@@ -1,0 +1,9 @@
+
+.organizer_container {
+    display: grid;
+    grid-template-columns: 20% 1fr;
+    grid-gap: 10px;
+
+}
+
+

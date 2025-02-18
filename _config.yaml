@@ -1,0 +1,80 @@
+### basic settings
+# site properties and page defaults
+title: Hanyang HARCO LAB
+description: Webpage of HARCO
+logo: images/blueHY_mark.png
+header: images/upper.png
+footer: images/down.png
+baseurl: 
+
+
+# site social media and other links
+# links:
+#   email: wansookim@hanyang.ac.kr
+#   google-scholar: https://scholar.google.com/citations?user=07u_E8wAAAJ&hl=ko
+#   github: hyHarco
+
+# automatic citations
+auto-cite:
+  plugins:
+    - name: sources
+      input:
+        - ../_data/sources.yaml
+  output: ../_data/citations.yaml
+
+### advanced settings
+
+# default front matter parameters for markdown files
+defaults:
+  # all markdown files
+  - scope:
+      path: ""
+    values:
+      layout: default
+  # markdown files in /_members
+  - scope:
+      type: "members"
+    values:
+      layout: member
+  # markdown files in /_posts
+  - scope:
+      type: "posts"
+    values:
+      layout: post
+
+# collections
+collections:
+  members:
+    output: true
+
+# sass settings
+sass:
+  sass_dir: css
+
+# syntax highlighting
+highlighter: rouge
+
+# plugins
+plugins:
+  - jekyll-redirect-from
+  - jekyll-feed
+  - jekyll-sitemap
+  # - jekyll-github-metadata
+  # - jekyll-avatar
+  # - jekyll-gist
+  # - jekyll-mentions
+  # - jekyll-relative-links
+  # - jemoji
+
+
+social:
+  - title: fa-brands fa-fw fa-github
+    url: http://github.com/krex4715
+  - title: fa fa-bold
+    url: https://roboharco12.tistory.com/
+  - title: fa-brands fa-fw fa-instagram
+    url: https://www.instagram.com/anvry_jh/
+
+
+# jekyll theme
+theme: null
