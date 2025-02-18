@@ -1,7 +1,7 @@
 {%- if include.style == "small" -%}
-  {%- assign width = 100 -%}
+  {%- assign width = 120 -%}
 {%- else -%}
-  {%- assign width = 125 -%}
+  {%- assign width = 150 -%}
 {%- endif -%}
 
 {%- assign emptyarray = "" | split: "," -%}
@@ -36,17 +36,19 @@
     >
   </span>
 
-  {%- assign name = member.name | default: "" -%}
-  {%- if name -%}
-    <span class="portrait_name">
-      {{ name }}
-    </span>
-  {%- endif -%}
+  
 
   {%- assign description = member.description | default: "" -%}
   {%- if description -%}
-    <span class="portrait_description">
-      {{ description }}
+    <span class="portrait_description" style="font-size: 1.2em;">
+      <strong>{{ description }}</strong>
+    </span>
+  {%- endif -%}
+
+  {%- assign name = member.name | default: "" -%}
+  {%- if name -%}
+    <span class="portrait_name" style="font-size: 1.0em;">
+      {{ name }}
     </span>
   {%- endif -%}
 

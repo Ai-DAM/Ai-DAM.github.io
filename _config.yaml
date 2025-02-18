@@ -1,10 +1,11 @@
 ### basic settings
 # site properties and page defaults
-title: Hanyang HARCO LAB
-description: Webpage of HARCO
-logo: images/blueHY_mark.png
+title: ADAM 
+subtitle: Ai Assistance in Mirror
+description: Webpage of ADAM
+logo: images/logo/로고.png
 header: images/upper.png
-footer: images/down.png
+footer: images/lower.png
 baseurl: 
 
 
@@ -67,13 +68,6 @@ plugins:
   # - jemoji
 
 
-social:
-  - title: fa-brands fa-fw fa-github
-    url: http://github.com/krex4715
-  - title: fa fa-bold
-    url: https://roboharco12.tistory.com/
-  - title: fa-brands fa-fw fa-instagram
-    url: https://www.instagram.com/anvry_jh/
 
 
 # jekyll theme
