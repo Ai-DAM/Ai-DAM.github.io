@@ -1,4 +1,4 @@
-# Harco LAB
+# ADAM
 
 ## Testing Webpage site locally with Jekyll
 
@@ -12,9 +12,7 @@ We recommend using [Bundler](http://bundler.io/) to install and run Jekyll. Bund
 ### Building the site locally
 1. Open Terminal.
 2. Navigate to local repo source for your site.
-```bash
-$ cd hyHarco.github.io
-```
+
 3. Run the Jekyll site locally.
 ```bash
 $ bundle exec jekyll serve
