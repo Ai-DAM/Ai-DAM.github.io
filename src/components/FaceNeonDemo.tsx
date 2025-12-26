@@ -215,7 +215,7 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
 
     async function start() {
       setErr(null);
-      setStatus("Mediapipe 로딩 중…");
+      setStatus("로딩 중…");
 
       const visionMod = await import("@mediapipe/tasks-vision");
       const { FaceLandmarker, FilesetResolver } = visionMod;
@@ -309,7 +309,7 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
       video.muted = true;
       await video.play();
 
-      setStatus("실행 중 (입력 자체가 좌우반전되어 동작함)");
+      setStatus("실행 중…");
 
       const canvas = canvasRef.current!;
       const ctx = canvas.getContext("2d", { alpha: true })!;
@@ -435,7 +435,7 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
         </div>
         {err && <div className="demoErr">⚠ {err}</div>}
         <div className="demoHint">
-          * 영상은 서버로 전송되지 않고, 브라우저 로컬에서만 처리됩니다. (모델/wasm은 최초 1회 다운로드)
+          * 영상은 서버로 전송되지 않고, 브라우저 로컬에서만 처리됩니다
         </div>
       </div>
     </div>
