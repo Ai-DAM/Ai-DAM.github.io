@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import CustomCursor from "./components/CustomCursor";
 import BackgroundFX from "./components/BackgroundFX";
+import FaceNeonOverlayDemo from "./components/FaceNeonDemo";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
@@ -21,6 +22,7 @@ function scrollTo(id: string) {
 }
 
 export default function App() {
+  // ✅ Team data
   const TEAM = [
     {
       name: "김준현",
@@ -48,6 +50,7 @@ export default function App() {
     },
   ] as const;
 
+  // ✅ nav
   const nav = [
     { id: "Platform", label: "Platform" },
     { id: "Service", label: "Service" },
@@ -59,28 +62,32 @@ export default function App() {
     {
       name: "K-Me",
       tag: "Dance Training",
-      title: "스마트미러로 즐기는 AI 댄스 서비스",
+      title: "댄서의 연습 루프를 ‘측정 가능한 경험’으로",
       desc:
-        "스마트미러 기반 AI 댄스 트레이닝, 단체 트레이닝, 댄스강의 콘텐츠를 제공합니다. " +
-        "댄서의 포즈/제스처/타이밍을 실시간으로 인식해 피드백하고, 연습 데이터를 기록하여 성장 루프를 만듭니다.",
+        "스마트미러 기반 오버레이 트레이닝 + AI 피드백으로 촬영–비교–수정–반복을 한 번에. " +
+        "스튜디오 설치형 제품으로 운영/확장에 최적화됩니다.",
     },
     {
       name: "ADAM Live",
       tag: "Events & Pop-ups",
-      title: "관객이 반응하면 콘텐츠가 즉시 반응하는 라이브 인터랙티브 서비스",
+      title: "관객이 반응하면 콘텐츠가 즉시 반응하는 무대",
       desc:
         "대학 입학식, 브랜드 팝업, 아이돌 행사에서 ‘인사/제스처/포즈’ 같은 행동을 실시간으로 인식해 " +
         "영상/그래픽/사운드를 반응시키는 인터랙티브 미디어 경험을 제공합니다.",
     },
   ] as const;
 
-  const PLATFORM = [
+  // ✅ Platform group (3 + 3)
+  const PLATFORM_A = [
     { t: "Sense", d: "Camera 기반으로 사람의 포즈/제스처/행동을 안정적으로 캡처." },
     { t: "Interpret", d: "AI가 의미를 해석(인사, 포즈, 타이밍, 상태)하여 트리거를 만든다." },
     { t: "Respond", d: "디스플레이/미디어/이펙트가 즉시 반응하여 ‘살아있는 경험’을 만든다." },
+  ] as const;
+
+  const PLATFORM_B = [
     { t: "Distribute", d: "QR/저장/공유로 UGC 루프를 만들고, 다음 방문을 유도한다." },
     { t: "Operate", d: "현장 설치/부팅/권한/네트워크 등 운영 안정성을 제품 수준으로 만든다." },
-    { t: "Scale", d: "콘텐츠/파트너/공간으로 확장되는 설치형 플랫폼으로 성장한다." },
+    { t: "Sales", d: "패키지/콘텐츠를 가격화해 반복 가능한 매출로 연결한다." },
   ] as const;
 
   const TRACTION = [
@@ -105,16 +112,21 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeMember, setActiveMember] = useState<(typeof TEAM)[number] | null>(null);
 
+  // ✅ Demo modal
+  const [demoOpen, setDemoOpen] = useState(false);
+
   function go(id: string) {
     setMenuOpen(false);
     scrollTo(id);
   }
 
+  // ESC 닫기
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
         setMenuOpen(false);
         setActiveMember(null);
+        setDemoOpen(false);
       }
     }
     window.addEventListener("keydown", onKeyDown);
@@ -192,12 +204,7 @@ export default function App() {
                 onClick={(e) => e.stopPropagation()}
               >
                 {nav.map((n) => (
-                  <button
-                    key={n.id}
-                    className="navDrawerItem"
-                    type="button"
-                    onClick={() => go(n.id)}
-                  >
+                  <button key={n.id} className="navDrawerItem" type="button" onClick={() => go(n.id)}>
                     {n.label}
                   </button>
                 ))}
@@ -213,44 +220,27 @@ export default function App() {
       <main id="home">
         {/* HERO */}
         <section className="hero">
-          {/* ✅ 배경처럼 깔리는 아트 레이어(레이아웃 영향 X) */}
-          <div className="heroBgArt" aria-hidden>
-            <img
-              className="heroProductImg"
-              src="/images/product_home_banner.png"
-              alt=""
-              draggable={false}
-            />
-          </div>
+          <div className="wrap heroWrap">
+            {/* ✅ 배경처럼 느껴지게 absolute */}
+            <div className="heroBgArt" aria-hidden>
+              <img className="heroBgImg" src="/images/product_home_banner.png" alt="" draggable={false} />
+            </div>
 
-          <div className="wrap">
-            <motion.div variants={stagger} initial="hidden" animate="show">
+            <motion.div variants={stagger} initial="hidden" animate="show" className="heroCopy">
               <motion.h1 variants={fadeUp} className="heroTitle heroTitleStack">
                 <span className="heroTitleTop glowText">Real-time interactive experiences,</span>
                 <span className="heroTitleBottom glowText glowTextSoft">for real spaces.</span>
               </motion.h1>
 
               <motion.p variants={fadeUp} className="heroDesc">
-                ADAM은 오프라인 공간에서 사람과 콘텐츠가 실시간으로 상호작용하는
-                “설치형 인터랙티브 경험”을 만듭니다.
+                ADAM은 오프라인 공간에서 사람과 콘텐츠가 실시간으로 상호작용하는 “설치형 인터랙티브 경험”을 만듭니다.
               </motion.p>
 
               <motion.div variants={fadeUp} className="heroCTA">
-                <a
-                  className="btn"
-                  href="#contact"
-                  onClick={(e) => (e.preventDefault(), go("contact"))}
-                  data-cursor="hover"
-                >
+                <a className="btn" href="#contact" onClick={(e) => (e.preventDefault(), go("contact"))} data-cursor="hover">
                   데모 / 협업 문의
                 </a>
-
-                <a
-                  className="btn btnGhost"
-                  href="#Service"
-                  onClick={(e) => (e.preventDefault(), go("Service"))}
-                  data-cursor="hover"
-                >
+                <a className="btn btnGhost" href="#Service" onClick={(e) => (e.preventDefault(), go("Service"))} data-cursor="hover">
                   제품 라인업 보기
                 </a>
               </motion.div>
@@ -266,32 +256,62 @@ export default function App() {
         {/* Platform */}
         <section id="Platform" className="section sectionAlt">
           <div className="wrap">
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.18 }}
-            >
+            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
               <motion.h2 variants={fadeUp} className="h2">
-                <span className="glowText">AI Smart Mirror</span>
+                플랫폼 <span className="glowText">ADAM</span>
               </motion.h2>
+              <motion.p variants={fadeUp} className="p">
+                제품은 달라도 코어는 하나입니다. “감지 → 해석 → 반응 → 공유/운영/세일즈”로 이어지는 실시간 경험 파이프라인을 제공합니다.
+              </motion.p>
 
+              <motion.div variants={stagger} className="grid2">
+                {/* group A */}
+                <motion.article variants={fadeUp} className="card" data-cursor="hover">
+                  <div className="cardInner">
+                    <div className="platformHeadRow">
+                      <h3 className="cardTitle" style={{ marginBottom: 0 }}>
+                        Sense · Interpret · Respond
+                      </h3>
 
-              <motion.div variants={stagger} className="grid3">
-                {PLATFORM.map((x) => (
-                  <motion.article
-                    key={x.t}
-                    variants={fadeUp}
-                    className="card"
-                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                    data-cursor="hover"
-                  >
-                    <div className="cardInner">
-                      <h3 className="cardTitle">{x.t}</h3>
-                      <p className="cardText">{x.d}</p>
+                      <button className="miniBtn" type="button" onClick={() => setDemoOpen(true)}>
+                        Interactive with
+                      </button>
                     </div>
-                  </motion.article>
-                ))}
+
+                    <div className="miniList" style={{ marginTop: 12 }}>
+                      {PLATFORM_A.map((it) => (
+                        <div key={it.t} className="miniItem">
+                          <span className="miniDot" />
+                          <span>
+                            <b style={{ color: "var(--text)" }}>{it.t}:</b>{" "}
+                            <span style={{ color: "var(--muted)" }}>{it.d}</span>
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.article>
+
+                {/* group B */}
+                <motion.article variants={fadeUp} className="card" data-cursor="hover">
+                  <div className="cardInner">
+                    <h3 className="cardTitle" style={{ marginBottom: 0 }}>
+                      Distribute · Operate · Sales
+                    </h3>
+
+                    <div className="miniList" style={{ marginTop: 12 }}>
+                      {PLATFORM_B.map((it) => (
+                        <div key={it.t} className="miniItem">
+                          <span className="miniDot" />
+                          <span>
+                            <b style={{ color: "var(--text)" }}>{it.t}:</b>{" "}
+                            <span style={{ color: "var(--muted)" }}>{it.d}</span>
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.article>
               </motion.div>
             </motion.div>
           </div>
@@ -300,12 +320,7 @@ export default function App() {
         {/* Service */}
         <section id="Service" className="section">
           <div className="wrap">
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.18 }}
-            >
+            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
               <motion.h2 variants={fadeUp} className="h2">
                 <span className="glowText">Service Line-Up</span>
               </motion.h2>
@@ -342,34 +357,22 @@ export default function App() {
           </div>
         </section>
 
-        {/* About + Traction */}
+        {/* About */}
         <section id="company" className="section">
           <div className="wrap">
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.18 }}
-            >
+            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
               <motion.h2 variants={fadeUp} className="h2">
-                <span className="glowText">ADAM</span>
+                회사소개
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
-                ADAM은 “오프라인 공간에서의 인터랙션”을 제품 수준으로 만드는 팀입니다.
-                하드웨어(스마트 디스플레이/키오스크)와 소프트웨어(AI/콘텐츠/UX)를 하나의 경험으로 설계하고,
-                설치형 경험을 반복 가능한 패키지로 상품화합니다.
+                ADAM은 “오프라인 공간에서의 인터랙션”을 제품 수준으로 만드는 팀입니다. 하드웨어(스마트 디스플레이/키오스크)와
+                소프트웨어(AI/콘텐츠/UX)를 하나의 경험으로 설계하고, 설치형 경험을 반복 가능한 패키지로 상품화합니다.
               </motion.p>
 
               <motion.div variants={stagger} className="grid2">
                 {[
-                  {
-                    t: "What we sell",
-                    d: "설치형 AI 인터랙티브 경험(제품/패키지) — 스튜디오용, 행사/팝업용.",
-                  },
-                  {
-                    t: "How we win",
-                    d: "현장 안정성 + 즉시 반응하는 UX + 공유(UGC) 루프까지 한 번에 제공.",
-                  },
+                  { t: "What we sell", d: "설치형 AI 인터랙티브 경험(제품/패키지) — 스튜디오용, 행사/팝업용." },
+                  { t: "How we win", d: "현장 안정성 + 즉시 반응하는 UX + 공유(UGC) 루프까지 한 번에 제공." },
                 ].map((x) => (
                   <motion.article
                     key={x.t}
@@ -387,11 +390,7 @@ export default function App() {
               </motion.div>
 
               <motion.div variants={stagger} style={{ marginTop: 26 }}>
-                <motion.h3
-                  variants={fadeUp}
-                  className="h2"
-                  style={{ fontSize: "clamp(18px, 2.2vw, 22px)", marginBottom: 8 }}
-                >
+                <motion.h3 variants={fadeUp} className="h2" style={{ fontSize: "clamp(18px, 2.2vw, 22px)", marginBottom: 8 }}>
                   Traction
                 </motion.h3>
 
@@ -406,7 +405,6 @@ export default function App() {
                     >
                       <div className="cardInner">
                         <h3 className="cardTitle">{t.head}</h3>
-
                         <div className="miniList" style={{ marginTop: 10 }}>
                           {t.items.map((it) => (
                             <div key={it.k} className="miniItem">
@@ -427,28 +425,20 @@ export default function App() {
           </div>
         </section>
 
-        {/* Team */}
+        {/* Team strip */}
         <section id="team" className="section sectionAlt">
           <div className="wrap">
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.18 }}
-            >
+            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
               <motion.h2 variants={fadeUp} className="h2">
-                <span className="glowText">Team</span>
+                팀소개
               </motion.h2>
+              <motion.p variants={fadeUp} className="p">
+                팀원 카드를 클릭하면 상세 소개가 열립니다.
+              </motion.p>
 
               <motion.div variants={fadeUp} className="teamStrip">
                 {TEAM.map((m) => (
-                  <button
-                    key={m.name}
-                    type="button"
-                    className="teamTile"
-                    onClick={() => setActiveMember(m)}
-                    data-cursor="hover"
-                  >
+                  <button key={m.name} type="button" className="teamTile" onClick={() => setActiveMember(m)} data-cursor="hover">
                     <div className="teamTileImgWrap" aria-hidden>
                       <img className="teamTileImg" src={m.img} alt="" loading="lazy" />
                     </div>
@@ -466,13 +456,7 @@ export default function App() {
         {/* Team modal */}
         <AnimatePresence>
           {activeMember && (
-            <motion.div
-              className="modalOverlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setActiveMember(null)}
-            >
+            <motion.div className="modalOverlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveMember(null)}>
               <motion.div
                 className="modal"
                 initial={{ y: 10, opacity: 0, scale: 0.98 }}
@@ -481,12 +465,7 @@ export default function App() {
                 transition={{ duration: 0.18, ease: "easeOut" }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <button
-                  className="modalClose"
-                  type="button"
-                  onClick={() => setActiveMember(null)}
-                  aria-label="Close"
-                >
+                <button className="modalClose" type="button" onClick={() => setActiveMember(null)} aria-label="Close">
                   ×
                 </button>
 
@@ -508,36 +487,49 @@ export default function App() {
           )}
         </AnimatePresence>
 
+        {/* ✅ Demo modal */}
+        <AnimatePresence>
+          {demoOpen && (
+            <motion.div className="modalOverlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDemoOpen(false)}>
+              <motion.div
+                className="modal demoModal"
+                initial={{ y: 10, opacity: 0, scale: 0.98 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                exit={{ y: 10, opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button className="modalClose" type="button" onClick={() => setDemoOpen(false)} aria-label="Close">
+                  ×
+                </button>
+
+                <div className="demoHeader">
+                  <div className="demoTitle">Sense / Interpret / Respond — Camera Demo</div>
+                  <div className="demoSub">FaceLandmarker 기반 네온 얼굴 오버레이</div>
+                </div>
+
+                <FaceNeonOverlayDemo open={demoOpen} />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Contact */}
         <section id="contact" className="section sectionAlt">
           <div className="wrap">
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.18 }}
-            >
+            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
               <motion.h2 variants={fadeUp} className="h2">
-                Contact Us
+                Contact
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
                 데모/협업/설치/행사 운영 문의는 아래로 연락 주세요.
               </motion.p>
 
               <motion.div variants={fadeUp} style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <a
-                  className="btn"
-                  href="mailto:contact@ai-dam.ai?subject=ADAM%20Demo%20Request"
-                  data-cursor="hover"
-                >
+                <a className="btn" href="mailto:contact@ai-dam.ai?subject=ADAM%20Demo%20Request" data-cursor="hover">
                   contact@ai-dam.ai
                 </a>
-                <a
-                  className="btn btnGhost"
-                  href="#home"
-                  onClick={(e) => (e.preventDefault(), go("home"))}
-                  data-cursor="hover"
-                >
+                <a className="btn btnGhost" href="#home" onClick={(e) => (e.preventDefault(), go("home"))} data-cursor="hover">
                   Back to top
                 </a>
               </motion.div>
