@@ -10,7 +10,6 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-// mediapipe connectors can be {start,end} (most common) or tuple [a,b] (custom)
 type MPConnection = { start: number; end: number } | [number, number];
 
 function normConn(c: MPConnection): { start: number; end: number } {
@@ -35,13 +34,11 @@ function strokeConnectors(
   if (!connectors || !ptsPx?.length) return;
 
   ctx.save();
-
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
   ctx.lineWidth = Math.max(0.5, lineWidth);
   ctx.strokeStyle = strokeStyle;
   ctx.globalAlpha = opts.alpha ?? 1;
-
   ctx.shadowColor = opts.shadowColor ?? "transparent";
   ctx.shadowBlur = opts.shadowBlur ?? 0;
 
@@ -55,7 +52,6 @@ function strokeConnectors(
     ctx.lineTo(b.x, b.y);
   }
   ctx.stroke();
-
   ctx.restore();
 }
 
@@ -87,16 +83,14 @@ function drawNeonFaceOverlay(
   const w = Math.max(1, maxX - minX);
   const h = Math.max(1, maxY - minY);
 
-  // ✅ "그리는 것만" 흰색
+  // ✅ white neon only
   const white = "rgba(255,255,255,0.95)";
-
-  // adaptive thickness
   const base = clamp(Math.min(w, h) * 0.012, 1.2, 4.5);
 
   ctx.save();
   ctx.globalCompositeOperation = "lighter";
 
-  // 1) outer glow pass (white)
+  // outer glow
   strokeConnectors(ctx, pts, groups.FACE_OVAL, base * 2.2, white, {
     shadowColor: "rgba(255,255,255,0.55)",
     shadowBlur: 26,
@@ -128,7 +122,7 @@ function drawNeonFaceOverlay(
     alpha: 0.45,
   });
 
-  // 2) crisp core pass (white, sharper)
+  // crisp core
   strokeConnectors(ctx, pts, groups.FACE_OVAL, base * 1.15, white, {
     shadowColor: "rgba(255,255,255,0.18)",
     shadowBlur: 10,
@@ -150,12 +144,12 @@ function drawNeonFaceOverlay(
     alpha: 0.82,
   });
 
-  // 3) sprinkle dots (white)
+  // sprinkle dots
   ctx.save();
   ctx.fillStyle = "rgba(255,255,255,0.55)";
   ctx.shadowColor = "rgba(255,255,255,0.55)";
   ctx.shadowBlur = 14;
-  const step = 10; // 부담되면 14~18로
+  const step = 10;
   for (let i = 0; i < pts.length; i += step) {
     const p = pts[i];
     const r = base * 0.45;
@@ -185,6 +179,9 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
     LEFT_EYEBROW: MPConnection[];
     RIGHT_EYEBROW: MPConnection[];
   }>(null);
+
+  // ✅ mirrored input canvas (비디오를 좌우반전해서 넣을 캔버스)
+  const mirrorCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [status, setStatus] = useState<string>("준비 중…");
   const [err, setErr] = useState<string | null>(null);
@@ -223,7 +220,6 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
       const visionMod = await import("@mediapipe/tasks-vision");
       const { FaceLandmarker, FilesetResolver } = visionMod;
 
-      // ✅ wasm base URL 후보 (404/strict MIME 회피용)
       const wasmCandidates = [
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm",
         "https://unpkg.com/@mediapipe/tasks-vision@latest/wasm",
@@ -251,7 +247,6 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
 
       let landmarker: any = null;
 
-      // GPU delegate 실패할 수 있어서 fallback
       try {
         landmarker = await FaceLandmarker.createFromOptions(vision, {
           baseOptions: { modelAssetPath, delegate: "GPU" },
@@ -275,7 +270,6 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
 
       landmarkerRef.current = landmarker;
 
-      // ✅ connectors groups 저장 (Connection[] 형태)
       groupsRef.current = {
         FACE_OVAL: FaceLandmarker.FACE_LANDMARKS_FACE_OVAL,
         LIPS: FaceLandmarker.FACE_LANDMARKS_LIPS,
@@ -287,7 +281,14 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
 
       setStatus("카메라 권한 요청 중…");
 
-      const stream = await navigator.mediaDevices.getUserMedia({
+      const gUM = navigator.mediaDevices?.getUserMedia?.bind(navigator.mediaDevices);
+      if (!gUM) {
+        throw new Error(
+          "이 브라우저에서는 카메라 API(navigator.mediaDevices.getUserMedia)를 지원하지 않습니다. HTTPS + Safari/Chrome에서 열어주세요."
+        );
+      }
+
+      const stream = await gUM({
         video: {
           facingMode: "user",
           width: { ideal: 640 },
@@ -305,18 +306,24 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
       const video = videoRef.current!;
       video.srcObject = stream;
       video.playsInline = true;
+      video.muted = true;
       await video.play();
 
-      setStatus("실행 중 (얼굴을 화면 중앙에 두면 흰색 네온 오버레이가 뜸)");
+      setStatus("실행 중 (입력 자체가 좌우반전되어 동작함)");
 
       const canvas = canvasRef.current!;
       const ctx = canvas.getContext("2d", { alpha: true })!;
+
+      // ✅ mirrored input canvas 준비
+      const mirror = mirrorCanvasRef.current!;
+      const mctx = mirror.getContext("2d", { alpha: false })!;
+
       const t0 = performance.now();
 
       const loop = () => {
         if (cancelled) return;
 
-        // canvas = css size
+        // draw canvas sizes from css
         const cw = Math.max(1, Math.floor(canvas.clientWidth));
         const ch = Math.max(1, Math.floor(canvas.clientHeight));
         if (canvas.width !== cw || canvas.height !== ch) {
@@ -324,38 +331,52 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
           canvas.height = ch;
         }
 
+        // ✅ mirror 캔버스는 "비디오 원본 해상도"로 맞추는 게 정확
+        const vw = Math.max(1, video.videoWidth || 640);
+        const vh = Math.max(1, video.videoHeight || 480);
+        if (mirror.width !== vw || mirror.height !== vh) {
+          mirror.width = vw;
+          mirror.height = vh;
+        }
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // detection
+        // ✅ 1) 비디오 프레임을 mirror 캔버스에 좌우반전으로 그려 넣기
+        if (video.readyState >= 2) {
+          mctx.save();
+          mctx.clearRect(0, 0, vw, vh);
+          mctx.translate(vw, 0);
+          mctx.scale(-1, 1);
+          mctx.drawImage(video, 0, 0, vw, vh);
+          mctx.restore();
+        }
+
+        // ✅ 2) detectForVideo 입력을 "mirror 캔버스"로
         let pts: Pt[] | null = null;
         try {
-          // 비디오 준비 전이면 skip
-          if (video.readyState >= 2) {
-            const res = landmarker.detectForVideo(video, performance.now());
-            const lm = res?.faceLandmarks?.[0];
-            if (lm && lm.length) {
-              pts = lm.map((p: any) => ({
-                x: p.x * canvas.width,
-                y: p.y * canvas.height,
-                z: p.z,
-              }));
-            }
+          const res = landmarker.detectForVideo(mirror, performance.now());
+          const lm = res?.faceLandmarks?.[0];
+          if (lm && lm.length) {
+            // lm 좌표는 mirror 입력 기준 0..1 이므로, 표시 캔버스 크기로 매핑
+            pts = lm.map((p: any) => ({
+              x: p.x * canvas.width,
+              y: p.y * canvas.height,
+              z: p.z,
+            }));
           }
         } catch {
           // ignore per-frame
         }
 
-        // fallback idle (얼굴 못잡아도 "살아있게")
         const tt = (performance.now() - t0) / 1000;
         const breath = Math.sin(tt * 1.2) * 0.015;
 
         if (pts && groupsRef.current) {
-          // smoothing (EMA)
           const prev = smoothRef.current;
           if (!prev || prev.length !== pts.length) {
             smoothRef.current = pts;
           } else {
-            const a = 0.32; // smoothing strength
+            const a = 0.32;
             for (let i = 0; i < pts.length; i++) {
               prev[i].x = lerp(prev[i].x, pts[i].x, a);
               prev[i].y = lerp(prev[i].y, pts[i].y, a);
@@ -366,7 +387,7 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
 
           drawNeonFaceOverlay(ctx, smoothRef.current!, groupsRef.current);
         } else {
-          // subtle center pulse (white)
+          // subtle center pulse
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
           ctx.fillStyle = "rgba(255,255,255,0.10)";
@@ -402,8 +423,10 @@ export default function FaceNeonOverlayDemo({ open }: { open: boolean }) {
   return (
     <div className="demoWrap">
       <div className="demoStage">
-        <video ref={videoRef} className="demoVideo" muted />
+        <video ref={videoRef} className="demoVideo" muted playsInline />
         <canvas ref={canvasRef} className="demoCanvas" />
+        {/* ✅ 미러 입력 캔버스는 화면에 안 보이게 */}
+        <canvas ref={mirrorCanvasRef} style={{ display: "none" }} />
       </div>
 
       <div className="demoMeta">
