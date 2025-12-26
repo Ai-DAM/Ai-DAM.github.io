@@ -31,7 +31,6 @@ body, a, button { cursor: auto; }
   margin: 0 auto;
 }
 
-
 .glowText{
   font-family: Orbitron, Inter, system-ui;
   letter-spacing: .02em;
@@ -39,11 +38,8 @@ body, a, button { cursor: auto; }
   -webkit-background-clip:text;
   background-clip:text;
   color: transparent;
-
-  /* 기존 0 0 16px -> 더 약하게 */
   text-shadow: 0 0 10px rgba(139,92,255,.14);
 }
-
 
 /* Topbar */
 .topbar{
@@ -143,16 +139,16 @@ body, a, button { cursor: auto; }
 .hero{
   position: relative;
   padding: clamp(56px, 8vw, 96px) 0 clamp(24px, 5vw, 44px);
-  isolation: isolate;               /* ✅ 배경 FX가 텍스트 위로 못 올라오게 */
+  isolation: isolate;
 }
 .hero .wrap{
   position: relative;
-  z-index: 5;                        /* ✅ 히어로 텍스트 최상단 고정 */
+  z-index: 5;
 }
 
 .heroTitle{
   margin: 14px 0 10px;
-  font-size: clamp(24px, 4.0vw, 64px);   /* ✅ 더 공격적으로 줄임 */
+  font-size: clamp(24px, 4.0vw, 64px);
   line-height: 1.02;
   letter-spacing: -0.03em;
 }
@@ -167,11 +163,9 @@ body, a, button { cursor: auto; }
 .heroTitleTop{
   display: inline-block;
   white-space: nowrap;
-  font-size: 0.90em;                      /* ✅ 한 번 더 줄여서 잘림 방지 */
-  letter-spacing: -0.075em;               /* ✅ 가로폭 더 줄이기 */
+  font-size: 0.90em;
+  letter-spacing: -0.075em;
   line-height: 1.02;
-
-  /* ✅ 글로우를 "덩어리" 안 생기게 더 얌전하게 */
   text-shadow:
     0 0 10px rgba(139,92,255,.12),
     0 0 8px rgba(0,210,255,.10);
@@ -412,7 +406,7 @@ body, a, button { cursor: auto; }
   background: radial-gradient(circle at 30% 30%, rgba(139,92,255,.55), transparent 62%);
 }
 .bgBlob2{
-  left: 102%;   /* ✅ 타이틀 침범 줄이기 */
+  left: 102%;
   top: 14%;
   background: radial-gradient(circle at 35% 35%, rgba(0,210,255,.45), transparent 62%);
   opacity: .45;
@@ -432,10 +426,10 @@ body, a, button { cursor: auto; }
     radial-gradient(900px 520px at 100% 50%, rgba(0,0,0,.20), transparent 60%);
 }
 
-/* Responsive */
+/* Responsive (base) */
 @media (max-width: 980px){
   .grid3{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .heroTitleTop{ font-size: 0.90em; } /* ✅ 더 잘 안 잘리게 */
+  .heroTitleTop{ font-size: 0.90em; }
 }
 @media (max-width: 860px){
   .nav{ gap: 10px; font-size: 13px; }
@@ -448,5 +442,239 @@ body, a, button { cursor: auto; }
   .miniItem{ font-size: 12.5px; }
 }
 @media (max-width: 560px){
-  .heroTitleTop{ white-space: normal; } /* 모바일은 줄바꿈 허용 */
+  .heroTitleTop{ white-space: normal; }
+}
+
+/* =========================
+   Team: 4x1 tiles + modal
+   ========================= */
+
+.teamGrid4{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.teamTile{
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: clamp(16px, 2vw, 22px);
+  background: rgba(255,255,255,.04);
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+.teamTile::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:
+    radial-gradient(520px 200px at 20% 0%, rgba(139,92,255,.18), transparent 60%),
+    radial-gradient(480px 220px at 85% 0%, rgba(0,210,255,.12), transparent 60%);
+  opacity: .75;
+  filter: blur(14px);
+  pointer-events:none;
+}
+.teamTile:hover{
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,.16);
+  background: rgba(255,255,255,.055);
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.55),
+    0 0 18px rgba(139,92,255,.12),
+    0 0 14px rgba(0,210,255,.10);
+}
+.teamTile:focus-visible{
+  outline: none;
+  border-color: rgba(255,255,255,.22);
+  box-shadow:
+    0 0 0 3px rgba(139,92,255,.22),
+    0 0 24px rgba(0,210,255,.18);
+}
+
+.teamTileImg{
+  position: relative;
+  z-index: 2;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.teamTilePhoto{
+  width: 88%;
+  height: 88%;
+  object-fit: contain;
+  object-position: center bottom;
+  transform: translateY(2px);
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,.35));
+}
+
+.teamTileMeta{
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.teamTileName{
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.teamTileRole{
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  color: rgba(234,234,255,.72);
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  padding: 5px 9px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+}
+
+/* Modal */
+.modalOverlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.modalDialog{
+  width: min(860px, 100%);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 22px;
+  background: rgba(10,10,18,.88);
+  box-shadow: 0 30px 90px rgba(0,0,0,.7);
+  position: relative;
+  overflow: hidden;
+}
+.modalDialog::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:
+    radial-gradient(700px 260px at 15% 0%, rgba(139,92,255,.25), transparent 60%),
+    radial-gradient(650px 320px at 85% 0%, rgba(0,210,255,.16), transparent 60%);
+  opacity: .65;
+  filter: blur(16px);
+  pointer-events:none;
+}
+
+.modalClose{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(234,234,255,.9);
+  font-size: 24px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+.modalClose:hover{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.09);
+  border-color: rgba(255,255,255,.18);
+}
+
+.modalBody{
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 18px;
+  padding: 18px;
+  align-items: center;
+}
+
+.modalImg{
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.modalPhoto{
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,.35));
+}
+
+.modalInfo{
+  min-width: 0;
+}
+.modalTitleRow{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.modalName{
+  font-weight: 1000;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+.modalRolePill{
+  display:inline-flex;
+  align-items:center;
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  color: rgba(234,234,255,.86);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  flex: 0 0 auto;
+}
+.modalDesc{
+  margin: 0;
+  color: rgba(234,234,255,.78);
+  line-height: 1.75;
+  font-size: 14px;
+}
+
+/* Team responsive */
+@media (max-width: 980px){
+  .teamGrid4{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px){
+  .teamGrid4{ grid-template-columns: 1fr; }
+  .modalBody{
+    grid-template-columns: 1fr;
+  }
+  .modalName{ font-size: 20px; }
 }

@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import CustomCursor from "./components/CustomCursor";
 import BackgroundFX from "./components/BackgroundFX";
-import { TEAM } from "./data";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
@@ -21,13 +21,60 @@ function scrollTo(id: string) {
 }
 
 export default function App() {
+  // ✅ 섹션은 Platform / Service / About / Team / Contact만
+  // ✅ nav에 Contact 넣지 말고, 우측 CTA 버튼 하나만 사용
+
+  const TEAM = [
+    {
+      name: "김준현",
+      role: "CEO",
+      img: "/images/members/joonhyun.png",
+      one: "한양대 로봇공학 학사·인공지능융합 석사, AI 동작의도 인식 연구와 트레이너/백댄서 등 현장 댄스 경험을 잇는 컬쳐×테크 CEO",
+    },
+    {
+      name: "구다서",
+      role: "CMO",
+      img: "/images/members/daseo.png",
+      one: "매출 0원에서 연매출 50–60억 규모로 성장시킨 그로스 경험과 디자인·콘텐츠 감각을 겸비한 CMO",
+    },
+    {
+      name: "김성봉",
+      role: "CBO",
+      img: "/images/members/sungbong.png",
+      one: "한양대 ERICA 제40대 총학생회장 출신, 요식업 창업(연매출 8억) 경험을 바탕으로 현장 운영·세일즈를 리드하는 CBO",
+    },
+    {
+      name: "이영문",
+      role: "CSO",
+      img: "/images/members/youngmoon.png",
+      one: "미시간주립대 컴퓨터공학 석·박사, 한양대 로봇공학과 교수로 AI/로보틱스 연구를 총괄하는 CSO",
+    },
+  ] as const;
+
+  const [activeMember, setActiveMember] = useState<(typeof TEAM)[number] | null>(null);
+
+  useEffect(() => {
+    if (!activeMember) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveMember(null);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [activeMember]);
+
   const nav = [
     { id: "Platform", label: "Platform" },
     { id: "Service", label: "Service" },
     { id: "company", label: "About" },
     { id: "team", label: "Team" },
-    { id: "traction", label: "Traction" },
-    { id: "contact", label: "Contact" },
   ];
 
   const SOLUTIONS = [
@@ -50,32 +97,15 @@ export default function App() {
   ] as const;
 
   const PLATFORM = [
-    {
-      t: "Sense",
-      d: "Camera 기반으로 사람의 포즈/제스처/행동을 안정적으로 캡처.",
-    },
-    {
-      t: "Interpret",
-      d: "AI가 의미를 해석(인사, 포즈, 타이밍, 상태)하여 트리거를 만든다.",
-    },
-    {
-      t: "Respond",
-      d: "디스플레이/미디어/이펙트가 즉시 반응하여 ‘살아있는 경험’을 만든다.",
-    },
-    {
-      t: "Distribute",
-      d: "QR/저장/공유로 UGC 루프를 만들고, 다음 방문을 유도한다.",
-    },
-    {
-      t: "Operate",
-      d: "현장 설치/부팅/권한/네트워크 등 운영 안정성을 제품 수준으로 만든다.",
-    },
-    {
-      t: "Scale",
-      d: "콘텐츠/파트너/공간으로 확장되는 설치형 플랫폼으로 성장한다.",
-    },
+    { t: "Sense", d: "Camera 기반으로 사람의 포즈/제스처/행동을 안정적으로 캡처." },
+    { t: "Interpret", d: "AI가 의미를 해석(인사, 포즈, 타이밍, 상태)하여 트리거를 만든다." },
+    { t: "Respond", d: "디스플레이/미디어/이펙트가 즉시 반응하여 ‘살아있는 경험’을 만든다." },
+    { t: "Distribute", d: "QR/저장/공유로 UGC 루프를 만들고, 다음 방문을 유도한다." },
+    { t: "Operate", d: "현장 설치/부팅/권한/네트워크 등 운영 안정성을 제품 수준으로 만든다." },
+    { t: "Scale", d: "콘텐츠/파트너/공간으로 확장되는 설치형 플랫폼으로 성장한다." },
   ];
 
+  // ✅ Traction은 About(회사소개) 섹션의 하위 블록으로만 사용
   const TRACTION = [
     {
       head: "K-Me (Dance)",
@@ -123,6 +153,8 @@ export default function App() {
                 {n.label}
               </a>
             ))}
+
+            {/* ✅ Contact 버튼 하나만 남김 */}
             <a
               className="btn btnSm"
               href="#contact"
@@ -140,16 +172,14 @@ export default function App() {
         <section className="hero">
           <div className="wrap">
             <motion.div variants={stagger} initial="hidden" animate="show">
-
               <motion.h1 variants={fadeUp} className="heroTitle heroTitleStack">
                 <span className="heroTitleTop glowText">Real-time interactive experiences,</span>
                 <span className="heroTitleBottom glowText glowTextSoft">for real spaces.</span>
               </motion.h1>
 
-
               <motion.p variants={fadeUp} className="heroDesc">
-                ADAM은 오프라인 공간에서 사람과 콘텐츠가 실시간으로 상호작용하는
-                “설치형 인터랙티브 경험”을 만듭니다.
+                ADAM은 오프라인 공간에서 사람과 콘텐츠가 실시간으로 상호작용하는 “설치형 인터랙티브 경험”을
+                만듭니다.
                 <br />
               </motion.p>
 
@@ -162,10 +192,12 @@ export default function App() {
                 >
                   데모 / 협업 문의
                 </a>
+
+                {/* ✅ 기존 #solutions → #Service 로 수정 */}
                 <a
                   className="btn btnGhost"
-                  href="#solutions"
-                  onClick={(e) => (e.preventDefault(), scrollTo("solutions"))}
+                  href="#Service"
+                  onClick={(e) => (e.preventDefault(), scrollTo("Service"))}
                   data-cursor="hover"
                 >
                   제품 라인업 보기
@@ -180,7 +212,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* 플랫폼 (Platform) */}
+        {/* Platform */}
         <section id="Platform" className="section sectionAlt">
           <div className="wrap">
             <motion.div
@@ -216,9 +248,6 @@ export default function App() {
             </motion.div>
           </div>
         </section>
-
-
-
 
         {/* Service */}
         <section id="Service" className="section">
@@ -265,8 +294,7 @@ export default function App() {
           </div>
         </section>
 
-        
-        {/* 회사소개 */}
+        {/* About (회사소개) + Traction 하위항목 */}
         <section id="company" className="section">
           <div className="wrap">
             <motion.div
@@ -309,11 +337,54 @@ export default function App() {
                   </motion.article>
                 ))}
               </motion.div>
+
+              {/* ✅ Traction = About 하위항목 */}
+              <motion.div variants={stagger} style={{ marginTop: 26 }}>
+                <motion.h3
+                  variants={fadeUp}
+                  className="h2"
+                  style={{ fontSize: "clamp(18px, 2.2vw, 22px)", marginBottom: 8 }}
+                >
+                  Traction
+                </motion.h3>
+                <motion.p variants={fadeUp} className="p" style={{ marginBottom: 14 }}>
+                  ADAM의 traction은 “플랫폼이 제품으로 굴러가며 지표가 나오는 것”입니다.
+                  댄스(K-Me)와 행사(ADAM Live) 트랙을 분리해 증명합니다.
+                </motion.p>
+
+                <motion.div variants={stagger} className="grid2">
+                  {TRACTION.map((t) => (
+                    <motion.article
+                      key={t.head}
+                      variants={fadeUp}
+                      className="card"
+                      whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                      data-cursor="hover"
+                    >
+                      <div className="cardInner">
+                        <h3 className="cardTitle">{t.head}</h3>
+
+                        <div className="miniList" style={{ marginTop: 10 }}>
+                          {t.items.map((it) => (
+                            <div key={it.k} className="miniItem">
+                              <span className="miniDot" />
+                              <span>
+                                <b style={{ color: "var(--text)" }}>{it.k}:</b>{" "}
+                                <span style={{ color: "var(--muted)" }}>{it.v}</span>
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.article>
+                  ))}
+                </motion.div>
+              </motion.div>
             </motion.div>
           </div>
         </section>
 
-        {/* 팀소개 */}
+        {/* Team (4x1 tiles + modal) */}
         <section id="team" className="section sectionAlt">
           <div className="wrap">
             <motion.div
@@ -329,73 +400,74 @@ export default function App() {
                 “제품을 끝까지 만들고, 현장에서 굴려서 증명하는 사람들” 중심으로 구성됩니다.
               </motion.p>
 
-              <motion.div variants={stagger} className="grid3">
+              <motion.div variants={stagger} className="teamGrid4">
                 {TEAM.map((m) => (
-                  <motion.article
+                  <motion.button
                     key={m.name}
+                    type="button"
                     variants={fadeUp}
-                    className="card"
-                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                    className="teamTile"
+                    onClick={() => setActiveMember(m)}
                     data-cursor="hover"
                   >
-                    <div className="cardInner">
-                      <h3 className="cardTitle">{m.name}</h3>
-                      <p className="cardText" style={{ marginBottom: 10 }}>
-                        {m.role}
-                      </p>
-                      <p className="cardText">{m.desc}</p>
+                    <div className="teamTileImg">
+                      <img src={m.img} alt={m.name} className="teamTilePhoto" loading="lazy" />
                     </div>
-                  </motion.article>
+                    <div className="teamTileMeta">
+                      <div className="teamTileName">{m.name}</div>
+                      <div className="teamTileRole">{m.role}</div>
+                    </div>
+                  </motion.button>
                 ))}
               </motion.div>
-            </motion.div>
-          </div>
-        </section>
 
-        {/* Traction */}
-        <section id="traction" className="section">
-          <div className="wrap">
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.18 }}
-            >
-              <motion.h2 variants={fadeUp} className="h2">
-                Traction
-              </motion.h2>
-              <motion.p variants={fadeUp} className="p">
-                ADAM의 traction은 “플랫폼이 제품으로 굴러가며 지표가 나오는 것”입니다.
-                댄스(K-Me)와 행사(ADAM Live) 트랙을 분리해 증명합니다.
-              </motion.p>
-
-              <motion.div variants={stagger} className="grid2">
-                {TRACTION.map((t) => (
-                  <motion.article
-                    key={t.head}
-                    variants={fadeUp}
-                    className="card"
-                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                    data-cursor="hover"
+              <AnimatePresence>
+                {activeMember && (
+                  <motion.div
+                    className="modalOverlay"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setActiveMember(null)}
                   >
-                    <div className="cardInner">
-                      <h3 className="cardTitle">{t.head}</h3>
+                    <motion.div
+                      className="modalDialog"
+                      role="dialog"
+                      aria-modal="true"
+                      initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 16, scale: 0.98 }}
+                      transition={{ duration: 0.18, ease: "easeOut" }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        className="modalClose"
+                        onClick={() => setActiveMember(null)}
+                        aria-label="Close"
+                        data-cursor="hover"
+                      >
+                        ×
+                      </button>
 
-                      <div className="miniList" style={{ marginTop: 10 }}>
-                        {t.items.map((it) => (
-                          <div key={it.k} className="miniItem">
-                            <span className="miniDot" />
-                            <span>
-                              <b style={{ color: "var(--text)" }}>{it.k}:</b>{" "}
-                              <span style={{ color: "var(--muted)" }}>{it.v}</span>
-                            </span>
+                      <div className="modalBody">
+                        <div className="modalImg">
+                          <img src={activeMember.img} alt={activeMember.name} className="modalPhoto" />
+                        </div>
+
+                        <div className="modalInfo">
+                          <div className="modalTitleRow">
+                            <div className="modalName">{activeMember.name}</div>
+                            <span className="modalRolePill">{activeMember.role}</span>
                           </div>
-                        ))}
+
+                          <p className="modalDesc">{activeMember.one}</p>
+                        </div>
                       </div>
-                    </div>
-                  </motion.article>
-                ))}
-              </motion.div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </div>
         </section>
@@ -416,10 +488,7 @@ export default function App() {
                 데모/협업/설치/행사 운영 문의는 아래로 연락 주세요.
               </motion.p>
 
-              <motion.div
-                variants={fadeUp}
-                style={{ display: "flex", gap: 12, flexWrap: "wrap" }}
-              >
+              <motion.div variants={fadeUp} style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <a
                   className="btn"
                   href="mailto:contact@ai-dam.ai?subject=ADAM%20Demo%20Request"
