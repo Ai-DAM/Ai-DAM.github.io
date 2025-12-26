@@ -260,9 +260,6 @@ export default function App() {
               <motion.h2 variants={fadeUp} className="h2">
                 플랫폼 <span className="glowText">ADAM</span>
               </motion.h2>
-              <motion.p variants={fadeUp} className="p">
-                제품은 달라도 코어는 하나입니다. “감지 → 해석 → 반응 → 공유/운영/세일즈”로 이어지는 실시간 경험 파이프라인을 제공합니다.
-              </motion.p>
 
               <motion.div variants={stagger} className="grid2">
                 {/* group A */}
