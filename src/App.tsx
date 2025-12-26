@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import CustomCursor from "./components/CustomCursor";
 import BackgroundFX from "./components/BackgroundFX";
 
@@ -21,8 +21,6 @@ function scrollTo(id: string) {
 }
 
 export default function App() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   const TEAM = [
     {
       name: "김준현",
@@ -50,29 +48,26 @@ export default function App() {
     },
   ] as const;
 
-  type TeamMember = (typeof TEAM)[number];
-  const [activeMember, setActiveMember] = useState<TeamMember | null>(null);
-
   const nav = [
     { id: "Platform", label: "Platform" },
     { id: "Service", label: "Service" },
     { id: "company", label: "About" },
     { id: "team", label: "Team" },
-  ];
+  ] as const;
 
   const SOLUTIONS = [
     {
       name: "K-Me",
       tag: "Dance Training",
-      title: "댄서의 연습 루프를 ‘측정 가능한 경험’으로",
+      title: "스마트미러로 즐기는 AI 댄스 서비스",
       desc:
-        "스마트미러 기반 오버레이 트레이닝 + AI 피드백으로 촬영–비교–수정–반복을 한 번에. " +
-        "스튜디오 설치형 제품으로 운영/확장에 최적화됩니다.",
+        "스마트미러 기반 AI 댄스 트레이닝, 단체 트레이닝, 댄스강의 콘텐츠를 제공합니다. " +
+        "댄서의 포즈/제스처/타이밍을 실시간으로 인식해 피드백하고, 연습 데이터를 기록하여 성장 루프를 만듭니다.",
     },
     {
       name: "ADAM Live",
       tag: "Events & Pop-ups",
-      title: "관객이 반응하면 콘텐츠가 즉시 반응하는 무대",
+      title: "관객이 반응하면 콘텐츠가 즉시 반응하는 라이브 인터랙티브 서비스",
       desc:
         "대학 입학식, 브랜드 팝업, 아이돌 행사에서 ‘인사/제스처/포즈’ 같은 행동을 실시간으로 인식해 " +
         "영상/그래픽/사운드를 반응시키는 인터랙티브 미디어 경험을 제공합니다.",
@@ -86,7 +81,7 @@ export default function App() {
     { t: "Distribute", d: "QR/저장/공유로 UGC 루프를 만들고, 다음 방문을 유도한다." },
     { t: "Operate", d: "현장 설치/부팅/권한/네트워크 등 운영 안정성을 제품 수준으로 만든다." },
     { t: "Scale", d: "콘텐츠/파트너/공간으로 확장되는 설치형 플랫폼으로 성장한다." },
-  ];
+  ] as const;
 
   const TRACTION = [
     {
@@ -105,32 +100,26 @@ export default function App() {
         { k: "Engagement", v: "참여율/촬영/QR 전환 지표로 성과 측정" },
       ],
     },
-  ];
+  ] as const;
 
-  // ESC로 닫기 + body 스크롤 잠금
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeMember, setActiveMember] = useState<(typeof TEAM)[number] | null>(null);
+
+  function go(id: string) {
+    setMenuOpen(false);
+    scrollTo(id);
+  }
+
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
-        setActiveMember(null);
         setMenuOpen(false);
+        setActiveMember(null);
       }
     }
     window.addEventListener("keydown", onKeyDown);
-
-    const prev = document.body.style.overflow;
-    if (menuOpen || !!activeMember) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = prev || "";
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = prev || "";
-    };
-  }, [menuOpen, activeMember]);
-
-  const go = (id: string) => {
-    setMenuOpen(false);
-    scrollTo(id);
-  };
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   return (
     <>
@@ -150,7 +139,6 @@ export default function App() {
           </a>
 
           <nav className="nav">
-            {/* Desktop links */}
             <div className="navLinks">
               {nav.map((n) => (
                 <a
@@ -164,7 +152,6 @@ export default function App() {
               ))}
             </div>
 
-            {/* Desktop CTA */}
             <a
               className="btn btnSm navCTA"
               href="#contact"
@@ -174,93 +161,68 @@ export default function App() {
               Contact
             </a>
 
-            {/* Mobile hamburger */}
             <button
+              className="navBurger"
               type="button"
-              className="hamburgerBtn"
               aria-label="Open menu"
               aria-expanded={menuOpen}
-              onClick={() => setMenuOpen(true)}
+              onClick={() => setMenuOpen((v) => !v)}
               data-cursor="hover"
             >
-              <span className="hamburgerIcon" aria-hidden>
-                <span />
-                <span />
-                <span />
-              </span>
+              <span className="burgerLines" aria-hidden />
             </button>
           </nav>
         </div>
-      </header>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            className="mobileNavOverlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onMouseDown={(e) => {
-              if (e.target === e.currentTarget) setMenuOpen(false);
-            }}
-          >
+        <AnimatePresence>
+          {menuOpen && (
             <motion.div
-              className="mobileNavPanel"
-              initial={{ x: 18, opacity: 0, scale: 0.98 }}
-              animate={{ x: 0, opacity: 1, scale: 1 }}
-              exit={{ x: 18, opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="navDrawer"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMenuOpen(false)}
             >
-              <div className="mobileNavHeader">
-                <div className="mobileNavBrand">
-                  <span className="brandMark" />
-                  <span className="brandName">ADAM</span>
-                </div>
-
-                <button
-                  type="button"
-                  className="mobileNavClose"
-                  aria-label="Close menu"
-                  onClick={() => setMenuOpen(false)}
-                  data-cursor="hover"
-                >
-                  ×
-                </button>
-              </div>
-
-              <div className="mobileNavLinks">
+              <motion.div
+                className="navDrawerPanel"
+                initial={{ y: -10, opacity: 0, scale: 0.98 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                exit={{ y: -10, opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                onClick={(e) => e.stopPropagation()}
+              >
                 {nav.map((n) => (
                   <button
                     key={n.id}
+                    className="navDrawerItem"
                     type="button"
-                    className="mobileNavLink"
                     onClick={() => go(n.id)}
-                    data-cursor="hover"
                   >
                     {n.label}
                   </button>
                 ))}
-              </div>
-
-              <div className="mobileNavFooter">
-                <button
-                  type="button"
-                  className="btn mobileNavCTA"
-                  onClick={() => go("contact")}
-                  data-cursor="hover"
-                >
+                <button className="navDrawerCTA" type="button" onClick={() => go("contact")}>
                   Contact
                 </button>
-              </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </header>
 
       <main id="home">
         {/* HERO */}
         <section className="hero">
+          {/* ✅ 배경처럼 깔리는 아트 레이어(레이아웃 영향 X) */}
+          <div className="heroBgArt" aria-hidden>
+            <img
+              className="heroProductImg"
+              src="/public/images/product_home_banner.png"
+              alt=""
+              draggable={false}
+            />
+          </div>
+
           <div className="wrap">
             <motion.div variants={stagger} initial="hidden" animate="show">
               <motion.h1 variants={fadeUp} className="heroTitle heroTitleStack">
@@ -271,7 +233,6 @@ export default function App() {
               <motion.p variants={fadeUp} className="heroDesc">
                 ADAM은 오프라인 공간에서 사람과 콘텐츠가 실시간으로 상호작용하는
                 “설치형 인터랙티브 경험”을 만듭니다.
-                <br />
               </motion.p>
 
               <motion.div variants={fadeUp} className="heroCTA">
@@ -312,12 +273,9 @@ export default function App() {
               viewport={{ once: true, amount: 0.18 }}
             >
               <motion.h2 variants={fadeUp} className="h2">
-                플랫폼 <span className="glowText">ADAM</span>
+                <span className="glowText">AI Smart Mirror</span>
               </motion.h2>
-              <motion.p variants={fadeUp} className="p">
-                제품은 달라도 코어는 하나입니다. “사람의 행동을 감지 → 해석 → 미디어로 반응 → 공유로 확장”
-                하는 실시간 경험 파이프라인을 제공합니다.
-              </motion.p>
+
 
               <motion.div variants={stagger} className="grid3">
                 {PLATFORM.map((x) => (
@@ -394,7 +352,7 @@ export default function App() {
               viewport={{ once: true, amount: 0.18 }}
             >
               <motion.h2 variants={fadeUp} className="h2">
-                회사소개
+                <span className="glowText">ADAM</span>
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
                 ADAM은 “오프라인 공간에서의 인터랙션”을 제품 수준으로 만드는 팀입니다.
@@ -436,10 +394,6 @@ export default function App() {
                 >
                   Traction
                 </motion.h3>
-                <motion.p variants={fadeUp} className="p" style={{ marginBottom: 14 }}>
-                  ADAM의 traction은 “플랫폼이 제품으로 굴러가며 지표가 나오는 것”입니다.
-                  댄스(K-Me)와 행사(ADAM Live) 트랙을 분리해 증명합니다.
-                </motion.p>
 
                 <motion.div variants={stagger} className="grid2">
                   {TRACTION.map((t) => (
@@ -483,31 +437,26 @@ export default function App() {
               viewport={{ once: true, amount: 0.18 }}
             >
               <motion.h2 variants={fadeUp} className="h2">
-                팀소개
+                <span className="glowText">Team</span>
               </motion.h2>
-              <motion.p variants={fadeUp} className="p">
-                “제품을 끝까지 만들고, 현장에서 굴려서 증명하는 사람들” 중심으로 구성됩니다.
-              </motion.p>
 
-              <motion.div variants={stagger} className="teamGrid4">
+              <motion.div variants={fadeUp} className="teamStrip">
                 {TEAM.map((m) => (
-                  <motion.button
+                  <button
                     key={m.name}
                     type="button"
-                    variants={fadeUp}
                     className="teamTile"
-                    whileHover={{ y: -4, transition: { duration: 0.18 } }}
                     onClick={() => setActiveMember(m)}
                     data-cursor="hover"
                   >
-                    <div className="teamTileImg">
-                      <img className="teamTilePhoto" src={m.img} alt={m.name} loading="lazy" />
+                    <div className="teamTileImgWrap" aria-hidden>
+                      <img className="teamTileImg" src={m.img} alt="" loading="lazy" />
                     </div>
                     <div className="teamTileMeta">
                       <div className="teamTileName">{m.name}</div>
                       <div className="teamTileRole">{m.role}</div>
                     </div>
-                  </motion.button>
+                  </button>
                 ))}
               </motion.div>
             </motion.div>
@@ -522,38 +471,36 @@ export default function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onMouseDown={(e) => {
-                if (e.target === e.currentTarget) setActiveMember(null);
-              }}
+              onClick={() => setActiveMember(null)}
             >
               <motion.div
-                className="modalDialog"
-                initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                className="modal"
+                initial={{ y: 10, opacity: 0, scale: 0.98 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                exit={{ y: 10, opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
+                onClick={(e) => e.stopPropagation()}
               >
                 <button
                   className="modalClose"
                   type="button"
-                  aria-label="Close"
                   onClick={() => setActiveMember(null)}
-                  data-cursor="hover"
+                  aria-label="Close"
                 >
                   ×
                 </button>
 
                 <div className="modalBody">
-                  <div className="modalImg">
-                    <img className="modalPhoto" src={activeMember.img} alt={activeMember.name} />
+                  <div className="modalImgWrap" aria-hidden>
+                    <img className="modalImg" src={activeMember.img} alt="" />
                   </div>
 
-                  <div className="modalInfo">
+                  <div className="modalText">
                     <div className="modalTitleRow">
                       <div className="modalName">{activeMember.name}</div>
                       <span className="modalRolePill">{activeMember.role}</span>
                     </div>
-                    <p className="modalDesc">{activeMember.one}</p>
+                    <p className="modalOne">{activeMember.one}</p>
                   </div>
                 </div>
               </motion.div>
@@ -571,7 +518,7 @@ export default function App() {
               viewport={{ once: true, amount: 0.18 }}
             >
               <motion.h2 variants={fadeUp} className="h2">
-                Contact
+                Contact Us
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
                 데모/협업/설치/행사 운영 문의는 아래로 연락 주세요.

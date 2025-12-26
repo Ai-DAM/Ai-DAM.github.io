@@ -24,7 +24,7 @@ body{
 
 #root{ position: relative; z-index: 0; }
 a{ color:inherit; text-decoration:none; }
-body, a, button { cursor: auto; }
+button{ font: inherit; color: inherit; }
 
 .wrap{
   width: min(1100px, calc(100% - clamp(24px, 4vw, 40px)));
@@ -34,12 +34,26 @@ body, a, button { cursor: auto; }
 .glowText{
   font-family: Orbitron, Inter, system-ui;
   letter-spacing: .02em;
-  background: linear-gradient(135deg, var(--p1), var(--p3), var(--p2));
-  -webkit-background-clip:text;
-  background-clip:text;
+
+  /* ✅ 기존 그라디언트 유지하되 밝은 하이라이트를 한 겹 추가 */
+  background:
+    linear-gradient(135deg,
+      rgba(255,255,255,.92) 0%,
+      var(--p3) 32%,
+      var(--p2) 66%,
+      rgba(255,255,255,.88) 100%
+    );
+  -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
-  text-shadow: 0 0 10px rgba(139,92,255,.14);
+
+  /* ✅ 글자 자체가 더 “빛나는” 느낌 */
+  text-shadow:
+    0 0 14px rgba(139,92,255,.22),
+    0 0 12px rgba(0,210,255,.16),
+    0 0 20px rgba(255,79,216,.12);
 }
+
 
 /* Topbar */
 .topbar{
@@ -77,7 +91,7 @@ body, a, button { cursor: auto; }
 .nav{
   display:flex;
   align-items:center;
-  gap: 12px;
+  gap: 10px;
   color: var(--muted);
   font-size: 14px;
 }
@@ -86,7 +100,7 @@ body, a, button { cursor: auto; }
   align-items:center;
   gap: 14px;
 }
-.navLinks a{
+.nav a{
   position: relative;
   padding: 10px 12px;
   border-radius: 14px;
@@ -98,7 +112,7 @@ body, a, button { cursor: auto; }
     border-color 160ms ease,
     box-shadow 160ms ease;
 }
-.navLinks a:hover{
+.nav a:hover{
   color: var(--text);
   background: rgba(255,255,255,.06);
   border-color: rgba(255,255,255,.10);
@@ -108,7 +122,7 @@ body, a, button { cursor: auto; }
     0 0 18px rgba(139,92,255,.14),
     0 0 14px rgba(0,210,255,.10);
 }
-.navLinks a:focus-visible{
+.nav a:focus-visible{
   outline: none;
   color: var(--text);
   background: rgba(255,255,255,.06);
@@ -116,137 +130,6 @@ body, a, button { cursor: auto; }
   box-shadow:
     0 0 0 3px rgba(139,92,255,.22),
     0 0 24px rgba(0,210,255,.18);
-}
-
-/* Hamburger */
-.hamburgerBtn{
-  display: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.06);
-  color: var(--text);
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
-}
-.hamburgerBtn:hover{
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.09);
-  border-color: rgba(255,255,255,.18);
-}
-.hamburgerIcon{
-  width: 18px;
-  height: 14px;
-  display: grid;
-  gap: 3px;
-}
-.hamburgerIcon span{
-  display:block;
-  height: 2px;
-  border-radius: 999px;
-  background: rgba(234,234,255,.92);
-  box-shadow: 0 0 12px rgba(0,210,255,.10);
-}
-
-/* Mobile menu */
-.mobileNavOverlay{
-  position: fixed;
-  inset: 0;
-  z-index: 9997;
-  background: rgba(0,0,0,.55);
-  backdrop-filter: blur(10px);
-  display: grid;
-  place-items: start end;
-  padding: 14px;
-}
-.mobileNavPanel{
-  width: min(360px, 92vw);
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 20px;
-  background: rgba(10,10,18,.90);
-  box-shadow: 0 30px 90px rgba(0,0,0,.7);
-  overflow: hidden;
-  position: relative;
-}
-.mobileNavPanel::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background:
-    radial-gradient(700px 260px at 15% 0%, rgba(139,92,255,.25), transparent 60%),
-    radial-gradient(650px 320px at 85% 0%, rgba(0,210,255,.16), transparent 60%);
-  opacity: .65;
-  filter: blur(16px);
-  pointer-events:none;
-}
-.mobileNavHeader{
-  position: relative;
-  z-index: 2;
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 14px 14px 10px;
-  border-bottom: 1px solid rgba(255,255,255,.10);
-}
-.mobileNavBrand{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-}
-.mobileNavClose{
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.06);
-  color: rgba(234,234,255,.9);
-  font-size: 24px;
-  line-height: 1;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
-}
-.mobileNavClose:hover{
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.09);
-  border-color: rgba(255,255,255,.18);
-}
-.mobileNavLinks{
-  position: relative;
-  z-index: 2;
-  display: grid;
-  gap: 8px;
-  padding: 12px 14px 8px;
-}
-.mobileNavLink{
-  width: 100%;
-  text-align: left;
-  padding: 12px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.04);
-  color: rgba(234,234,255,.88);
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
-}
-.mobileNavLink:hover{
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.07);
-  border-color: rgba(255,255,255,.16);
-}
-.mobileNavFooter{
-  position: relative;
-  z-index: 2;
-  padding: 10px 14px 14px;
-}
-.mobileNavCTA{
-  width: 100%;
 }
 
 /* Buttons */
@@ -271,15 +154,118 @@ body, a, button { cursor: auto; }
   font-weight: 800;
 }
 
+/* Mobile burger */
+.navBurger{
+  display:none;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+.burgerLines{
+  display:block;
+  width: 18px;
+  height: 12px;
+  margin: 0 auto;
+  position: relative;
+}
+.burgerLines::before,
+.burgerLines::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  height:2px;
+  border-radius: 999px;
+  background: rgba(234,234,255,.85);
+  box-shadow: 0 0 10px rgba(0,210,255,.12);
+}
+.burgerLines::before{ top:0; }
+.burgerLines::after{ bottom:0; }
+
+.navDrawer{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(10px);
+  z-index: 60;
+}
+.navDrawerPanel{
+  width: min(560px, calc(100% - 28px));
+  margin: 14px auto 0;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(5,5,10,.78);
+  box-shadow: 0 30px 90px rgba(0,0,0,.6);
+  padding: 12px;
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.navDrawerItem,
+.navDrawerCTA{
+  width: 100%;
+  text-align: left;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  cursor: pointer;
+}
+.navDrawerCTA{
+  border-color: rgba(255,255,255,.14);
+  background: linear-gradient(135deg, rgba(139,92,255,.85), rgba(0,210,255,.55));
+  font-weight: 900;
+}
+
 /* Hero */
 .hero{
   position: relative;
   padding: clamp(56px, 8vw, 96px) 0 clamp(24px, 5vw, 44px);
   isolation: isolate;
+  overflow: hidden; /* ✅ 배경 아트가 밖으로 나가도 깔끔하게 */
 }
 .hero .wrap{
   position: relative;
-  z-index: 5;
+  z-index: 2; /* ✅ 텍스트가 항상 위 */
+}
+
+/* ✅ 배경처럼 느껴지는 아트 레이어 */
+.heroBgArt{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.heroProductImg{
+  position: absolute;
+  top: 52%;
+  /* ✅ “오른쪽에서 15% 정도 떨어진 느낌” (줌/모바일에도 유지) */
+  right: clamp(18px, 15vw, 420px);
+
+  /* ✅ 조금 작게 (너가 말한 “작아도 됨”) */
+  width: clamp(170px, 22vw, 320px);
+  height: auto;
+
+  /* ✅ 레이아웃이 아니라 “배경 오브젝트” 느낌 */
+  opacity: 0.42;
+  transform: translate(12%, -50%); /* ✅ 살짝 화면 밖으로 밀어 배경감 */
+  mix-blend-mode: screen;
+
+  filter:
+    brightness(1.25)
+    contrast(1.05)
+    saturate(1.08)
+    drop-shadow(0 22px 70px rgba(0,0,0,.65));
+
+  /* ✅ 가장자리 자연스럽게 */
+  -webkit-mask-image: radial-gradient(circle at 55% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,.9) 45%, rgba(0,0,0,.0) 76%);
+  mask-image: radial-gradient(circle at 55% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,.9) 45%, rgba(0,0,0,.0) 76%);
+  will-change: transform;
 }
 
 .heroTitle{
@@ -288,14 +274,12 @@ body, a, button { cursor: auto; }
   line-height: 1.02;
   letter-spacing: -0.03em;
 }
-
 .heroTitleStack{
   display: flex;
   flex-direction: column;
   gap: clamp(4px, 0.8vw, 10px);
   max-width: 980px;
 }
-
 .heroTitleTop{
   display: inline-block;
   white-space: nowrap;
@@ -306,7 +290,6 @@ body, a, button { cursor: auto; }
     0 0 10px rgba(139,92,255,.12),
     0 0 8px rgba(0,210,255,.10);
 }
-
 .heroTitleBottom{
   display: inline-block;
   line-height: 1.02;
@@ -358,7 +341,7 @@ body, a, button { cursor: auto; }
   margin-top: 18px;
 }
 
-/* Pills / chips / mini list */
+/* Pills */
 .pillRow{ display:flex; flex-wrap:wrap; gap: 10px; }
 .pill{
   display:inline-flex;
@@ -369,49 +352,6 @@ body, a, button { cursor: auto; }
   background: rgba(255,255,255,.04);
   color: rgba(234,234,255,.78);
   font-size: 13px;
-}
-
-.cardMetaRow{
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.chip{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.18);
-  color: rgba(234,234,255,.78);
-  font-size: 12px;
-  letter-spacing: .02em;
-}
-
-.miniList{
-  margin-top: 14px;
-  display:flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.miniItem{
-  display:flex;
-  align-items:flex-start;
-  gap: 10px;
-  color: rgba(234,234,255,.78);
-  line-height: 1.55;
-  font-size: 13px;
-}
-.miniDot{
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  margin-top: 6px;
-  flex: 0 0 auto;
-  background: linear-gradient(135deg, var(--p1), var(--p3), var(--p2));
-  box-shadow: 0 0 16px rgba(0,210,255,.25);
 }
 
 /* Sections */
@@ -462,6 +402,24 @@ body, a, button { cursor: auto; }
   pointer-events:none;
 }
 .cardInner{ position:relative; z-index:2; }
+.cardMetaRow{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  color: rgba(234,234,255,.78);
+  font-size: 12px;
+  letter-spacing: .02em;
+}
 .cardTitle{
   margin:0 0 8px;
   font-weight: 900;
@@ -472,6 +430,177 @@ body, a, button { cursor: auto; }
   color: var(--muted);
   line-height: 1.7;
   font-size: clamp(14px, 1.45vw, 15px);
+}
+
+/* mini list */
+.miniList{
+  margin-top: 14px;
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.miniItem{
+  display:flex;
+  align-items:flex-start;
+  gap: 10px;
+  color: rgba(234,234,255,.78);
+  line-height: 1.55;
+  font-size: 13px;
+}
+.miniDot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  margin-top: 6px;
+  flex: 0 0 auto;
+  background: linear-gradient(135deg, var(--p1), var(--p3), var(--p2));
+  box-shadow: 0 0 16px rgba(0,210,255,.25);
+}
+
+/* Team strip */
+.teamStrip{
+  display:flex;
+  gap: 14px;
+  align-items: stretch;
+}
+.teamTile{
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  border-radius: 18px;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+.teamTile:hover{
+  transform: translateY(-4px);
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.14);
+}
+.teamTileImgWrap{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.20);
+  display:grid;
+  place-items: center;
+  overflow:hidden;
+}
+.teamTileImg{
+  width: 92%;
+  height: 92%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 18px 40px rgba(0,0,0,.55));
+}
+.teamTileMeta{
+  margin-top: 10px;
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.teamTileName{
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.teamTileRole{
+  font-size: 12px;
+  opacity: .75;
+  letter-spacing: .08em;
+  font-weight: 900;
+}
+
+/* Modal */
+.modalOverlay{
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(10px);
+  display:grid;
+  place-items: center;
+  padding: 18px;
+}
+.modal{
+  width: min(860px, 100%);
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(5,5,10,.86);
+  box-shadow: 0 40px 120px rgba(0,0,0,.70);
+  position: relative;
+  overflow:hidden;
+}
+.modalClose{
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+}
+.modalBody{
+  display:grid;
+  grid-template-columns: 260px 1fr;
+  gap: 18px;
+  padding: 18px;
+  align-items: center;
+}
+.modalImgWrap{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background:
+    radial-gradient(520px 240px at 20% 0%, rgba(139,92,255,.18), transparent 60%),
+    radial-gradient(520px 240px at 90% 0%, rgba(0,210,255,.14), transparent 60%),
+    rgba(0,0,0,.22);
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.modalImg{
+  width: 92%;
+  height: 92%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 22px 55px rgba(0,0,0,.65));
+}
+.modalTitleRow{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.modalName{
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+.modalRolePill{
+  display:inline-flex;
+  align-items:center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  color: rgba(234,234,255,.80);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.modalOne{
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.75;
 }
 
 /* Footer */
@@ -488,35 +617,6 @@ body, a, button { cursor: auto; }
   justify-content: space-between;
   gap: 14px;
   flex-wrap: wrap;
-}
-
-/* Custom cursor */
-.cursorWrap{
-  position: fixed;
-  inset: 0;
-  pointer-events:none;
-  z-index: 9999;
-}
-.cursorDot{
-  position:absolute;
-  width: 6px; height: 6px; border-radius: 999px;
-  background: linear-gradient(135deg, var(--p1), var(--p3), var(--p2));
-  box-shadow: 0 0 16px rgba(0,210,255,.35);
-  transform: translate(-50%, -50%);
-}
-.cursorRing{
-  position:absolute;
-  width: 36px; height: 36px; border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: radial-gradient(circle at 30% 30%, rgba(139,92,255,.20), transparent 55%);
-  box-shadow: 0 0 34px rgba(139,92,255,.18);
-  transform: translate(-50%, -50%);
-}
-@media (pointer: fine) and (hover: hover) {
-  body, a, button { cursor: none; }
-}
-@media (pointer: coarse), (hover: none) {
-  .cursorWrap { display: none !important; }
 }
 
 /* BackgroundFX */
@@ -562,262 +662,62 @@ body, a, button { cursor: auto; }
     radial-gradient(900px 520px at 100% 50%, rgba(0,0,0,.20), transparent 60%);
 }
 
-/* =========================
-   Team: 4x1 유지(모바일은 가로 스크롤)
-   ========================= */
-
-.teamGrid4{
-  display: grid;
-  grid-template-columns: repeat(4, minmax(160px, 1fr));
-  gap: 14px;
-}
-
-/* 버튼 카드 */
-.teamTile{
-  appearance: none;
-  border: 1px solid var(--line);
-  border-radius: clamp(16px, 2vw, 22px);
-  background: rgba(255,255,255,.04);
-  padding: 14px;
-  position: relative;
-  overflow: hidden;
-  text-align: left;
-  color: inherit;
-  cursor: pointer;
-  transition:
-    transform 160ms ease,
-    border-color 160ms ease,
-    background 160ms ease,
-    box-shadow 160ms ease;
-}
-.teamTile::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background:
-    radial-gradient(520px 200px at 20% 0%, rgba(139,92,255,.18), transparent 60%),
-    radial-gradient(480px 220px at 85% 0%, rgba(0,210,255,.12), transparent 60%);
-  opacity: .75;
-  filter: blur(14px);
-  pointer-events:none;
-}
-.teamTile:hover{
-  transform: translateY(-4px);
-  border-color: rgba(255,255,255,.16);
-  background: rgba(255,255,255,.055);
-  box-shadow:
-    0 18px 55px rgba(0,0,0,.55),
-    0 0 18px rgba(139,92,255,.12),
-    0 0 14px rgba(0,210,255,.10);
-}
-.teamTile:focus-visible{
-  outline: none;
-  border-color: rgba(255,255,255,.22);
-  box-shadow:
-    0 0 0 3px rgba(139,92,255,.22),
-    0 0 24px rgba(0,210,255,.18);
-}
-
-.teamTileImg{
-  position: relative;
-  z-index: 2;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.18);
-  aspect-ratio: 1 / 1;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-
-.teamTilePhoto{
-  width: 86%;
-  height: 86%;
-  object-fit: contain;
-  object-position: center bottom;
-  transform: translateY(2px);
-  filter: drop-shadow(0 18px 30px rgba(0,0,0,.35));
-}
-
-.teamTileMeta{
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.teamTileName{
-  font-weight: 900;
-  letter-spacing: -0.02em;
-}
-
-.teamTileRole{
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: .08em;
-  color: rgba(234,234,255,.72);
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.04);
-  padding: 5px 9px;
-  border-radius: 999px;
-  flex: 0 0 auto;
-}
-
-/* Modal */
-.modalOverlay{
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  background: rgba(0,0,0,.55);
-  backdrop-filter: blur(10px);
-  display: grid;
-  place-items: center;
-  padding: 18px;
-}
-
-.modalDialog{
-  width: min(860px, 100%);
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 22px;
-  background: rgba(10,10,18,.88);
-  box-shadow: 0 30px 90px rgba(0,0,0,.7);
-  position: relative;
-  overflow: hidden;
-}
-.modalDialog::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background:
-    radial-gradient(700px 260px at 15% 0%, rgba(139,92,255,.25), transparent 60%),
-    radial-gradient(650px 320px at 85% 0%, rgba(0,210,255,.16), transparent 60%);
-  opacity: .65;
-  filter: blur(16px);
-  pointer-events:none;
-}
-
-.modalClose{
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.06);
-  color: rgba(234,234,255,.9);
-  font-size: 24px;
-  line-height: 1;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  z-index: 3;
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
-}
-.modalClose:hover{
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.09);
-  border-color: rgba(255,255,255,.18);
-}
-
-.modalBody{
-  position: relative;
-  z-index: 2;
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 18px;
-  padding: 18px;
-  align-items: center;
-}
-
-.modalImg{
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.18);
-  aspect-ratio: 1 / 1;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-.modalPhoto{
-  width: 90%;
-  height: 90%;
-  object-fit: contain;
-  object-position: center bottom;
-  filter: drop-shadow(0 18px 30px rgba(0,0,0,.35));
-}
-
-.modalInfo{
-  min-width: 0;
-}
-.modalTitleRow{
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-.modalName{
-  font-weight: 1000;
-  font-size: 22px;
-  letter-spacing: -0.02em;
-}
-.modalRolePill{
-  display:inline-flex;
-  align-items:center;
-  padding: 7px 11px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.05);
-  color: rgba(234,234,255,.86);
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: .08em;
-  flex: 0 0 auto;
-}
-.modalDesc{
-  margin: 0;
-  color: rgba(234,234,255,.78);
-  line-height: 1.75;
-  font-size: 14px;
-}
-
 /* Responsive */
 @media (max-width: 980px){
   .grid3{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .heroTitleTop{ font-size: 0.90em; }
+}
 
-  /* Team은 4x1 유지 + 가로 스크롤 */
-  .teamGrid4{
+@media (max-width: 860px){
+  .navLinks{ display:none; }
+  .navCTA{ display:none; }
+  .navBurger{ display:inline-flex; align-items:center; justify-content:center; }
+
+  /* ✅ 모바일/줌에서도 "안 사라지게" + 더 배경처럼 */
+  .heroProductImg{
+    position: absolute;
+    top: 52%;
+    right: clamp(18px, 15vw, 200px);   /* ✅ 15% 느낌 */
+    width: clamp(150px, 22vw, 300px);
+    height: auto;
+
+    /* ✅ “어둡게”가 아니라 “은은하게” */
+    opacity: 0.55;
+    transform: translate(10%, -50%);   /* 살짝 밖으로 밀어서 배경감 */
+    pointer-events: none;
+    user-select: none;
+
+    /* ✅ PNG 누끼가 자연스럽게 */
+    mix-blend-mode: normal;            /* screen이 어두운 PNG엔 오히려 이상할 때가 많음 */
+    filter:
+      drop-shadow(0 18px 55px rgba(0,0,0,.55))
+      brightness(1.05)
+      saturate(1.05);
+
+    /* ✅ 가장자리만 부드럽게 (검은 오버레이 X) */
+    -webkit-mask-image: radial-gradient(circle at 55% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,.95) 52%, rgba(0,0,0,0) 78%);
+    mask-image: radial-gradient(circle at 55% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,.95) 52%, rgba(0,0,0,0) 78%);
+  }
+
+
+  /* ✅ Team은 4x1 유지: 모바일은 가로 스크롤 */
+  .teamStrip{
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     padding-bottom: 6px;
     scroll-snap-type: x mandatory;
   }
   .teamTile{
-    min-width: 170px;
+    flex: 0 0 200px;
     scroll-snap-align: start;
   }
-}
 
-@media (max-width: 860px){
-  /* 네비 링크/CTA 숨기고 햄버거 표시 */
-  .navLinks{ display: none; }
-  .navCTA{ display: none; }
-  .hamburgerBtn{ display: inline-flex; }
+  .modalBody{ grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px){
   .grid3{ grid-template-columns: 1fr; }
   .grid2{ grid-template-columns: 1fr; }
-  .heroCTA{ gap: 10px; }
   .pill{ font-size: 12px; }
-  .miniItem{ font-size: 12.5px; }
-
-  .modalBody{ grid-template-columns: 1fr; }
-  .modalName{ font-size: 20px; }
 }
 
 @media (max-width: 560px){
