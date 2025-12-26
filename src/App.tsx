@@ -21,8 +21,7 @@ function scrollTo(id: string) {
 }
 
 export default function App() {
-  // ✅ 섹션은 Platform / Service / About / Team / Contact만
-  // ✅ nav에 Contact 넣지 말고, 우측 CTA 버튼 하나만 사용
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const TEAM = [
     {
@@ -51,24 +50,8 @@ export default function App() {
     },
   ] as const;
 
-  const [activeMember, setActiveMember] = useState<(typeof TEAM)[number] | null>(null);
-
-  useEffect(() => {
-    if (!activeMember) return;
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActiveMember(null);
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [activeMember]);
+  type TeamMember = (typeof TEAM)[number];
+  const [activeMember, setActiveMember] = useState<TeamMember | null>(null);
 
   const nav = [
     { id: "Platform", label: "Platform" },
@@ -105,7 +88,6 @@ export default function App() {
     { t: "Scale", d: "콘텐츠/파트너/공간으로 확장되는 설치형 플랫폼으로 성장한다." },
   ];
 
-  // ✅ Traction은 About(회사소개) 섹션의 하위 블록으로만 사용
   const TRACTION = [
     {
       head: "K-Me (Dance)",
@@ -125,6 +107,31 @@ export default function App() {
     },
   ];
 
+  // ESC로 닫기 + body 스크롤 잠금
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setActiveMember(null);
+        setMenuOpen(false);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+
+    const prev = document.body.style.overflow;
+    if (menuOpen || !!activeMember) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = prev || "";
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prev || "";
+    };
+  }, [menuOpen, activeMember]);
+
+  const go = (id: string) => {
+    setMenuOpen(false);
+    scrollTo(id);
+  };
+
   return (
     <>
       <CustomCursor />
@@ -135,7 +142,7 @@ export default function App() {
           <a
             className="brand"
             href="#home"
-            onClick={(e) => (e.preventDefault(), scrollTo("home"))}
+            onClick={(e) => (e.preventDefault(), go("home"))}
             data-cursor="hover"
           >
             <span className="brandMark" />
@@ -143,29 +150,113 @@ export default function App() {
           </a>
 
           <nav className="nav">
-            {nav.map((n) => (
-              <a
-                key={n.id}
-                href={`#${n.id}`}
-                onClick={(e) => (e.preventDefault(), scrollTo(n.id))}
-                data-cursor="hover"
-              >
-                {n.label}
-              </a>
-            ))}
+            {/* Desktop links */}
+            <div className="navLinks">
+              {nav.map((n) => (
+                <a
+                  key={n.id}
+                  href={`#${n.id}`}
+                  onClick={(e) => (e.preventDefault(), go(n.id))}
+                  data-cursor="hover"
+                >
+                  {n.label}
+                </a>
+              ))}
+            </div>
 
-            {/* ✅ Contact 버튼 하나만 남김 */}
+            {/* Desktop CTA */}
             <a
-              className="btn btnSm"
+              className="btn btnSm navCTA"
               href="#contact"
-              onClick={(e) => (e.preventDefault(), scrollTo("contact"))}
+              onClick={(e) => (e.preventDefault(), go("contact"))}
               data-cursor="hover"
             >
               Contact
             </a>
+
+            {/* Mobile hamburger */}
+            <button
+              type="button"
+              className="hamburgerBtn"
+              aria-label="Open menu"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(true)}
+              data-cursor="hover"
+            >
+              <span className="hamburgerIcon" aria-hidden>
+                <span />
+                <span />
+                <span />
+              </span>
+            </button>
           </nav>
         </div>
       </header>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className="mobileNavOverlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onMouseDown={(e) => {
+              if (e.target === e.currentTarget) setMenuOpen(false);
+            }}
+          >
+            <motion.div
+              className="mobileNavPanel"
+              initial={{ x: 18, opacity: 0, scale: 0.98 }}
+              animate={{ x: 0, opacity: 1, scale: 1 }}
+              exit={{ x: 18, opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+            >
+              <div className="mobileNavHeader">
+                <div className="mobileNavBrand">
+                  <span className="brandMark" />
+                  <span className="brandName">ADAM</span>
+                </div>
+
+                <button
+                  type="button"
+                  className="mobileNavClose"
+                  aria-label="Close menu"
+                  onClick={() => setMenuOpen(false)}
+                  data-cursor="hover"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="mobileNavLinks">
+                {nav.map((n) => (
+                  <button
+                    key={n.id}
+                    type="button"
+                    className="mobileNavLink"
+                    onClick={() => go(n.id)}
+                    data-cursor="hover"
+                  >
+                    {n.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mobileNavFooter">
+                <button
+                  type="button"
+                  className="btn mobileNavCTA"
+                  onClick={() => go("contact")}
+                  data-cursor="hover"
+                >
+                  Contact
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main id="home">
         {/* HERO */}
@@ -178,8 +269,8 @@ export default function App() {
               </motion.h1>
 
               <motion.p variants={fadeUp} className="heroDesc">
-                ADAM은 오프라인 공간에서 사람과 콘텐츠가 실시간으로 상호작용하는 “설치형 인터랙티브 경험”을
-                만듭니다.
+                ADAM은 오프라인 공간에서 사람과 콘텐츠가 실시간으로 상호작용하는
+                “설치형 인터랙티브 경험”을 만듭니다.
                 <br />
               </motion.p>
 
@@ -187,17 +278,16 @@ export default function App() {
                 <a
                   className="btn"
                   href="#contact"
-                  onClick={(e) => (e.preventDefault(), scrollTo("contact"))}
+                  onClick={(e) => (e.preventDefault(), go("contact"))}
                   data-cursor="hover"
                 >
                   데모 / 협업 문의
                 </a>
 
-                {/* ✅ 기존 #solutions → #Service 로 수정 */}
                 <a
                   className="btn btnGhost"
                   href="#Service"
-                  onClick={(e) => (e.preventDefault(), scrollTo("Service"))}
+                  onClick={(e) => (e.preventDefault(), go("Service"))}
                   data-cursor="hover"
                 >
                   제품 라인업 보기
@@ -294,7 +384,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* About (회사소개) + Traction 하위항목 */}
+        {/* About + Traction */}
         <section id="company" className="section">
           <div className="wrap">
             <motion.div
@@ -338,7 +428,6 @@ export default function App() {
                 ))}
               </motion.div>
 
-              {/* ✅ Traction = About 하위항목 */}
               <motion.div variants={stagger} style={{ marginTop: 26 }}>
                 <motion.h3
                   variants={fadeUp}
@@ -384,7 +473,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* Team (4x1 tiles + modal) */}
+        {/* Team */}
         <section id="team" className="section sectionAlt">
           <div className="wrap">
             <motion.div
@@ -407,11 +496,12 @@ export default function App() {
                     type="button"
                     variants={fadeUp}
                     className="teamTile"
+                    whileHover={{ y: -4, transition: { duration: 0.18 } }}
                     onClick={() => setActiveMember(m)}
                     data-cursor="hover"
                   >
                     <div className="teamTileImg">
-                      <img src={m.img} alt={m.name} className="teamTilePhoto" loading="lazy" />
+                      <img className="teamTilePhoto" src={m.img} alt={m.name} loading="lazy" />
                     </div>
                     <div className="teamTileMeta">
                       <div className="teamTileName">{m.name}</div>
@@ -420,57 +510,56 @@ export default function App() {
                   </motion.button>
                 ))}
               </motion.div>
-
-              <AnimatePresence>
-                {activeMember && (
-                  <motion.div
-                    className="modalOverlay"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={() => setActiveMember(null)}
-                  >
-                    <motion.div
-                      className="modalDialog"
-                      role="dialog"
-                      aria-modal="true"
-                      initial={{ opacity: 0, y: 16, scale: 0.98 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 16, scale: 0.98 }}
-                      transition={{ duration: 0.18, ease: "easeOut" }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <button
-                        type="button"
-                        className="modalClose"
-                        onClick={() => setActiveMember(null)}
-                        aria-label="Close"
-                        data-cursor="hover"
-                      >
-                        ×
-                      </button>
-
-                      <div className="modalBody">
-                        <div className="modalImg">
-                          <img src={activeMember.img} alt={activeMember.name} className="modalPhoto" />
-                        </div>
-
-                        <div className="modalInfo">
-                          <div className="modalTitleRow">
-                            <div className="modalName">{activeMember.name}</div>
-                            <span className="modalRolePill">{activeMember.role}</span>
-                          </div>
-
-                          <p className="modalDesc">{activeMember.one}</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
           </div>
         </section>
+
+        {/* Team modal */}
+        <AnimatePresence>
+          {activeMember && (
+            <motion.div
+              className="modalOverlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onMouseDown={(e) => {
+                if (e.target === e.currentTarget) setActiveMember(null);
+              }}
+            >
+              <motion.div
+                className="modalDialog"
+                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+              >
+                <button
+                  className="modalClose"
+                  type="button"
+                  aria-label="Close"
+                  onClick={() => setActiveMember(null)}
+                  data-cursor="hover"
+                >
+                  ×
+                </button>
+
+                <div className="modalBody">
+                  <div className="modalImg">
+                    <img className="modalPhoto" src={activeMember.img} alt={activeMember.name} />
+                  </div>
+
+                  <div className="modalInfo">
+                    <div className="modalTitleRow">
+                      <div className="modalName">{activeMember.name}</div>
+                      <span className="modalRolePill">{activeMember.role}</span>
+                    </div>
+                    <p className="modalDesc">{activeMember.one}</p>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Contact */}
         <section id="contact" className="section sectionAlt">
@@ -499,7 +588,7 @@ export default function App() {
                 <a
                   className="btn btnGhost"
                   href="#home"
-                  onClick={(e) => (e.preventDefault(), scrollTo("home"))}
+                  onClick={(e) => (e.preventDefault(), go("home"))}
                   data-cursor="hover"
                 >
                   Back to top
