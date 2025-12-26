@@ -217,7 +217,7 @@ export default function App() {
           <div className="heroBgArt" aria-hidden>
             <img
               className="heroProductImg"
-              src="/public/images/product_home_banner.png"
+              src="/images/product_home_banner.png"
               alt=""
               draggable={false}
             />
