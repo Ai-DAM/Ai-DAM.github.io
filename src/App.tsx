@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import CustomCursor from "./components/CustomCursor";
-import { PARTNERS, TEAM } from "./data";
+import BackgroundFX from "./components/BackgroundFX";
+import { TEAM } from "./data";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
@@ -20,23 +21,114 @@ function scrollTo(id: string) {
 }
 
 export default function App() {
+  const nav = [
+    { id: "Platform", label: "Platform" },
+    { id: "Service", label: "Service" },
+    { id: "company", label: "About" },
+    { id: "team", label: "Team" },
+    { id: "traction", label: "Traction" },
+    { id: "contact", label: "Contact" },
+  ];
+
+  const SOLUTIONS = [
+    {
+      name: "K-Me",
+      tag: "Dance Training",
+      title: "댄서의 연습 루프를 ‘측정 가능한 경험’으로",
+      desc:
+        "스마트미러 기반 오버레이 트레이닝 + AI 피드백으로 촬영–비교–수정–반복을 한 번에. " +
+        "스튜디오 설치형 제품으로 운영/확장에 최적화됩니다.",
+    },
+    {
+      name: "ADAM Live",
+      tag: "Events & Pop-ups",
+      title: "관객이 반응하면 콘텐츠가 즉시 반응하는 무대",
+      desc:
+        "대학 입학식, 브랜드 팝업, 아이돌 행사에서 ‘인사/제스처/포즈’ 같은 행동을 실시간으로 인식해 " +
+        "영상/그래픽/사운드를 반응시키는 인터랙티브 미디어 경험을 제공합니다.",
+    },
+  ] as const;
+
+  const PLATFORM = [
+    {
+      t: "Sense",
+      d: "Camera 기반으로 사람의 포즈/제스처/행동을 안정적으로 캡처.",
+    },
+    {
+      t: "Interpret",
+      d: "AI가 의미를 해석(인사, 포즈, 타이밍, 상태)하여 트리거를 만든다.",
+    },
+    {
+      t: "Respond",
+      d: "디스플레이/미디어/이펙트가 즉시 반응하여 ‘살아있는 경험’을 만든다.",
+    },
+    {
+      t: "Distribute",
+      d: "QR/저장/공유로 UGC 루프를 만들고, 다음 방문을 유도한다.",
+    },
+    {
+      t: "Operate",
+      d: "현장 설치/부팅/권한/네트워크 등 운영 안정성을 제품 수준으로 만든다.",
+    },
+    {
+      t: "Scale",
+      d: "콘텐츠/파트너/공간으로 확장되는 설치형 플랫폼으로 성장한다.",
+    },
+  ];
+
+  const TRACTION = [
+    {
+      head: "K-Me (Dance)",
+      items: [
+        { k: "Pilot", v: "스튜디오 설치형 PoC 운영/검증" },
+        { k: "Iteration", v: "댄서 피드백 기반 UX/하드웨어 고도화" },
+        { k: "Content", v: "연습 루프를 콘텐츠/데이터로 확장" },
+      ],
+    },
+    {
+      head: "ADAM Live (Events)",
+      items: [
+        { k: "Use-cases", v: "입학식/팝업/브랜드 행사 시나리오 구체화" },
+        { k: "Event Kit", v: "현장 설치+운영 패키지 단위로 상품화" },
+        { k: "Engagement", v: "참여율/촬영/QR 전환 지표로 성과 측정" },
+      ],
+    },
+  ];
+
   return (
     <>
       <CustomCursor />
+      <BackgroundFX />
 
       <header className="topbar">
         <div className="wrap topInner">
-          <a className="brand" href="#home" onClick={(e) => (e.preventDefault(), scrollTo("home"))}>
+          <a
+            className="brand"
+            href="#home"
+            onClick={(e) => (e.preventDefault(), scrollTo("home"))}
+            data-cursor="hover"
+          >
             <span className="brandMark" />
             <span className="brandName">ADAM</span>
           </a>
 
           <nav className="nav">
-            <a href="#service" onClick={(e) => (e.preventDefault(), scrollTo("service"))}>서비스소개</a>
-            <a href="#company" onClick={(e) => (e.preventDefault(), scrollTo("company"))}>회사소개</a>
-            <a href="#team" onClick={(e) => (e.preventDefault(), scrollTo("team"))}>팀소개</a>
-            <a href="#partners" onClick={(e) => (e.preventDefault(), scrollTo("partners"))}>협력사</a>
-            <a className="btn btnSm" href="#contact" onClick={(e) => (e.preventDefault(), scrollTo("contact"))}>
+            {nav.map((n) => (
+              <a
+                key={n.id}
+                href={`#${n.id}`}
+                onClick={(e) => (e.preventDefault(), scrollTo(n.id))}
+                data-cursor="hover"
+              >
+                {n.label}
+              </a>
+            ))}
+            <a
+              className="btn btnSm"
+              href="#contact"
+              onClick={(e) => (e.preventDefault(), scrollTo("contact"))}
+              data-cursor="hover"
+            >
               Contact
             </a>
           </nav>
@@ -46,74 +138,67 @@ export default function App() {
       <main id="home">
         {/* HERO */}
         <section className="hero">
-          <div className="heroBG" />
           <div className="wrap">
             <motion.div variants={stagger} initial="hidden" animate="show">
-              <motion.div variants={fadeUp} className="badge">
-                <span className="badgeDot" />
-                <span>AI-DAM.ai · Smart Mirror Platform</span>
-              </motion.div>
 
-              <motion.h1 variants={fadeUp} className="heroTitle">
-                Where dance becomes <span className="glowText">measurable</span>.
+              <motion.h1 variants={fadeUp} className="heroTitle heroTitleStack">
+                <span className="heroTitleTop glowText">Real-time interactive experiences,</span>
+                <span className="heroTitleBottom glowText glowTextSoft">for real spaces.</span>
               </motion.h1>
 
+
               <motion.p variants={fadeUp} className="heroDesc">
-                ADAM은 댄서의 연습 루프를 혁신하는 AI 스마트미러 플랫폼입니다.
-                촬영–오버레이–피드백–반복을 하나의 경험으로 묶고,
-                스튜디오부터 브랜드 팝업까지 확장 가능한 인터랙티브 미디어로 진화합니다.
+                ADAM은 오프라인 공간에서 사람과 콘텐츠가 실시간으로 상호작용하는
+                “설치형 인터랙티브 경험”을 만듭니다.
+                <br />
               </motion.p>
 
               <motion.div variants={fadeUp} className="heroCTA">
-                <a className="btn" href="#contact" onClick={(e) => (e.preventDefault(), scrollTo("contact"))}>
-                  데모 요청하기
+                <a
+                  className="btn"
+                  href="#contact"
+                  onClick={(e) => (e.preventDefault(), scrollTo("contact"))}
+                  data-cursor="hover"
+                >
+                  데모 / 협업 문의
                 </a>
-                <a className="btn btnGhost" href="#service" onClick={(e) => (e.preventDefault(), scrollTo("service"))}>
-                  서비스 한눈에 보기
+                <a
+                  className="btn btnGhost"
+                  href="#solutions"
+                  onClick={(e) => (e.preventDefault(), scrollTo("solutions"))}
+                  data-cursor="hover"
+                >
+                  제품 라인업 보기
                 </a>
               </motion.div>
 
-              <motion.div variants={fadeUp} className="kpiRow">
-                <div className="kpi">
-                  <div className="kpiK">Real-time</div>
-                  <div className="kpiV">Pose / Motion</div>
-                </div>
-                <div className="kpi">
-                  <div className="kpiK">Deployment</div>
-                  <div className="kpiV">Studio · Pop-up</div>
-                </div>
-                <div className="kpi">
-                  <div className="kpiK">Experience</div>
-                  <div className="kpiV">Neon UI · Interactive</div>
-                </div>
+              <motion.div variants={fadeUp} className="pillRow" style={{ marginTop: 18 }}>
+                <span className="pill">K-Me · Dance Training</span>
+                <span className="pill">ADAM Live · Events & Pop-ups</span>
               </motion.div>
             </motion.div>
           </div>
         </section>
 
-        {/* 서비스소개 */}
-        <section id="service" className="section">
+        {/* 플랫폼 (Platform) */}
+        <section id="Platform" className="section sectionAlt">
           <div className="wrap">
             <motion.div
               variants={stagger}
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.18 }}
             >
               <motion.h2 variants={fadeUp} className="h2">
-                서비스소개 <span className="glowText">ADAM</span>
+                플랫폼 <span className="glowText">ADAM</span>
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
-                연습의 “반복”을 더 빠르고, 더 정확하고, 더 재밌게.
-                댄서가 혼자서도 퀄리티를 끌어올릴 수 있는 피드백 루프를 제공합니다.
+                제품은 달라도 코어는 하나입니다. “사람의 행동을 감지 → 해석 → 미디어로 반응 → 공유로 확장”
+                하는 실시간 경험 파이프라인을 제공합니다.
               </motion.p>
 
               <motion.div variants={stagger} className="grid3">
-                {[
-                  { t: "Overlay Training", d: "미러 기반 오버레이/타이밍 가이드/반복 루프." },
-                  { t: "AI Feedback", d: "자세 추정 기반의 정량 피드백과 개선 포인트." },
-                  { t: "Event Mode", d: "팝업용 인터랙션(제스처/QR/프레임) 제공." },
-                ].map((x) => (
+                {PLATFORM.map((x) => (
                   <motion.article
                     key={x.t}
                     variants={fadeUp}
@@ -132,28 +217,83 @@ export default function App() {
           </div>
         </section>
 
-        {/* 회사소개 */}
-        <section id="company" className="section sectionAlt">
+
+
+
+        {/* Service */}
+        <section id="Service" className="section">
           <div className="wrap">
             <motion.div
               variants={stagger}
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.18 }}
+            >
+              <motion.h2 variants={fadeUp} className="h2">
+                <span className="glowText">Service Line-Up</span>
+              </motion.h2>
+
+              <motion.div variants={stagger} className="grid2">
+                {SOLUTIONS.map((s) => (
+                  <motion.article
+                    key={s.name}
+                    variants={fadeUp}
+                    className="card"
+                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                    data-cursor="hover"
+                  >
+                    <div className="cardInner">
+                      <div className="cardMetaRow">
+                        <span className="chip">{s.tag}</span>
+                      </div>
+
+                      <h3 className="cardTitle" style={{ fontSize: "clamp(18px, 1.9vw, 20px)" }}>
+                        <span className="glowText" style={{ textShadow: "none" }}>
+                          {s.name}
+                        </span>
+                      </h3>
+
+                      <p className="cardText" style={{ marginBottom: 10 }}>
+                        <b style={{ color: "var(--text)" }}>{s.title}</b>
+                      </p>
+                      <p className="cardText">{s.desc}</p>
+                    </div>
+                  </motion.article>
+                ))}
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        
+        {/* 회사소개 */}
+        <section id="company" className="section">
+          <div className="wrap">
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.18 }}
             >
               <motion.h2 variants={fadeUp} className="h2">
                 회사소개
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
-                우리는 “댄서가 스스로 성장하는 환경”을 만든다.  
-                하드웨어(키오스크/미러)와 소프트웨어(AI/콘텐츠/UX)를 하나의 제품으로 설계해,
-                설치형 경험을 플랫폼으로 확장합니다.
+                ADAM은 “오프라인 공간에서의 인터랙션”을 제품 수준으로 만드는 팀입니다.
+                하드웨어(스마트 디스플레이/키오스크)와 소프트웨어(AI/콘텐츠/UX)를 하나의 경험으로 설계하고,
+                설치형 경험을 반복 가능한 패키지로 상품화합니다.
               </motion.p>
 
               <motion.div variants={stagger} className="grid2">
                 {[
-                  { t: "Mission", d: "댄스 연습 경험을 데이터와 몰입형 UI로 재정의한다." },
-                  { t: "Why now", d: "UGC/댄스 콘텐츠 폭증 + 오프라인 경험의 프리미엄화." },
+                  {
+                    t: "What we sell",
+                    d: "설치형 AI 인터랙티브 경험(제품/패키지) — 스튜디오용, 행사/팝업용.",
+                  },
+                  {
+                    t: "How we win",
+                    d: "현장 안정성 + 즉시 반응하는 UX + 공유(UGC) 루프까지 한 번에 제공.",
+                  },
                 ].map((x) => (
                   <motion.article
                     key={x.t}
@@ -174,17 +314,19 @@ export default function App() {
         </section>
 
         {/* 팀소개 */}
-        <section id="team" className="section">
+        <section id="team" className="section sectionAlt">
           <div className="wrap">
             <motion.div
               variants={stagger}
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.18 }}
             >
-              <motion.h2 variants={fadeUp} className="h2">팀소개</motion.h2>
+              <motion.h2 variants={fadeUp} className="h2">
+                팀소개
+              </motion.h2>
               <motion.p variants={fadeUp} className="p">
-                “제품을 끝까지 만드는 사람들” 중심으로 구성됩니다.
+                “제품을 끝까지 만들고, 현장에서 굴려서 증명하는 사람들” 중심으로 구성됩니다.
               </motion.p>
 
               <motion.div variants={stagger} className="grid3">
@@ -198,7 +340,9 @@ export default function App() {
                   >
                     <div className="cardInner">
                       <h3 className="cardTitle">{m.name}</h3>
-                      <p className="cardText" style={{ marginBottom: 10 }}>{m.role}</p>
+                      <p className="cardText" style={{ marginBottom: 10 }}>
+                        {m.role}
+                      </p>
                       <p className="cardText">{m.desc}</p>
                     </div>
                   </motion.article>
@@ -208,31 +352,48 @@ export default function App() {
           </div>
         </section>
 
-        {/* 협력사 */}
-        <section id="partners" className="section sectionAlt">
+        {/* Traction */}
+        <section id="traction" className="section">
           <div className="wrap">
             <motion.div
               variants={stagger}
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.18 }}
             >
-              <motion.h2 variants={fadeUp} className="h2">협력사</motion.h2>
+              <motion.h2 variants={fadeUp} className="h2">
+                Traction
+              </motion.h2>
               <motion.p variants={fadeUp} className="p">
-                스튜디오/행사/브랜드 파트너와 함께 설치형 경험을 확장합니다.
+                ADAM의 traction은 “플랫폼이 제품으로 굴러가며 지표가 나오는 것”입니다.
+                댄스(K-Me)와 행사(ADAM Live) 트랙을 분리해 증명합니다.
               </motion.p>
 
-              <motion.div variants={stagger} className="grid3">
-                {PARTNERS.map((p) => (
-                  <motion.div
-                    key={p}
+              <motion.div variants={stagger} className="grid2">
+                {TRACTION.map((t) => (
+                  <motion.article
+                    key={t.head}
                     variants={fadeUp}
-                    className="partnerLogo"
-                    whileHover={{ scale: 1.02 }}
+                    className="card"
+                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
                     data-cursor="hover"
                   >
-                    {p}
-                  </motion.div>
+                    <div className="cardInner">
+                      <h3 className="cardTitle">{t.head}</h3>
+
+                      <div className="miniList" style={{ marginTop: 10 }}>
+                        {t.items.map((it) => (
+                          <div key={it.k} className="miniItem">
+                            <span className="miniDot" />
+                            <span>
+                              <b style={{ color: "var(--text)" }}>{it.k}:</b>{" "}
+                              <span style={{ color: "var(--muted)" }}>{it.v}</span>
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.article>
                 ))}
               </motion.div>
             </motion.div>
@@ -240,20 +401,25 @@ export default function App() {
         </section>
 
         {/* Contact */}
-        <section id="contact" className="section">
+        <section id="contact" className="section sectionAlt">
           <div className="wrap">
             <motion.div
               variants={stagger}
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.18 }}
             >
-              <motion.h2 variants={fadeUp} className="h2">Contact</motion.h2>
+              <motion.h2 variants={fadeUp} className="h2">
+                Contact
+              </motion.h2>
               <motion.p variants={fadeUp} className="p">
-                데모/협업/설치 문의는 아래로 바로 연락 주세요.
+                데모/협업/설치/행사 운영 문의는 아래로 연락 주세요.
               </motion.p>
 
-              <motion.div variants={fadeUp} style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <motion.div
+                variants={fadeUp}
+                style={{ display: "flex", gap: 12, flexWrap: "wrap" }}
+              >
                 <a
                   className="btn"
                   href="mailto:contact@ai-dam.ai?subject=ADAM%20Demo%20Request"
@@ -277,7 +443,7 @@ export default function App() {
         <footer className="footer">
           <div className="wrap footerInner">
             <span>© {new Date().getFullYear()} ADAM. All rights reserved.</span>
-            <span style={{ opacity: 0.8 }}>AI Dance Assistance Mirror</span>
+            <span style={{ opacity: 0.8 }}>Interactive AI Experience Platform</span>
           </div>
         </footer>
       </main>
