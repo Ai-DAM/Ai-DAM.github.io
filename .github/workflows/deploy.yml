@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -24,12 +24,18 @@ jobs:
         with:
           node-version: 20
           cache: "npm"
+          # ✅ 루트에 package-lock.json이 있는 "그 프로젝트" 기준으로 캐시 잡기
+          cache-dependency-path: package-lock.json
 
       - run: npm ci
       - run: npm run build
 
       - name: Add .nojekyll
         run: touch dist/.nojekyll
+
+      # ✅ CNAME을 dist로 복사 (Actions 배포는 dist만 올라가므로)
+      - name: Add CNAME
+        run: cp CNAME dist/CNAME || true
 
       - uses: actions/upload-pages-artifact@v3
         with:
