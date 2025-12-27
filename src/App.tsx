@@ -3,6 +3,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import CustomCursor from "./components/CustomCursor";
 import BackgroundFX from "./components/BackgroundFX";
 import FaceNeonOverlayDemo from "./components/FaceNeonDemo";
+import HeroWormBorder from "./components/HeroWormBorder";
+
+
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
@@ -44,7 +47,7 @@ export default function App() {
     },
     {
       name: "이영문",
-      role: "CSO",
+      role: "Advisor",
       img: "/images/members/youngmoon.png",
       one: "미시간주립대 컴퓨터공학 석·박사, 한양대 로봇공학과 교수로 AI/로보틱스 연구를 총괄하는 CSO",
     },
@@ -221,44 +224,62 @@ export default function App() {
         {/* HERO */}
         <section className="hero">
           <div className="wrap heroWrap">
-            {/* ✅ 배경처럼 느껴지게 absolute */}
             <div className="heroBgArt" aria-hidden>
               <img className="heroBgImg" src="/images/product_home_banner.png" alt="" draggable={false} />
             </div>
 
             <motion.div variants={stagger} initial="hidden" animate="show" className="heroCopy">
-              <motion.h1 variants={fadeUp} className="heroTitle heroTitleStack">
-                <span className="heroTitleTop glowText">Real-time interactive experiences,</span>
-                <span className="heroTitleBottom glowText glowTextSoft">for real spaces.</span>
-              </motion.h1>
+              <motion.div variants={fadeUp} className="heroTitleWorm">
+                <HeroWormBorder pad={10} radius={25} duration={7.2}>
+                  <h1 className="heroTitle heroTitleStack">
+                    <span className="heroTitleTop glowText heroGlow">Real-time interactive experiences,</span>
+                    <span className="heroTitleBottom glowText glowTextSoft heroGlowSoft">for real spaces.</span>
+                  </h1>
+                </HeroWormBorder>
+              </motion.div>
 
-              <motion.p variants={fadeUp} className="heroDesc">
-                ADAM은 오프라인 공간에서 사람과 콘텐츠가 실시간으로 상호작용하는 “설치형 인터랙티브 경험”을 만듭니다.
+
+              {/* ✅ 버튼 아래 줄바꿈 + 타이핑 */}
+              <motion.p variants={fadeUp} className="heroDesc heroDescType">
+                <span className="typewrite">
+                  AI • Real-time Sense · Interpret · Respond for Interactive Experiences
+                </span>
               </motion.p>
 
+
+              {/* ✅ CTA 먼저 */}
               <motion.div variants={fadeUp} className="heroCTA">
-                <a className="btn" href="#contact" onClick={(e) => (e.preventDefault(), go("contact"))} data-cursor="hover">
+                <a
+                  className="btn"
+                  href="#contact"
+                  onClick={(e) => (e.preventDefault(), go("contact"))}
+                  data-cursor="hover"
+                >
                   데모 / 협업 문의
                 </a>
-                <a className="btn btnGhost" href="#Service" onClick={(e) => (e.preventDefault(), go("Service"))} data-cursor="hover">
+                <a
+                  className="btn btnGhost"
+                  href="#Service"
+                  onClick={(e) => (e.preventDefault(), go("Service"))}
+                  data-cursor="hover"
+                >
                   제품 라인업 보기
                 </a>
               </motion.div>
 
-              <motion.div variants={fadeUp} className="pillRow" style={{ marginTop: 18 }}>
-                <span className="pill">K-Me · Dance Training</span>
-                <span className="pill">ADAM Live · Events & Pop-ups</span>
-              </motion.div>
             </motion.div>
           </div>
         </section>
+
+
+        
 
         {/* Platform */}
         <section id="Platform" className="section sectionAlt">
           <div className="wrap">
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
-              <motion.h2 variants={fadeUp} className="h2">
-                플랫폼 <span className="glowText">ADAM</span>
+              <motion.h2 variants={fadeUp} className="h2 h2Underline">
+                <span className="glowText">ADAM Platform</span>
               </motion.h2>
 
               <motion.div variants={stagger} className="grid2">
@@ -318,7 +339,7 @@ export default function App() {
         <section id="Service" className="section">
           <div className="wrap">
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
-              <motion.h2 variants={fadeUp} className="h2">
+              <motion.h2 variants={fadeUp} className="h2 h2Underline">
                 <span className="glowText">Service Line-Up</span>
               </motion.h2>
 
@@ -358,7 +379,7 @@ export default function App() {
         <section id="company" className="section">
           <div className="wrap">
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
-              <motion.h2 variants={fadeUp} className="h2">
+              <motion.h2 variants={fadeUp} className="h2 h2Underline">
                 회사소개
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
@@ -426,7 +447,7 @@ export default function App() {
         <section id="team" className="section sectionAlt">
           <div className="wrap">
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
-              <motion.h2 variants={fadeUp} className="h2">
+              <motion.h2 variants={fadeUp} className="h2 h2Underline">
                 팀소개
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
@@ -515,7 +536,7 @@ export default function App() {
         <section id="contact" className="section sectionAlt">
           <div className="wrap">
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
-              <motion.h2 variants={fadeUp} className="h2">
+              <motion.h2 variants={fadeUp} className="h2 h2Underline">
                 Contact
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
@@ -523,8 +544,8 @@ export default function App() {
               </motion.p>
 
               <motion.div variants={fadeUp} style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <a className="btn" href="mailto:contact@ai-dam.ai?subject=ADAM%20Demo%20Request" data-cursor="hover">
-                  contact@ai-dam.ai
+                <a className="btn" href="mailto:ceo@ai-dam.ai?subject=ADAM%20Demo%20Request" data-cursor="hover">
+                  ceo@ai-dam.ai
                 </a>
                 <a className="btn btnGhost" href="#home" onClick={(e) => (e.preventDefault(), go("home"))} data-cursor="hover">
                   Back to top

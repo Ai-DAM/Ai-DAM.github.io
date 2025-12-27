@@ -229,14 +229,14 @@ button{ font: inherit; color: inherit; }
 }
 .hero .wrap{
   position: relative;
-  z-index: 2; /* 텍스트/버튼이 항상 위 */
+  z-index: 0; /* 텍스트/버튼이 항상 위 */
 }
 
 /* 배경 아트 레이어 */
 .heroBgArt{
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
   user-select: none;
 }
@@ -245,14 +245,14 @@ button{ font: inherit; color: inherit; }
 .heroProductImg,
 .heroBgImg{
   position: absolute;
-  top: 52%;
-  right: clamp(18px, 15vw, 420px);
+  top: 55%;
+  right: clamp(-30px, 5vw, 40px);
 
   width: clamp(170px, 22vw, 320px);
   height: auto;
 
-  opacity: 0.42;
-  transform: translate(12%, -50%);
+  opacity: 0.4;
+  transform: translate(14%, -50%);
   mix-blend-mode: screen;
 
   filter:
@@ -353,7 +353,7 @@ button{ font: inherit; color: inherit; }
 }
 
 /* Sections */
-.section{ padding: clamp(42px, 6vw, 70px) 0; }
+.section{ padding: clamp(64px, 8vw, 110px) 0; }
 .sectionAlt{ background: transparent; border: none; }
 
 .h2{
@@ -817,4 +817,417 @@ button{ font: inherit; color: inherit; }
 
 @media (max-width: 560px){
   .heroTitleTop{ white-space: normal; }
+}
+
+
+
+
+/* ✅ Hero title text should stay opaque (background never bleeds through) */
+.heroGlow{
+  background: linear-gradient(135deg,
+    rgba(255,255,255,1) 0%,
+    rgba(0,210,255,1) 32%,
+    rgba(255,79,216,1) 66%,
+    rgba(255,255,255,1) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background-size: 220% 220%;
+}
+
+.heroGlowSoft{
+  background: linear-gradient(135deg,
+    rgba(234,234,255,1) 0%,
+    rgba(0,210,255,1) 55%,
+    rgba(234,234,255,1) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background-size: 220% 220%;
+}
+
+
+@keyframes heroGradientShift{
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes heroNeonBreath{
+  0%,100%{
+    text-shadow:
+      0 0 14px rgba(139,92,255,.22),
+      0 0 12px rgba(0,210,255,.16),
+      0 0 20px rgba(255,79,216,.12);
+    filter: brightness(1);
+  }
+  50%{
+    text-shadow:
+      0 0 22px rgba(139,92,255,.30),
+      0 0 20px rgba(0,210,255,.22),
+      0 0 34px rgba(255,79,216,.18);
+    filter: brightness(1.04);
+  }
+}
+
+/* ✅ apply motion only to hero title */
+.heroTitleTop.heroGlow,
+.heroTitleBottom.heroGlowSoft{
+  animation:
+    heroGradientShift 9s ease-in-out infinite,
+    heroNeonBreath 3.4s ease-in-out infinite;
+}
+
+/* 접근성: 모션 싫어하는 환경이면 끔 */
+@media (prefers-reduced-motion: reduce){
+  .heroTitleTop.heroGlow,
+  .heroTitleBottom.heroGlowSoft{
+    animation: none;
+  }
+}
+
+
+
+
+/* =========================
+   Custom Cursor (v2)
+========================= */
+.cursorWrap{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999; /* ✅ 무조건 최상단 */
+}
+
+/* 링(큰 원): 배경 거의 제거하고 테두리 + 글로우만 */
+.cursorRing{
+  position: fixed;
+  left: 0; top: 0;
+
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+
+  /* ✅ 불투명 배경 제거 */
+  background: transparent;
+
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow:
+    0 0 16px rgba(0,210,255,.14),
+    0 0 18px rgba(139,92,255,.10);
+
+  transform: translate(-50%, -50%) scale(1);
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+/* 클릭 펄스 */
+.cursorRing::after{
+  content:"";
+  position:absolute;
+  inset:-10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,210,255,.25);
+  opacity: 0;
+  transform: scale(.6);
+  pointer-events:none;
+}
+
+@keyframes cursorClickPulse{
+  0%   { opacity: .55; transform: scale(.55); }
+  100% { opacity: 0;   transform: scale(1.35); }
+}
+
+.cursorWrap.isClick .cursorRing::after{
+  animation: cursorClickPulse 420ms ease-out;
+}
+
+/* 점(작은 원): 링보다 위에 오게 + 더 선명 */
+.cursorDot{
+  position: fixed;
+  left: 0; top: 0;
+
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+
+  background: rgba(234,234,255,.98);
+  box-shadow:
+    0 0 10px rgba(0,210,255,.22),
+    0 0 10px rgba(255,79,216,.12);
+
+  transform: translate(-50%, -50%);
+}
+
+/* ✅ 기본 커서(포인터/클릭 커서) 절대 안 보이게 강제 */
+@media (pointer: fine) and (hover: hover){
+  html, body, body * { cursor: none !important; }
+}
+
+/* (옵션) 클릭 하이라이트 제거 (모바일엔 컴포넌트가 안 뜨지만 그냥 안전빵) */
+a, button, [data-cursor="hover"]{
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================
+   Hero Worm Border (soft)
+========================= */
+.heroTitleWorm{
+  display: inline-block;
+  --worm-shift-y: 12px;
+}
+
+.heroWormWrap{
+  position: relative;
+  display: inline-block;
+}
+
+.heroWormContent{
+  position: relative;
+  z-index: 2;
+}
+
+.heroWormSvg{
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+  transform: translateY(var(--worm-shift-y, 0px));
+  /* ✅ 전체적으로 “연무” 처리 (강추) */
+  opacity: .55;
+  filter: blur(.25px);
+}
+
+/* 기존 밑줄 제거 */
+.heroTitleWorm .heroTitleBottom::after{
+  content: none !important;
+}
+
+/* 트랙 없애고 싶으면 그냥 display:none; 해도 됨 */
+.heroWormTrack{
+  display: none;
+}
+
+/* 공통 애니 */
+.heroWormSeg,
+.heroWormGlow{
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 120 880;
+  stroke-dashoffset: 0;
+  animation: wormMove var(--worm-speed) linear infinite;
+}
+
+/* ✅ 글로우: “분위기만” 남기기 */
+.heroWormGlow{
+  stroke: url(#wormGrad);
+  stroke-width: 7;        /* 조금 얇게 */
+  opacity: .08;           /* 확 낮춤 */
+  filter: blur(3.4px);    /* 더 흐리게 */
+}
+
+/* ✅ 선분: 존재감 최소화 */
+.heroWormSeg{
+  stroke: url(#wormGrad);
+  stroke-width: 2.0;      /* 얇게 */
+  opacity: .28;           /* 핵심: 낮추기 */
+  /* ✅ 드롭쉐도우가 “튀는” 원인이라 거의 제거 */
+  filter: none;
+  /* 더 은은하게 하고 싶으면 아래로 대체
+  filter: drop-shadow(0 0 6px rgba(0,210,255,.10));
+  */
+}
+
+@keyframes wormMove{
+  to { stroke-dashoffset: -1000; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .heroWormSeg, .heroWormGlow{ animation: none; }
+}
+
+
+
+
+/* CTA 한 줄 정렬 */
+.heroCTAInline{
+  align-items: center;
+}
+
+/* 버튼 옆 텍스트 */
+.heroDescInline{
+  color: var(--muted);
+  font-size: clamp(12px, 1.1vw, 14px);
+  line-height: 1.2;
+  margin-left: 12px;
+
+  /* ✅ 한 줄 유지 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* 버튼보다 약간 덜 튀게 */
+  opacity: .9;
+}
+
+/* 화면이 좁으면 자동으로 아래로 내려오게 */
+@media (max-width: 860px){
+  .heroCTAInline{
+    flex-wrap: wrap;
+  }
+  .heroDescInline{
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+    white-space: normal; /* 모바일에선 1줄 강제 풀기 */
+  }
+}
+
+/* =========================
+   Typewriter effect (CSS)
+========================= */
+/* CTA 아래 문구 */
+.heroDescType{
+  margin-top: 8px;  /* ✅ 버튼과 간격 */
+  max-width: 760px;
+  font-size: clamp(12px, 1.25vw, 15px);
+
+}
+
+.typewrite{
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+
+  /* ❌ 기존 세로바 제거 */
+  border-right: none;
+
+  max-width: 0;
+  position: relative;
+  padding-right: 10px; /* 커서 공간 */
+
+  /* ✅ 더 느리게: 14초 루프 */
+  animation: typewriterLoop 14s steps(80, end) infinite;
+}
+
+/* ✅ 커서: 네온 점(작은 캡슐/닷) */
+.typewrite::after{
+  content:"";
+  position:absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-45%);
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+
+  background: rgba(234,234,255,.92);
+  box-shadow:
+    0 0 10px rgba(0,210,255,.22),
+    0 0 12px rgba(139,92,255,.18),
+    0 0 14px rgba(255,79,216,.12);
+
+  animation: caretBlinkDot 1.05s ease-in-out infinite;
+}
+
+/* ✅ 0~55%: 타이핑(7.7초)
+   ✅ 55~88%: 유지(4.6초)
+   ✅ 88~100%: 리셋(1.7초) */
+@keyframes typewriterLoop{
+  0%   { max-width: 0; }
+  55%  { max-width: 200ch; }
+  88%  { max-width: 200ch; }
+  100% { max-width: 0; }
+}
+
+@keyframes caretBlinkDot{
+  0%,100% { opacity: .95; transform: translateY(-45%) scale(1); }
+  50%     { opacity: .15; transform: translateY(-45%) scale(.65); }
+}
+
+/* 접근성 */
+@media (prefers-reduced-motion: reduce){
+  .typewrite{
+    max-width: none;
+    animation: none;
+  }
+  .typewrite::after{
+    display:none;
+  }
+}
+
+
+/* =========================
+   Section Title Underline (SOFT)
+   - 크기는 그대로 두고 "존재감(불투명/글로우)"만 낮춘 버전
+   - 사용법: <motion.h2 className="h2 h2Underline">...</motion.h2>
+========================= */
+
+.h2Underline{
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px; /* 밑줄과 텍스트 간격 */
+}
+
+/* ✅ 연무(halo) */
+.h2Underline::before{
+  content:"";
+  position:absolute;
+  left: 0;
+  bottom: 1px;
+
+  width: clamp(140px, 22vw, 240px);
+  height: 10px;
+  border-radius: 999px;
+
+  background: linear-gradient(90deg, var(--p1), var(--p3), var(--p2));
+  opacity: .18;              /* ✅ 핵심: 낮춤 */
+  filter: blur(7px);         /* ✅ 퍼지게 해서 배경처럼 */
+  pointer-events:none;
+}
+
+/* ✅ 실제 밑줄 */
+.h2Underline::after{
+  content:"";
+  position:absolute;
+  left: 0;
+  bottom: 0;
+
+  width: clamp(140px, 22vw, 240px);
+  height: 2px;
+  border-radius: 999px;
+
+  background: linear-gradient(90deg, var(--p1), var(--p3), var(--p2));
+  opacity: .22;              /* ✅ 핵심: 낮춤 */
+
+  /* ✅ 글로우도 약하게 */
+  box-shadow:
+    0 0 10px rgba(0,210,255,.10),
+    0 0 10px rgba(139,92,255,.08),
+    0 0 8px  rgba(255,79,216,.06);
+
+  pointer-events:none;
+}
+
+/* (옵션) 숨 쉬는 느낌을 아주 약하게 */
+@keyframes h2UnderlineBreathSoft{
+  0%,100%{ opacity: .20; filter: brightness(1); }
+  50%    { opacity: .26; filter: brightness(1.02); }
+}
+
+/* 원하는 경우만 켜기: class를 추가로 붙이면 됨 */
+.h2Underline.isBreathing::after{
+  animation: h2UnderlineBreathSoft 3.6s ease-in-out infinite;
+}
+
+/* 접근성 */
+@media (prefers-reduced-motion: reduce){
+  .h2Underline.isBreathing::after{ animation: none; }
 }
