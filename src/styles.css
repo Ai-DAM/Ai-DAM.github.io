@@ -80,11 +80,60 @@ button{ font: inherit; color: inherit; }
   background: linear-gradient(135deg, var(--p1), var(--p3), var(--p2));
   box-shadow: 0 0 22px rgba(139,92,255,.45);
 }
+
+.brandIcon{
+  width: 20px;      /* ✅ 22 -> 20 (아주 살짝 작게) */
+  height: 20px;
+  border-radius: 8px;
+  object-fit: contain;
+
+  /* 기본 글로우 */
+  filter:
+    drop-shadow(0 0 6px rgba(0,210,255,.28))
+    drop-shadow(0 0 14px rgba(0,210,255,.18))
+    drop-shadow(0 0 22px rgba(139,92,255,.12))
+    brightness(1.02);
+
+  transform: translateZ(0);
+  will-change: filter, transform, opacity;
+
+  /* ✅ 숨쉬기 */
+  animation: brandNeonBreath 3.2s ease-in-out infinite;
+}
+@keyframes brandNeonBreath{
+  0%, 100%{
+    transform: translateZ(0) scale(1);
+    filter:
+      drop-shadow(0 0 5px rgba(0,210,255,.24))
+      drop-shadow(0 0 12px rgba(0,210,255,.16))
+      drop-shadow(0 0 18px rgba(139,92,255,.10))
+      brightness(1.00);
+    opacity: .98;
+  }
+  50%{
+    transform: translateZ(0) scale(1.04);
+    filter:
+      drop-shadow(0 0 8px rgba(0,210,255,.36))
+      drop-shadow(0 0 18px rgba(0,210,255,.24))
+      drop-shadow(0 0 28px rgba(139,92,255,.16))
+      drop-shadow(0 0 34px rgba(255,79,216,.10))
+      brightness(1.06);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .brandIcon{ animation: none; }
+}
+
+
+
+
+
 .brandName{
   font-family: Orbitron, Inter, system-ui;
   font-weight: 900;
   letter-spacing: .12em;
-  font-size: 14px;
+  font-size: 24px;
 }
 
 .nav{
@@ -353,7 +402,7 @@ button{ font: inherit; color: inherit; }
 }
 
 /* Sections */
-.section{ padding: clamp(64px, 8vw, 110px) 0; }
+.section{ padding: clamp(64px, 12vw, 220px) 0; }
 .sectionAlt{ background: transparent; border: none; }
 
 .h2{
@@ -1230,4 +1279,163 @@ a, button, [data-cursor="hover"]{
 /* 접근성 */
 @media (prefers-reduced-motion: reduce){
   .h2Underline.isBreathing::after{ animation: none; }
+}
+
+
+
+/* =========================
+   Contact 강화
+========================= */
+.contactGrid{
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.contactCard{
+  border: 1px solid var(--line);
+  border-radius: clamp(16px, 2vw, 22px);
+  background: rgba(255,255,255,.04);
+  padding: clamp(16px, 2.2vw, 20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.contactCard::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:
+    radial-gradient(600px 220px at 20% 0%, rgba(139,92,255,.18), transparent 60%),
+    radial-gradient(500px 260px at 80% 0%, rgba(0,210,255,.14), transparent 60%);
+  opacity: .75;
+  filter: blur(14px);
+  pointer-events:none;
+}
+
+.contactCardHead{
+  position: relative;
+  z-index: 2;
+  margin-bottom: 12px;
+}
+.contactTitle{
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-size: 16px;
+}
+.contactSub{
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Map */
+.mapFrame{
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.12);
+  overflow: hidden;
+  background: rgba(255,255,255,.03);
+}
+.mapFrame iframe{
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  filter: saturate(1.05) contrast(1.05);
+}
+
+.contactAddr{
+  position: relative;
+  z-index: 2;
+  margin-top: 12px;
+  color: rgba(234,234,255,.82);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.addrBtns{
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Form */
+.contactForm{
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fLabel{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: rgba(234,234,255,.86);
+  font-size: 13px;
+}
+
+.fInput, .fTextarea{
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  color: var(--text);
+  padding: 12px 12px;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.fTextarea{
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.fInput:focus, .fTextarea:focus{
+  border-color: rgba(0,210,255,.22);
+  box-shadow:
+    0 0 0 3px rgba(0,210,255,.12),
+    0 0 24px rgba(139,92,255,.10);
+  background: rgba(0,0,0,.26);
+}
+
+.fRow{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.fHint{
+  color: var(--muted);
+  font-size: 13px;
+}
+.fHint .ok{ color: rgba(170,255,210,.95); }
+.fHint .bad{ color: rgba(255,180,180,.95); }
+
+@media (max-width: 860px){
+  .contactGrid{ grid-template-columns: 1fr; }
+}
+
+/* ✅ Contact 섹션에서 문의하기만 단독으로 쓸 때 */
+.contactGridSolo{
+  grid-template-columns: 1fr !important;
+  max-width: 1000%;
+  margin: 0 auto;
+}
+
+
+
+.fActions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap; /* 모바일에서 줄바꿈 허용 */
 }

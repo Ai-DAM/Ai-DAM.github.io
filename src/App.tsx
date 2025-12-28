@@ -4,6 +4,7 @@ import CustomCursor from "./components/CustomCursor";
 import BackgroundFX from "./components/BackgroundFX";
 import FaceNeonOverlayDemo from "./components/FaceNeonDemo";
 import HeroWormBorder from "./components/HeroWormBorder";
+import ContactForm from "./components/ContactForm";
 
 
 
@@ -118,6 +119,8 @@ export default function App() {
   // ✅ Demo modal
   const [demoOpen, setDemoOpen] = useState(false);
 
+
+
   function go(id: string) {
     setMenuOpen(false);
     scrollTo(id);
@@ -149,7 +152,7 @@ export default function App() {
             onClick={(e) => (e.preventDefault(), go("home"))}
             data-cursor="hover"
           >
-            <span className="brandMark" />
+            <img className="brandIcon" src="/icon.png" alt="ADAM" draggable={false} />
             <span className="brandName">ADAM</span>
           </a>
 
@@ -383,8 +386,7 @@ export default function App() {
                 회사소개
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
-                ADAM은 “오프라인 공간에서의 인터랙션”을 제품 수준으로 만드는 팀입니다. 하드웨어(스마트 디스플레이/키오스크)와
-                소프트웨어(AI/콘텐츠/UX)를 하나의 경험으로 설계하고, 설치형 경험을 반복 가능한 패키지로 상품화합니다.
+                ADAM은 “오프라인 공간에서의 인터랙션”을 제품화하는 AI 테크 스타트업입니다.
               </motion.p>
 
               <motion.div variants={stagger} className="grid2">
@@ -451,7 +453,7 @@ export default function App() {
                 팀소개
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
-                팀원 카드를 클릭하면 상세 소개가 열립니다.
+                Interactive AI Experience Platform을 만들어갈 ADAM 팀원들을 소개합니다.
               </motion.p>
 
               <motion.div variants={fadeUp} className="teamStrip">
@@ -532,6 +534,10 @@ export default function App() {
           )}
         </AnimatePresence>
 
+
+
+
+
         {/* Contact */}
         <section id="contact" className="section sectionAlt">
           <div className="wrap">
@@ -540,20 +546,23 @@ export default function App() {
                 Contact
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
-                데모/협업/설치/행사 운영 문의는 아래로 연락 주세요.
+                데모/협업/설치/행사 운영 문의
               </motion.p>
 
-              <motion.div variants={fadeUp} style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <a className="btn" href="mailto:ceo@ai-dam.ai?subject=ADAM%20Demo%20Request" data-cursor="hover">
-                  ceo@ai-dam.ai
-                </a>
-                <a className="btn btnGhost" href="#home" onClick={(e) => (e.preventDefault(), go("home"))} data-cursor="hover">
-                  Back to top
-                </a>
+              {/* ✅ 단일 카드(문의하기만) */}
+              <motion.div variants={fadeUp} className="contactGrid contactGridSolo">
+                <div className="contactCard" data-cursor="hover">
+                  <div className="cardInner">
+                    <ContactForm />
+                  </div>
+                </div>
               </motion.div>
             </motion.div>
           </div>
         </section>
+
+
+
 
         <footer className="footer">
           <div className="wrap footerInner">
