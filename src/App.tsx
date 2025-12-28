@@ -66,15 +66,15 @@ export default function App() {
     {
       name: "K-Me",
       tag: "Dance Training",
-      title: "댄서의 연습 루프를 ‘측정 가능한 경험’으로",
+      title: "스마트미러로 AI 댄스 트레이닝 서비스",
       desc:
-        "스마트미러 기반 오버레이 트레이닝 + AI 피드백으로 촬영–비교–수정–반복을 한 번에. " +
+        "스마트미러 기반 트레이닝 + AI 피드백으로 촬영–비교–수정–반복을 한 번에. " +
         "스튜디오 설치형 제품으로 운영/확장에 최적화됩니다.",
     },
     {
       name: "ADAM Live",
       tag: "Events & Pop-ups",
-      title: "관객이 반응하면 콘텐츠가 즉시 반응하는 무대",
+      title: "실시간 인터랙티브 이벤트/팝업 패키지",
       desc:
         "대학 입학식, 브랜드 팝업, 아이돌 행사에서 ‘인사/제스처/포즈’ 같은 행동을 실시간으로 인식해 " +
         "영상/그래픽/사운드를 반응시키는 인터랙티브 미디어 경험을 제공합니다.",
@@ -245,7 +245,7 @@ export default function App() {
               {/* ✅ 버튼 아래 줄바꿈 + 타이핑 */}
               <motion.p variants={fadeUp} className="heroDesc heroDescType">
                 <span className="typewrite">
-                  AI • Sense · Interpret · Respond for Interactive Experiences
+                  AI • Sense • Interpret • Respond for Interactive Experiences
                 </span>
               </motion.p>
 
@@ -567,7 +567,6 @@ export default function App() {
         <footer className="footer">
           <div className="wrap footerInner">
             <span>© {new Date().getFullYear()} ADAM. All rights reserved.</span>
-            <span style={{ opacity: 0.8 }}>Interactive AI Experience Platform</span>
           </div>
         </footer>
       </main>
