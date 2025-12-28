@@ -245,7 +245,7 @@ export default function App() {
               {/* ✅ 버튼 아래 줄바꿈 + 타이핑 */}
               <motion.p variants={fadeUp} className="heroDesc heroDescType">
                 <span className="typewrite">
-                  AI • Real-time Sense · Interpret · Respond for Interactive Experiences
+                  AI • Sense · Interpret · Respond for Interactive Experiences
                 </span>
               </motion.p>
 
