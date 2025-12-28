@@ -1103,6 +1103,18 @@ a, button, [data-cursor="hover"]{
 
 
 
+/* =========================
+   Worm follow mode (Desktop only, JS controlled)
+   - HeroWormBorder.tsx가 .wormFollow 클래스를 붙이면 활성화됨
+========================= */
+.heroWormWrap.wormFollow .heroWormSeg,
+.heroWormWrap.wormFollow .heroWormGlow{
+  animation: none !important;
+  stroke-dashoffset: var(--worm-dashoffset, 0) !important;
+}
+
+
+
 
 /* CTA 한 줄 정렬 */
 .heroCTAInline{
