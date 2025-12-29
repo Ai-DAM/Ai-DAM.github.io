@@ -32,25 +32,25 @@ export default function App() {
       name: "김준현",
       role: "CEO",
       img: "/images/members/joonhyun.png",
-      one: "한양대 로봇공학 학사·인공지능융합 석사, AI 동작의도 인식 연구와 트레이너/백댄서 등 현장 댄스 경험을 잇는 컬쳐×테크 CEO",
+      one: "",
     },
     {
       name: "구다서",
       role: "CMO",
       img: "/images/members/daseo.png",
-      one: "매출 0원에서 연매출 50–60억 규모로 성장시킨 그로스 경험과 디자인·콘텐츠 감각을 겸비한 CMO",
+      one: "",
     },
     {
       name: "김성봉",
       role: "CBO",
       img: "/images/members/sungbong.png",
-      one: "한양대 ERICA 제40대 총학생회장 출신, 요식업 창업(연매출 8억) 경험을 바탕으로 현장 운영·세일즈를 리드하는 CBO",
+      one: "",
     },
     {
       name: "이영문",
       role: "Advisor",
       img: "/images/members/youngmoon.png",
-      one: "미시간주립대 컴퓨터공학 석·박사, 한양대 로봇공학과 교수로 AI/로보틱스 연구를 총괄하는 CSO",
+      one: "",
     },
   ] as const;
 
@@ -83,15 +83,15 @@ export default function App() {
 
   // ✅ Platform group (3 + 3)
   const PLATFORM_A = [
-    { t: "Sense", d: "Camera 기반으로 사람의 포즈/제스처/행동을 안정적으로 캡처." },
-    { t: "Interpret", d: "AI가 의미를 해석(인사, 포즈, 타이밍, 상태)하여 트리거를 만든다." },
-    { t: "Respond", d: "디스플레이/미디어/이펙트가 즉시 반응하여 ‘살아있는 경험’을 만든다." },
+    { t: "Sense", d: "Capture" },
+    { t: "Interpret", d: "AI-based Recognition" },
+    { t: "Respond", d: "Real-time Media" },
   ] as const;
 
   const PLATFORM_B = [
-    { t: "Distribute", d: "QR/저장/공유로 UGC 루프를 만들고, 다음 방문을 유도한다." },
-    { t: "Operate", d: "현장 설치/부팅/권한/네트워크 등 운영 안정성을 제품 수준으로 만든다." },
-    { t: "Sales", d: "패키지/콘텐츠를 가격화해 반복 가능한 매출로 연결한다." },
+    { t: "Distribute", d: "QR/저장/공유 UGC" },
+    { t: "Operate", d: "Remote Management" },
+    { t: "Sales", d: "Analytics & Metrics" },
   ] as const;
 
   const TRACTION = [
@@ -245,7 +245,7 @@ export default function App() {
               {/* ✅ 버튼 아래 줄바꿈 + 타이핑 */}
               <motion.p variants={fadeUp} className="heroDesc heroDescType">
                 <span className="typewrite">
-                  AI • Sense • Interpret • Respond for Interactive Experiences
+                  ADAM은 “오프라인 공간에서의 인터랙션”을 제품화하는 AI 테크 스타트업입니다.
                 </span>
               </motion.p>
 
@@ -385,9 +385,11 @@ export default function App() {
               <motion.h2 variants={fadeUp} className="h2 h2Underline">
                 회사소개
               </motion.h2>
+
+              {/* 나중에 추가하고싶으면 추가하기 */}
               <motion.p variants={fadeUp} className="p">
-                ADAM은 “오프라인 공간에서의 인터랙션”을 제품화하는 AI 테크 스타트업입니다.
               </motion.p>
+
 
               <motion.div variants={stagger} className="grid2">
                 {[
@@ -453,7 +455,7 @@ export default function App() {
                 팀소개
               </motion.h2>
               <motion.p variants={fadeUp} className="p">
-                Interactive AI Experience Platform을 만들어갈 ADAM 팀원들을 소개합니다.
+                Team ADAM을 소개합니다
               </motion.p>
 
               <motion.div variants={fadeUp} className="teamStrip">
@@ -567,8 +569,22 @@ export default function App() {
         <footer className="footer">
           <div className="wrap footerInner">
             <span>© {new Date().getFullYear()} ADAM. All rights reserved.</span>
+
+            <div className="footerInfo">
+              <span className="footerCompany">아담</span>
+              <span className="footerSep">·</span>
+              <span>사업자등록번호: 343-04-03348</span>
+              <span className="footerSep">·</span>
+              <a className="footerLink" href="mailto:ceo@ai-dam.ai">
+                k-me@ai-dam.ai
+              </a>
+            </div>
           </div>
         </footer>
+
+
+
+
       </main>
     </>
   );

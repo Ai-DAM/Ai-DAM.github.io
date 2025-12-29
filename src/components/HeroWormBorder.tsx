@@ -381,9 +381,9 @@ export default function HeroWormBorder({
               y2="0"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stopColor="rgba(0,210,255,.95)" />
-              <stop offset="0.5" stopColor="rgba(139,92,255,.95)" />
-              <stop offset="1" stopColor="rgba(255,79,216,.95)" />
+              <stop offset="0" stopColor="rgba(0, 208, 255, 1)" />
+              <stop offset="0.5" stopColor="rgba(255, 255, 255, 0.95)" />
+              <stop offset="1" stopColor="rgba(255, 255, 255, 0.95)" />
             </linearGradient>
           </defs>
 
@@ -409,7 +409,7 @@ export default function HeroWormBorder({
             height={boxH}
             rx={radius}
             ry={radius}
-            pathLength={1000}
+            pathLength={2000}
             style={{ stroke: `url(#wormGrad-${uid})` }}
           />
         </svg>

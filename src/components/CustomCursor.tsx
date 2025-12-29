@@ -32,7 +32,7 @@ export default function CustomCursor() {
       // hover/press 조합 스케일(겹치지 않게 깔끔하게)
       const s = hovered ? (pressed ? 1.20 : 1.35) : (pressed ? 0.92 : 1.0);
       ring.style.setProperty("transform", `translate(-50%, -50%) scale(${s})`);
-      ring.style.setProperty("border-color", hovered ? "rgba(255,255,255,.35)" : "rgba(255,255,255,.18)");
+      ring.style.setProperty("border-color", hovered ? "rgba(255,255,255,.35)" : "rgba(255, 255, 255, 0.58)");
     };
 
     const onMove = (e: MouseEvent) => {
