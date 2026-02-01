@@ -26,40 +26,13 @@ function scrollTo(id: string) {
 }
 
 export default function App() {
-  // ✅ Team data
-  const TEAM = [
-    {
-      name: "김준현",
-      role: "CEO",
-      img: "/images/members/joonhyun.png",
-      one: "",
-    },
-    {
-      name: "구다서",
-      role: "CMO",
-      img: "/images/members/daseo.png",
-      one: "",
-    },
-    {
-      name: "김성봉",
-      role: "CBO",
-      img: "/images/members/sungbong.png",
-      one: "",
-    },
-    {
-      name: "이영문",
-      role: "Advisor",
-      img: "/images/members/youngmoon.png",
-      one: "",
-    },
-  ] as const;
+
 
   // ✅ nav
   const nav = [
     { id: "Platform", label: "Platform" },
     { id: "Service", label: "Service" },
     { id: "company", label: "About" },
-    { id: "team", label: "Team" },
   ] as const;
 
   const SOLUTIONS = [
@@ -114,7 +87,6 @@ export default function App() {
   ] as const;
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeMember, setActiveMember] = useState<(typeof TEAM)[number] | null>(null);
 
   // ✅ Demo modal
   const [demoOpen, setDemoOpen] = useState(false);
@@ -131,7 +103,6 @@ export default function App() {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
         setMenuOpen(false);
-        setActiveMember(null);
         setDemoOpen(false);
       }
     }
@@ -446,68 +417,6 @@ export default function App() {
             </motion.div>
           </div>
         </section>
-
-        {/* Team strip */}
-        <section id="team" className="section sectionAlt">
-          <div className="wrap">
-            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
-              <motion.h2 variants={fadeUp} className="h2 h2Underline">
-                팀소개
-              </motion.h2>
-              <motion.p variants={fadeUp} className="p">
-                Team ADAM을 소개합니다
-              </motion.p>
-
-              <motion.div variants={fadeUp} className="teamStrip">
-                {TEAM.map((m) => (
-                  <button key={m.name} type="button" className="teamTile" onClick={() => setActiveMember(m)} data-cursor="hover">
-                    <div className="teamTileImgWrap" aria-hidden>
-                      <img className="teamTileImg" src={m.img} alt="" loading="lazy" />
-                    </div>
-                    <div className="teamTileMeta">
-                      <div className="teamTileName">{m.name}</div>
-                      <div className="teamTileRole">{m.role}</div>
-                    </div>
-                  </button>
-                ))}
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Team modal */}
-        <AnimatePresence>
-          {activeMember && (
-            <motion.div className="modalOverlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveMember(null)}>
-              <motion.div
-                className="modal"
-                initial={{ y: 10, opacity: 0, scale: 0.98 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                exit={{ y: 10, opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.18, ease: "easeOut" }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button className="modalClose" type="button" onClick={() => setActiveMember(null)} aria-label="Close">
-                  ×
-                </button>
-
-                <div className="modalBody">
-                  <div className="modalImgWrap" aria-hidden>
-                    <img className="modalImg" src={activeMember.img} alt="" />
-                  </div>
-
-                  <div className="modalText">
-                    <div className="modalTitleRow">
-                      <div className="modalName">{activeMember.name}</div>
-                      <span className="modalRolePill">{activeMember.role}</span>
-                    </div>
-                    <p className="modalOne">{activeMember.one}</p>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* ✅ Demo modal */}
         <AnimatePresence>
