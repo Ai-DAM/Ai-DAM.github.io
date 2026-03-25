@@ -1,0 +1,247 @@
+:root {
+  --kform-bg: #05050a;
+  --kform-line: rgba(255, 255, 255, 0.1);
+  --kform-text: #eaeaff;
+  --kform-muted: rgba(234, 234, 255, 0.72);
+  --kform-p1: #8b5cff;
+  --kform-p2: #ff4fd8;
+  --kform-p3: #00d2ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--kform-bg);
+}
+
+.kform-page {
+  color: var(--kform-text);
+  font-family: "Pretendard", "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+.kform-wrap {
+  width: min(860px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.kform-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+  background: rgba(5, 5, 10, 0.6);
+  border-bottom: 1px solid var(--kform-line);
+}
+
+.kform-topbar-inner {
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kform-brand img {
+  height: 20px;
+  width: auto;
+}
+
+.kform-link {
+  color: var(--kform-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.kform-main {
+  min-height: calc(100vh - 68px);
+  display: grid;
+  place-items: center;
+  padding: clamp(20px, 5vw, 36px) 0;
+  background:
+    radial-gradient(700px 300px at 0% 0%, rgba(139, 92, 255, 0.2), transparent 60%),
+    radial-gradient(700px 320px at 100% 0%, rgba(0, 210, 255, 0.14), transparent 60%);
+}
+
+.kform-shell {
+  display: grid;
+  gap: 12px;
+}
+
+.kform-progress-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kform-progress-head p,
+.kform-progress-head strong {
+  margin: 0;
+  font-size: 14px;
+}
+
+.kform-progress-head p {
+  color: var(--kform-muted);
+}
+
+.kform-progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid var(--kform-line);
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.kform-progress-track span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--kform-p1), var(--kform-p3), var(--kform-p2));
+  transition: width 0.25s ease;
+}
+
+.kform-card {
+  border: 1px solid var(--kform-line);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 18px;
+  padding: clamp(18px, 3.5vw, 30px);
+  display: grid;
+  gap: 14px;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.42);
+}
+
+.kform-card h1 {
+  margin: 0;
+  font-size: clamp(28px, 4.6vw, 40px);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+}
+
+.kform-card p {
+  margin: 0;
+  color: var(--kform-muted);
+}
+
+.kform-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.kform-option {
+  border: 1px solid var(--kform-line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--kform-text);
+  min-height: 48px;
+  padding: 10px 12px;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.kform-option.is-selected {
+  border-color: rgba(139, 92, 255, 0.75);
+  box-shadow: 0 0 0 3px rgba(139, 92, 255, 0.2);
+  background: rgba(139, 92, 255, 0.16);
+}
+
+.kform-input {
+  width: 100%;
+  border: 1px solid var(--kform-line);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--kform-text);
+  min-height: 50px;
+  padding: 12px;
+  font: inherit;
+  outline: none;
+}
+
+.kform-input:focus {
+  border-color: rgba(139, 92, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(139, 92, 255, 0.16);
+}
+
+.kform-textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.kform-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kform-btn {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(139, 92, 255, 0.92), rgba(0, 210, 255, 0.68));
+  color: #fff;
+  min-height: 44px;
+  padding: 10px 14px;
+  text-decoration: none;
+  font: inherit;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.kform-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.kform-btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--kform-line);
+}
+
+.kform-summary {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.kform-summary div {
+  border: 1px solid var(--kform-line);
+  border-radius: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.kform-summary dt {
+  font-size: 12px;
+  color: var(--kform-muted);
+  margin-bottom: 4px;
+}
+
+.kform-summary dd {
+  margin: 0;
+  font-size: 14px;
+}
+
+.kform-error {
+  color: #ff9ba8;
+  font-size: 14px;
+}
+
+.kform-mailto {
+  color: rgba(0, 210, 255, 0.95);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+@media (max-width: 760px) {
+  .kform-options {
+    grid-template-columns: 1fr;
+  }
+}

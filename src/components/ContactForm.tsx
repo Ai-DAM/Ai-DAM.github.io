@@ -27,7 +27,7 @@ export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [err, setErr] = useState<string>("");
 
-  const mailtoHref = "mailto:k-me@ai-dam.ai?subject=ADAM%20Demo%20Request";
+  const mailtoHref = "mailto:k-me@ai-dam.ai?subject=K-me%20Vision%20AI%20문의";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

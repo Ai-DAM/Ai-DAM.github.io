@@ -45,7 +45,7 @@ export default {
     }
 
     // Resend로 이메일 발송
-    const from = env.MAIL_FROM; // 예: "ADAM Contact <noreply@ai-dam.ai>"
+    const from = env.MAIL_FROM; // 예: "K-ME Contact <noreply@ai-dam.ai>"
     const to = env.MAIL_TO;     // 예: "ceo@ai-dam.ai"
 
     if (!env.RESEND_API_KEY || !from || !to) {
@@ -53,7 +53,7 @@ export default {
     }
 
     const text =
-`[ADAM Contact]
+`[K-ME Contact]
 From: ${fromEmail}
 Subject: ${subject}
 
@@ -62,7 +62,7 @@ ${message}
 
     const html = `
       <div style="font-family: ui-sans-serif, system-ui; line-height:1.6;">
-        <h2>ADAM Contact</h2>
+        <h2>K-ME Contact</h2>
         <p><b>From:</b> ${escapeHtml(fromEmail)}</p>
         <p><b>Subject:</b> ${escapeHtml(subject)}</p>
         <hr/>
@@ -79,7 +79,7 @@ ${message}
       body: JSON.stringify({
         from,
         to: [to],
-        subject: `[ADAM] ${subject}`,
+        subject: `[K-ME] ${subject}`,
         text,
         html,
         // Reply-To는 표준 헤더로 처리 (필드 호환성 문제 회피)

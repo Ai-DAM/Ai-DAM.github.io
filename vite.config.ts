@@ -1,10 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { resolve } from "path";
 
 export default defineConfig({
   plugins: [react()],
-  base: "./",
+  base: "/",
   server: {
     proxy: {
       "/api": {
@@ -17,8 +16,10 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "index.html"),
-        ir_deck: resolve(__dirname, "ir_deck.html"),
+        main: "index.html",
+        ir_deck: "ir_deck.html",
+        visionai: "visionai.html",
+        visionai_form: "visionai_form.html",
       },
     },
   },
