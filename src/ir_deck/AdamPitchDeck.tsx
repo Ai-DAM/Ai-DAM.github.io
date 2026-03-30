@@ -57,7 +57,7 @@ const FooterNote = ({ children }: { children: React.ReactNode }) => (
     style={{ bottom: 32, left: 48, right: 48 }}
   >
     <div className="ir-flex ir-gap-4">{children}</div>
-    <div style={{ opacity: 0.5 }}>CONFIDENTIAL - ADAM IR 2025</div>
+    <div style={{ opacity: 0.5 }}>CONFIDENTIAL - K-me IR 2025</div>
   </div>
 );
 
@@ -99,7 +99,7 @@ const Slide1_Cover = () => (
       </div>
 
       <h1 className="ir-text-4xl ir-bold ir-leading-tight ir-mb-4">
-        ADAM은 <span className="ir-text-cyan">'오프라인 공간에서의 인터랙션'</span>을
+        K-me는 <span className="ir-text-cyan">'오프라인 공간에서의 인터랙션'</span>을
         <br />
         <span className="ir-text-violet">제품화</span>하는 AI 테크 스타트업입니다.
       </h1>
@@ -416,7 +416,7 @@ const Slide5_Market = () => (
             STEP 2
           </div>
           <div>
-            <div className="ir-text-lg ir-bold ir-text-white">ADAM Live: 팝업/이벤트 패키지 (Scale-up)</div>
+            <div className="ir-text-lg ir-bold ir-text-white">K-me Live: 팝업/이벤트 패키지 (Scale-up)</div>
             <div className="ir-text-sm ir-text-gray-400">팬덤 경험 · 참여율 데이터 · QR 전환 성과 측정</div>
           </div>
         </div>
@@ -474,7 +474,7 @@ const Slide6_Traction = () => (
         <div className="ir-flex ir-between" style={{ alignItems: "flex-start" }}>
           <div>
             <h3 className="ir-text-2xl ir-bold" style={{ color: "#a78bfa" }}>
-              ADAM Live{" "}
+              K-me Live{" "}
               <span className="ir-text-sm ir-text-gray-500 ir-light" style={{ marginLeft: 8 }}>
                 / Event & Retail (Scale)
               </span>
@@ -495,7 +495,7 @@ const Slide6_Traction = () => (
 
 const Slide7_Competition = () => (
   <SlideContainer>
-    <SlideHeader title="Why ADAM Wins" subTitle="COMPETITIVE LANDSCAPE" />
+    <SlideHeader title="Why K-me Wins" subTitle="COMPETITIVE LANDSCAPE" />
 
     <div style={{ width: "100%", marginTop: 16 }}>
       <div
@@ -512,7 +512,7 @@ const Slide7_Competition = () => (
         <div style={{ textAlign: "left", paddingLeft: 16 }}>Criteria</div>
         <div>미디어아트 SI</div>
         <div>단순 사이니지</div>
-        <div className="ir-text-cyan">ADAM (Product)</div>
+        <div className="ir-text-cyan">K-me (Product)</div>
       </div>
 
       {[

@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import CustomCursor from "./components/CustomCursor";
 import BackgroundFX from "./components/BackgroundFX";
-import FaceNeonOverlayDemo from "./components/FaceNeonDemo";
 import HeroWormBorder from "./components/HeroWormBorder";
 import ContactForm from "./components/ContactForm";
+import PlatformOrbit from "./components/PlatformOrbit";
+import StickyInquiryBar from "./components/StickyInquiryBar";
 
-
+const motionEase = [0.22, 1, 0.36, 1] as const;
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: "easeOut" } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: motionEase } },
 };
 
 const stagger = {
@@ -18,97 +19,180 @@ const stagger = {
   show: { transition: { staggerChildren: 0.08 } },
 };
 
+type ProductKind = "K-me Dance" | "K-me VisionAI";
+
+type ServiceCard = {
+  name: string;
+  mode: string;
+  title: string;
+  description: string;
+  points: string[];
+  primaryLabel: string;
+  primaryHref: string;
+  primaryExternal?: boolean;
+  secondaryLabel: string;
+  secondaryHref: string;
+  secondaryExternal?: boolean;
+};
+
+type CaseStudy = {
+  id: string;
+  category: ProductKind;
+  title: string;
+  tag: string;
+  description: string;
+  image: string;
+};
+
+const nav = [
+  { id: "home", label: "Home" },
+  { id: "Platform", label: "Platform" },
+  { id: "Service", label: "Service" },
+  { id: "Cases", label: "Cases" },
+  { id: "contact", label: "Contact" },
+] as const;
+
+const services: ServiceCard[] = [
+  {
+    name: "K-me Dance",
+    mode: "설치형",
+    title: "스마트미러로 즐기는 AI 댄스 서비스",
+    description: "스마트폰 대신 스마트미러 대화면으로 더 편하게 연습하는 댄스 서비스입니다.",
+    points: ["대화면으로 더 편하게", "좌우반전 · 속도조절", "앞뒤 이동으로 빠른 반복 연습"],
+    primaryLabel: "도입 문의하기",
+    primaryHref: "#contact",
+    secondaryLabel: "플랫폼 보기",
+    secondaryHref: "#Platform",
+  },
+  {
+    name: "K-me VisionAI",
+    mode: "행사형",
+    title: "행사 안내를 더 스마트하게 만드는 모션인식 스마트미러",
+    description: "정보안내와 참여형 인터랙션을 함께 제공해 참여율과 체류시간을 높입니다.",
+    points: ["스마트 정보안내", "모션인식 인터랙션", "체류시간 · 참여율 상승"],
+    primaryLabel: "VisionAI 상세 보기",
+    primaryHref: "https://ai-dam.ai/visionai",
+    primaryExternal: true,
+    secondaryLabel: "도입 문의하기",
+    secondaryHref: "#contact",
+  },
+];
+
+const caseStudies: CaseStudy[] = [
+  {
+    id: "visionai-jeonbuk",
+    category: "K-me VisionAI",
+    title: "전북콘텐츠진흥원",
+    tag: "Public Activation",
+    description: "공공기관 체험형 부스 사례",
+    image: encodeURI("/visionai/도입사례/전북콘텐츠진흥원.png"),
+  },
+  {
+    id: "visionai-1million",
+    category: "K-me VisionAI",
+    title: "원밀리언",
+    tag: "Experience Booth",
+    description: "이벤트형 체험 부스 사례",
+    image: encodeURI("/visionai/도입사례/원밀리언.png"),
+  },
+  {
+    id: "visionai-hanyang",
+    category: "K-me VisionAI",
+    title: "한양대",
+    tag: "Campus Event",
+    description: "대학 행사 도입 사례",
+    image: encodeURI("/visionai/도입사례/한양대.png"),
+  },
+  {
+    id: "visionai-sookmyung",
+    category: "K-me VisionAI",
+    title: "숙대",
+    tag: "Ceremony Interaction",
+    description: "캠퍼스 행사 운영 사례",
+    image: encodeURI("/visionai/도입사례/숙대.png"),
+  },
+  {
+    id: "visionai-house-train",
+    category: "K-me VisionAI",
+    title: "하우스트레인",
+    tag: "Branded Space",
+    description: "브랜드 공간 운영 사례",
+    image: encodeURI("/visionai/도입사례/하우스트레인.png"),
+  },
+  {
+    id: "dance-seravi",
+    category: "K-me Dance",
+    title: "세라비스페이스",
+    tag: "Studio Install",
+    description: "상설 트레이닝 공간 설치 사례",
+    image: encodeURI("/dance/도입사례/세라비스페이스.png"),
+  },
+  {
+    id: "dance-nouveau-hongdae",
+    category: "K-me Dance",
+    title: "누보홍대",
+    tag: "Dance Practice",
+    description: "연습실 도입 사례",
+    image: encodeURI("/dance/도입사례/누보홍대.png"),
+  },
+  {
+    id: "dance-nouveau-nonhyeon",
+    category: "K-me Dance",
+    title: "누보논현",
+    tag: "Repeat Training",
+    description: "설치형 운영 사례",
+    image: encodeURI("/dance/도입사례/누보논현.png"),
+  },
+];
+
 function scrollTo(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const topbar = document.querySelector(".topbar");
+  const topbarHeight = topbar instanceof HTMLElement ? topbar.offsetHeight : 0;
+  const top = window.scrollY + el.getBoundingClientRect().top - topbarHeight - 18;
+
+  window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
   history.replaceState(null, "", `#${id}`);
 }
 
 export default function App() {
-
-
-  // ✅ nav
-  const nav = [
-    { id: "Platform", label: "Platform" },
-    { id: "Service", label: "Service" },
-    { id: "company", label: "About" },
-  ] as const;
-
-  const SOLUTIONS = [
-    {
-      name: "K-Me",
-      tag: "Dance Training",
-      title: "스마트미러로 AI 댄스 트레이닝 서비스",
-      desc:
-        "스마트미러 기반 트레이닝 + AI 피드백으로 촬영–비교–수정–반복을 한 번에. " +
-        "스튜디오 설치형 제품으로 운영/확장에 최적화됩니다.",
-    },
-    {
-      name: "ADAM Live",
-      tag: "Events & Pop-ups",
-      title: "실시간 인터랙티브 이벤트/팝업 패키지",
-      desc:
-        "대학 입학식, 브랜드 팝업, 아이돌 행사에서 ‘인사/제스처/포즈’ 같은 행동을 실시간으로 인식해 " +
-        "영상/그래픽/사운드를 반응시키는 인터랙티브 미디어 경험을 제공합니다.",
-    },
-  ] as const;
-
-  // ✅ Platform group (3 + 3)
-  const PLATFORM_A = [
-    { t: "Sense", d: "Capture" },
-    { t: "Interpret", d: "AI-based Recognition" },
-    { t: "Respond", d: "Real-time Media" },
-  ] as const;
-
-  const PLATFORM_B = [
-    { t: "Distribute", d: "QR/저장/공유 UGC" },
-    { t: "Operate", d: "Remote Management" },
-    { t: "Sales", d: "Analytics & Metrics" },
-  ] as const;
-
-  const TRACTION = [
-    {
-      head: "K-Me (Dance)",
-      items: [
-        { k: "Pilot", v: "스튜디오 설치형 PoC 운영/검증" },
-        { k: "Iteration", v: "댄서 피드백 기반 UX/하드웨어 고도화" },
-        { k: "Content", v: "연습 루프를 콘텐츠/데이터로 확장" },
-      ],
-    },
-    {
-      head: "ADAM Live (Events)",
-      items: [
-        { k: "Use-cases", v: "입학식/팝업/브랜드 행사 시나리오 구체화" },
-        { k: "Event Kit", v: "현장 설치+운영 패키지 단위로 상품화" },
-        { k: "Engagement", v: "참여율/촬영/QR 전환 지표로 성과 측정" },
-      ],
-    },
-  ] as const;
-
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // ✅ Demo modal
-  const [demoOpen, setDemoOpen] = useState(false);
-
-
+  const [useHeroWorm, setUseHeroWorm] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(min-width: 861px) and (hover: hover) and (pointer: fine)").matches
+      : false
+  );
 
   function go(id: string) {
     setMenuOpen(false);
     scrollTo(id);
   }
 
-  // ESC 닫기
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
         setMenuOpen(false);
-        setDemoOpen(false);
       }
     }
+
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 861px) and (hover: hover) and (pointer: fine)");
+    const onChange = () => setUseHeroWorm(media.matches);
+
+    onChange();
+    media.addEventListener("change", onChange);
+
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  const danceCases = caseStudies.filter((caseStudy) => caseStudy.category === "K-me Dance");
+  const visionAiCases = caseStudies.filter((caseStudy) => caseStudy.category === "K-me VisionAI");
 
   return (
     <>
@@ -117,45 +201,52 @@ export default function App() {
 
       <header className="topbar">
         <div className="wrap topInner">
-          <a
-            className="brand"
-            href="#home"
-            onClick={(e) => (e.preventDefault(), go("home"))}
+          <button
+            className="brand brandButton"
+            type="button"
+            onClick={() => {
+              go("home");
+            }}
             data-cursor="hover"
           >
-            <img className="brandIcon" src="/icon.png" alt="ADAM" draggable={false} />
-            <span className="brandName">ADAM</span>
-          </a>
+            <img className="brandIcon" src="/icon.png" alt="K-me" draggable={false} />
+            <span className="brandName">K-me</span>
+          </button>
 
           <nav className="nav">
             <div className="navLinks">
-              {nav.map((n) => (
+              {nav.map((item) => (
                 <a
-                  key={n.id}
-                  href={`#${n.id}`}
-                  onClick={(e) => (e.preventDefault(), go(n.id))}
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    go(item.id);
+                  }}
                   data-cursor="hover"
                 >
-                  {n.label}
+                  {item.label}
                 </a>
               ))}
             </div>
 
-            <a
+            <button
               className="btn btnSm navCTA"
-              href="#contact"
-              onClick={(e) => (e.preventDefault(), go("contact"))}
+              type="button"
+              onClick={() => {
+                go("contact");
+              }}
               data-cursor="hover"
             >
-              Contact
-            </a>
+              도입 문의
+            </button>
 
             <button
               className="navBurger"
               type="button"
               aria-label="Open menu"
               aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((v) => !v)}
+              onClick={() => setMenuOpen((value) => !value)}
               data-cursor="hover"
             >
               <span className="burgerLines" aria-hidden />
@@ -177,16 +268,16 @@ export default function App() {
                 initial={{ y: -10, opacity: 0, scale: 0.98 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 exit={{ y: -10, opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.18, ease: "easeOut" }}
+                transition={{ duration: 0.18, ease: motionEase }}
                 onClick={(e) => e.stopPropagation()}
               >
-                {nav.map((n) => (
-                  <button key={n.id} className="navDrawerItem" type="button" onClick={() => go(n.id)}>
-                    {n.label}
+                {nav.map((item) => (
+                  <button key={item.id} className="navDrawerItem" type="button" onClick={() => go(item.id)}>
+                    {item.label}
                   </button>
                 ))}
                 <button className="navDrawerCTA" type="button" onClick={() => go("contact")}>
-                  Contact
+                  도입 문의
                 </button>
               </motion.div>
             </motion.div>
@@ -194,8 +285,7 @@ export default function App() {
         </AnimatePresence>
       </header>
 
-      <main id="home">
-        {/* HERO */}
+      <main id="home" className="siteMain">
         <section className="hero">
           <div className="wrap heroWrap">
             <div className="heroBgArt" aria-hidden>
@@ -203,298 +293,269 @@ export default function App() {
             </div>
 
             <motion.div variants={stagger} initial="hidden" animate="show" className="heroCopy">
-              <motion.div variants={fadeUp} className="heroTitleWorm">
-                <HeroWormBorder pad={10} radius={25} duration={7.2}>
+              <motion.div variants={fadeUp} className={useHeroWorm ? "heroTitleWorm" : undefined}>
+                {useHeroWorm ? (
+                  <HeroWormBorder pad={10} radius={25} duration={7.2}>
+                    <h1 className="heroTitle heroTitleStack">
+                      <span className="heroTitleTop glowText heroGlow">Real-time interactive experiences,</span>
+                      <span className="heroTitleBottom glowText glowTextSoft heroGlowSoft">for real spaces.</span>
+                    </h1>
+                  </HeroWormBorder>
+                ) : (
                   <h1 className="heroTitle heroTitleStack">
                     <span className="heroTitleTop glowText heroGlow">Real-time interactive experiences,</span>
                     <span className="heroTitleBottom glowText glowTextSoft heroGlowSoft">for real spaces.</span>
                   </h1>
-                </HeroWormBorder>
+                )}
               </motion.div>
 
-
-              {/* ✅ 버튼 아래 줄바꿈 + 타이핑 */}
-              <motion.p variants={fadeUp} className="heroDesc heroDescType">
-                <span className="typewrite">
-                  ADAM은 “오프라인 공간에서의 인터랙션”을 제품화하는 AI 테크 스타트업입니다.
-                </span>
+              <motion.p variants={fadeUp} className="heroDesc heroLead">
+                K-me는 오프라인 공간에 설치되어 사람을 인식하고 바로 반응하는 스마트미러 플랫폼입니다.
               </motion.p>
 
-
-              {/* ✅ CTA 먼저 */}
               <motion.div variants={fadeUp} className="heroCTA">
-                <a
+                <button
                   className="btn"
-                  href="#contact"
-                  onClick={(e) => (e.preventDefault(), go("contact"))}
+                  type="button"
+                  onClick={() => {
+                    go("contact");
+                  }}
                   data-cursor="hover"
                 >
-                  데모 / 협업 문의
-                </a>
-                <a
+                  도입 문의하기
+                </button>
+                <button
                   className="btn btnGhost"
-                  href="#Service"
-                  onClick={(e) => (e.preventDefault(), go("Service"))}
+                  type="button"
+                  onClick={() => {
+                    go("Service");
+                  }}
                   data-cursor="hover"
                 >
-                  제품 라인업 보기
-                </a>
+                  서비스 보기
+                </button>
               </motion.div>
 
+              <motion.div variants={fadeUp} className="heroPills">
+                <span className="pill">K-me Dance</span>
+                <span className="pill">K-me VisionAI</span>
+              </motion.div>
             </motion.div>
           </div>
         </section>
 
-
-        
-
-        {/* Platform */}
         <section id="Platform" className="section sectionAlt">
           <div className="wrap">
-            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
-              <motion.h2 variants={fadeUp} className="h2 h2Underline">
-                <span className="glowText">ADAM Platform</span>
-              </motion.h2>
+            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+              <motion.div variants={fadeUp} className="sectionHead sectionHeadWide">
+                <h2 className="h2 h2Underline">
+                  <span className="sectionTitleTone">공간이 반응하는 플랫폼</span>
+                </h2>
+              </motion.div>
 
-              <motion.div variants={stagger} className="grid2">
-                {/* group A */}
-                <motion.article variants={fadeUp} className="card" data-cursor="hover">
-                  <div className="cardInner">
-                    <div className="platformHeadRow">
-                      <h3 className="cardTitle" style={{ marginBottom: 0 }}>
-                        Sense · Interpret · Respond
-                      </h3>
-
-                      <button className="miniBtn" type="button" onClick={() => setDemoOpen(true)}>
-                        Interactive with
-                      </button>
-                    </div>
-
-                    <div className="miniList" style={{ marginTop: 12 }}>
-                      {PLATFORM_A.map((it) => (
-                        <div key={it.t} className="miniItem">
-                          <span className="miniDot" />
-                          <span>
-                            <b style={{ color: "var(--text)" }}>{it.t}:</b>{" "}
-                            <span style={{ color: "var(--muted)" }}>{it.d}</span>
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.article>
-
-                {/* group B */}
-                <motion.article variants={fadeUp} className="card" data-cursor="hover">
-                  <div className="cardInner">
-                    <h3 className="cardTitle" style={{ marginBottom: 0 }}>
-                      Distribute · Operate · Sales
-                    </h3>
-
-                    <div className="miniList" style={{ marginTop: 12 }}>
-                      {PLATFORM_B.map((it) => (
-                        <div key={it.t} className="miniItem">
-                          <span className="miniDot" />
-                          <span>
-                            <b style={{ color: "var(--text)" }}>{it.t}:</b>{" "}
-                            <span style={{ color: "var(--muted)" }}>{it.d}</span>
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.article>
+              <motion.div variants={fadeUp}>
+                <PlatformOrbit />
               </motion.div>
             </motion.div>
           </div>
         </section>
 
-        {/* Service */}
         <section id="Service" className="section">
           <div className="wrap">
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
-              <motion.h2 variants={fadeUp} className="h2 h2Underline">
-                <span className="glowText">Service Line-Up</span>
-              </motion.h2>
+              <motion.div variants={fadeUp} className="sectionHead sectionHeadWide">
+                <h2 className="h2 h2Underline">
+                  <span className="sectionTitleTone">공간에 맞는 K-me</span>
+                </h2>
+              </motion.div>
 
-              <motion.div variants={stagger} className="grid2">
-                {SOLUTIONS.map((s) => (
+              <motion.div variants={stagger} className="serviceGrid">
+                {services.map((service) => (
                   <motion.article
-                    key={s.name}
+                    key={service.name}
                     variants={fadeUp}
-                    className="card"
+                    className="card serviceCard"
                     whileHover={{ y: -6, transition: { duration: 0.2 } }}
                     data-cursor="hover"
                   >
                     <div className="cardInner">
-                      <div className="cardMetaRow">
-                        <span className="chip">{s.tag}</span>
-                      </div>
+                      <span className="serviceMode">{service.mode}</span>
 
-                      <h3 className="cardTitle" style={{ fontSize: "clamp(18px, 1.9vw, 20px)" }}>
-                        <span className="glowText" style={{ textShadow: "none" }}>
-                          {s.name}
+                      <h3 className="cardTitle serviceCardTitle">
+                        <span className="serviceNameTone">
+                          {service.name}
                         </span>
                       </h3>
 
-                      <p className="cardText" style={{ marginBottom: 10 }}>
-                        <b style={{ color: "var(--text)" }}>{s.title}</b>
-                      </p>
-                      <p className="cardText">{s.desc}</p>
-                    </div>
-                  </motion.article>
-                ))}
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
+                      <p className="serviceLead">{service.title}</p>
+                      <p className="cardText">{service.description}</p>
 
-        {/* About */}
-        <section id="company" className="section">
-          <div className="wrap">
-            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
-              <motion.h2 variants={fadeUp} className="h2 h2Underline">
-                회사소개
-              </motion.h2>
+                      <ul className="servicePoints">
+                        {service.points.map((point) => (
+                          <li key={point} className="servicePointItem">
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
 
-              {/* 나중에 추가하고싶으면 추가하기 */}
-              <motion.p variants={fadeUp} className="p">
-              </motion.p>
+                      <div className="serviceActions">
+                        <a
+                          className="btn"
+                          href={service.primaryHref}
+                          target={service.primaryExternal ? "_self" : undefined}
+                          rel={service.primaryExternal ? "noreferrer" : undefined}
+                          onClick={
+                            service.primaryExternal
+                              ? undefined
+                              : (e) => {
+                                  e.preventDefault();
+                                  go(service.primaryHref.replace("#", ""));
+                                }
+                          }
+                          data-cursor="hover"
+                        >
+                          {service.primaryLabel}
+                        </a>
 
-
-              <motion.div variants={stagger} className="grid2">
-                {[
-                  { t: "What we sell", d: "설치형 AI 인터랙티브 경험(제품/패키지) — 스튜디오용, 행사/팝업용." },
-                  { t: "How we win", d: "현장 안정성 + 즉시 반응하는 UX + 공유(UGC) 루프까지 한 번에 제공." },
-                ].map((x) => (
-                  <motion.article
-                    key={x.t}
-                    variants={fadeUp}
-                    className="card"
-                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                    data-cursor="hover"
-                  >
-                    <div className="cardInner">
-                      <h3 className="cardTitle">{x.t}</h3>
-                      <p className="cardText">{x.d}</p>
-                    </div>
-                  </motion.article>
-                ))}
-              </motion.div>
-
-              <motion.div variants={stagger} style={{ marginTop: 26 }}>
-                <motion.h3 variants={fadeUp} className="h2" style={{ fontSize: "clamp(18px, 2.2vw, 22px)", marginBottom: 8 }}>
-                  Traction
-                </motion.h3>
-
-                <motion.div variants={stagger} className="grid2">
-                  {TRACTION.map((t) => (
-                    <motion.article
-                      key={t.head}
-                      variants={fadeUp}
-                      className="card"
-                      whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                      data-cursor="hover"
-                    >
-                      <div className="cardInner">
-                        <h3 className="cardTitle">{t.head}</h3>
-                        <div className="miniList" style={{ marginTop: 10 }}>
-                          {t.items.map((it) => (
-                            <div key={it.k} className="miniItem">
-                              <span className="miniDot" />
-                              <span>
-                                <b style={{ color: "var(--text)" }}>{it.k}:</b>{" "}
-                                <span style={{ color: "var(--muted)" }}>{it.v}</span>
-                              </span>
-                            </div>
-                          ))}
-                        </div>
+                        <a
+                          className="btn btnGhost"
+                          href={service.secondaryHref}
+                          target={service.secondaryExternal ? "_self" : undefined}
+                          rel={service.secondaryExternal ? "noreferrer" : undefined}
+                          onClick={
+                            service.secondaryExternal
+                              ? undefined
+                              : (e) => {
+                                  e.preventDefault();
+                                  go(service.secondaryHref.replace("#", ""));
+                                }
+                          }
+                          data-cursor="hover"
+                        >
+                          {service.secondaryLabel}
+                        </a>
                       </div>
-                    </motion.article>
-                  ))}
-                </motion.div>
+                    </div>
+                  </motion.article>
+                ))}
               </motion.div>
             </motion.div>
           </div>
         </section>
 
-        {/* ✅ Demo modal */}
-        <AnimatePresence>
-          {demoOpen && (
-            <motion.div className="modalOverlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDemoOpen(false)}>
-              <motion.div
-                className="modal demoModal"
-                initial={{ y: 10, opacity: 0, scale: 0.98 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                exit={{ y: 10, opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.18, ease: "easeOut" }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button className="modalClose" type="button" onClick={() => setDemoOpen(false)} aria-label="Close">
-                  ×
-                </button>
-
-                <div className="demoHeader">
-                  <div className="demoTitle">Sense / Interpret / Respond — Camera Demo</div>
-                  <div className="demoSub">FaceLandmarker 기반 네온 얼굴 오버레이</div>
-                </div>
-
-                <FaceNeonOverlayDemo open={demoOpen} />
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-
-
-
-
-        {/* Contact */}
-        <section id="contact" className="section sectionAlt">
+        <section id="Cases" className="section sectionAlt">
           <div className="wrap">
             <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
-              <motion.h2 variants={fadeUp} className="h2 h2Underline">
-                Contact
-              </motion.h2>
-              <motion.p variants={fadeUp} className="p">
-                데모/협업/설치/행사 운영 문의
-              </motion.p>
-
-              {/* ✅ 단일 카드(문의하기만) */}
-              <motion.div variants={fadeUp} className="contactGrid contactGridSolo">
-                <div className="contactCard" data-cursor="hover">
-                  <div className="cardInner">
-                    <ContactForm />
-                  </div>
-                </div>
+              <motion.div variants={fadeUp} className="sectionHead sectionHeadWide">
+                <h2 className="h2 h2Underline">
+                  <span className="sectionTitleTone">도입 사례</span>
+                </h2>
               </motion.div>
+
+              <div className="casesGroupStack">
+                <motion.section variants={stagger} className="casesGroupSection">
+                  <motion.div variants={fadeUp} className="casesGroupHead">
+                    <h3>K-me Dance</h3>
+                    <p>스마트미러 설치형 댄스 서비스</p>
+                  </motion.div>
+
+                  <motion.div variants={stagger} className="casesGrid">
+                    {danceCases.map((caseStudy) => (
+                      <motion.article
+                        key={caseStudy.id}
+                        variants={fadeUp}
+                        className="caseCard"
+                        whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                        data-cursor="hover"
+                      >
+                        <div className="caseImageWrap">
+                          <img className="caseImage" src={caseStudy.image} alt={`${caseStudy.title} 도입사례`} draggable={false} />
+                        </div>
+
+                        <div className="caseOverlay">
+                          <span className="caseTag caseTagSolo">{caseStudy.tag}</span>
+                          <h3>{caseStudy.title}</h3>
+                          <p>{caseStudy.description}</p>
+                        </div>
+                      </motion.article>
+                    ))}
+                  </motion.div>
+                </motion.section>
+
+                <motion.section variants={stagger} className="casesGroupSection">
+                  <motion.div variants={fadeUp} className="casesGroupHead">
+                    <h3>K-me VisionAI</h3>
+                    <p>행사형 모션인식 스마트미러 플랫폼</p>
+                  </motion.div>
+
+                  <motion.div variants={stagger} className="casesGrid">
+                    {visionAiCases.map((caseStudy) => (
+                      <motion.article
+                        key={caseStudy.id}
+                        variants={fadeUp}
+                        className="caseCard"
+                        whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                        data-cursor="hover"
+                      >
+                        <div className="caseImageWrap">
+                          <img className="caseImage" src={caseStudy.image} alt={`${caseStudy.title} 도입사례`} draggable={false} />
+                        </div>
+
+                        <div className="caseOverlay">
+                          <span className="caseTag caseTagSolo">{caseStudy.tag}</span>
+                          <h3>{caseStudy.title}</h3>
+                          <p>{caseStudy.description}</p>
+                        </div>
+                      </motion.article>
+                    ))}
+                  </motion.div>
+                </motion.section>
+              </div>
             </motion.div>
           </div>
         </section>
 
+        <section id="contact" className="section">
+          <div className="wrap">
+            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.18 }}>
+              <motion.div variants={fadeUp} className="sectionHead sectionHeadWide">
+                <h2 className="h2 h2Underline">
+                  <span className="sectionTitleTone">도입 문의</span>
+                </h2>
+              </motion.div>
 
+              <motion.article variants={fadeUp} className="contactCard contactSingleCard" data-cursor="hover">
+                <div className="cardInner">
+                  <div className="contactCardHead">
+                    <div className="contactTitle">문의 남기기</div>
+                    <div className="contactSub">기기 도입, 협업, 광고 문의 가능</div>
+                  </div>
 
+                  <ContactForm />
+                </div>
+              </motion.article>
+            </motion.div>
+          </div>
+        </section>
 
         <footer className="footer">
           <div className="wrap footerInner">
-            <span>© {new Date().getFullYear()} ADAM. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} K-me. All rights reserved.</span>
 
             <div className="footerInfo">
               <span className="footerCompany">아담</span>
               <span className="footerSep">·</span>
               <span>사업자등록번호: 343-04-03348</span>
               <span className="footerSep">·</span>
-              <a className="footerLink" href="mailto:ceo@ai-dam.ai">
+              <a className="footerLink" href="mailto:k-me@ai-dam.ai">
                 k-me@ai-dam.ai
               </a>
             </div>
           </div>
         </footer>
-
-
-
-
       </main>
+
+      <StickyInquiryBar />
     </>
   );
 }

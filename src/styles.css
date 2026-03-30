@@ -82,10 +82,12 @@ button{ font: inherit; color: inherit; }
 }
 
 .brandIcon{
-  width: 20px;      /* ✅ 22 -> 20 (아주 살짝 작게) */
+  width: auto;
   height: 20px;
-  border-radius: 8px;
+  border-radius: 0;
   object-fit: contain;
+  display: block;
+  flex-shrink: 0;
 
   /* 기본 글로우 */
   filter:
@@ -272,7 +274,7 @@ button{ font: inherit; color: inherit; }
 /* Hero */
 .hero{
   position: relative;
-  padding: clamp(56px, 8vw, 96px) 0 clamp(24px, 5vw, 44px);
+  padding: clamp(40px, 6vw, 72px) 0 20px;
   isolation: isolate;
   overflow: hidden; /* 배경아트 깔끔하게 */
 }
@@ -402,7 +404,7 @@ button{ font: inherit; color: inherit; }
 }
 
 /* Sections */
-.section{ padding: clamp(64px, 12vw, 220px) 0; }
+.section{ padding: clamp(54px, 8vw, 104px) 0; }
 .sectionAlt{ background: transparent; border: none; }
 
 .h2{
@@ -410,6 +412,19 @@ button{ font: inherit; color: inherit; }
   font-size: clamp(22px, 3vw, 30px);
   letter-spacing: -.02em;
 }
+
+.sectionTitleTone,
+.serviceNameTone{
+  color: #f4f7ff;
+  text-shadow:
+    0 0 10px rgba(139,92,255,.12),
+    0 0 8px rgba(0,210,255,.10);
+}
+
+.serviceNameTone{
+  display: inline-block;
+}
+
 .p{
   margin:0 0 18px;
   color: var(--muted);
@@ -801,28 +816,28 @@ button{ font: inherit; color: inherit; }
 }
 .bgBlob{
   position: absolute;
-  width: 78vmax;
-  height: 78vmax;
+  width: 60vmax;
+  height: 60vmax;
   border-radius: 9999px;
   transform: translateZ(0);
   will-change: transform, opacity;
-  opacity: .6;
+  opacity: .34;
 }
 .bgBlob1{
-  left: 18%;
-  top: 18%;
-  background: radial-gradient(circle at 30% 30%, rgba(139,92,255,.55), transparent 62%);
+  left: 46%;
+  top: 28%;
+  background: radial-gradient(circle at 30% 30%, rgba(139,92,255,.34), transparent 62%);
 }
 .bgBlob2{
-  left: 102%;
-  top: 14%;
-  background: radial-gradient(circle at 35% 35%, rgba(0,210,255,.45), transparent 62%);
-  opacity: .45;
+  left: 92%;
+  top: 8%;
+  background: radial-gradient(circle at 35% 35%, rgba(0,210,255,.26), transparent 62%);
+  opacity: .24;
 }
 .bgBlob3{
-  left: 56%;
-  top: 92%;
-  background: radial-gradient(circle at 35% 35%, rgba(255,79,216,.35), transparent 64%);
+  left: -8%;
+  top: 86%;
+  background: radial-gradient(circle at 35% 35%, rgba(255,79,216,.18), transparent 64%);
 }
 .bgVignette{
   position:absolute;
@@ -845,17 +860,16 @@ button{ font: inherit; color: inherit; }
   .navCTA{ display:none; }
   .navBurger{ display:inline-flex; align-items:center; justify-content:center; }
 
-  /* 모바일/줌에서도 “안 사라지게” + 더 배경처럼 */
   .heroProductImg,
   .heroBgImg{
     position: absolute;
-    top: 52%;
-    right: clamp(18px, 15vw, 200px);
-    width: clamp(150px, 22vw, 300px);
+    top: 24%;
+    right: 0;
+    width: clamp(120px, 30vw, 170px);
     height: auto;
 
-    opacity: 0.55;
-    transform: translate(10%, -50%);
+    opacity: 0.32;
+    transform: translate(0, -50%);
     pointer-events: none;
     user-select: none;
 
@@ -867,6 +881,27 @@ button{ font: inherit; color: inherit; }
 
     -webkit-mask-image: radial-gradient(circle at 55% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,.95) 52%, rgba(0,0,0,0) 78%);
     mask-image: radial-gradient(circle at 55% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,.95) 52%, rgba(0,0,0,0) 78%);
+  }
+
+  .heroTitle{
+    max-width: 300px;
+    font-size: clamp(32px, 9.4vw, 44px);
+  }
+
+  .heroTitleTop.glowText.heroGlow,
+  .heroTitleBottom.glowText.glowTextSoft.heroGlowSoft{
+    background: none;
+    color: #f4f7ff;
+    -webkit-text-fill-color: #f4f7ff;
+    text-shadow: none;
+  }
+
+  .heroLead{
+    max-width: 300px;
+  }
+
+  .heroPills{
+    display: none;
   }
 
   /* Team은 4x1 유지: 모바일은 가로 스크롤 */
@@ -901,31 +936,18 @@ button{ font: inherit; color: inherit; }
 
 
 /* ✅ Hero title text should stay opaque (background never bleeds through) */
-.heroGlow{
-  background: linear-gradient(135deg,
-    rgba(255,255,255,1) 0%,
-    rgba(0,210,255,1) 32%,
-    rgba(255,79,216,1) 66%,
-    rgba(255,255,255,1) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  background-size: 220% 220%;
+.heroGlow,
+.heroGlowSoft{
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  color: #f4f7ff;
+  -webkit-text-fill-color: #f4f7ff;
 }
 
 .heroGlowSoft{
-  background: linear-gradient(135deg,
-    rgba(234,234,255,1) 0%,
-    rgba(0,210,255,1) 55%,
-    rgba(234,234,255,1) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  background-size: 220% 220%;
+  color: rgba(214,236,255,.96);
+  -webkit-text-fill-color: rgba(214,236,255,.96);
 }
 
 
@@ -955,9 +977,7 @@ button{ font: inherit; color: inherit; }
 /* ✅ apply motion only to hero title */
 .heroTitleTop.heroGlow,
 .heroTitleBottom.heroGlowSoft{
-  animation:
-    heroGradientShift 9s ease-in-out infinite,
-    heroNeonBreath 3.4s ease-in-out infinite;
+  animation: heroNeonBreath 3.4s ease-in-out infinite;
 }
 
 /* 접근성: 모션 싫어하는 환경이면 끔 */
@@ -1479,4 +1499,683 @@ a, button, [data-cursor="hover"]{
   gap:10px;
   align-items:center;
   flex-wrap:wrap; /* 모바일에서 줄바꿈 허용 */
+}
+
+.siteMain{
+  padding-bottom: clamp(108px, 13vw, 146px);
+}
+
+.brandButton{
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.heroWrap{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+}
+
+.heroCopy{
+  position: relative;
+  z-index: 2;
+  max-width: 780px;
+}
+
+.heroEyebrow,
+.sectionEyebrow,
+.stickyLeadEyebrow{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(234,234,255,.72);
+}
+
+.heroEyebrow::before,
+.sectionEyebrow::before,
+.stickyLeadEyebrow::before{
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--p1), var(--p3), var(--p2));
+  box-shadow: 0 0 16px rgba(0,210,255,.24);
+}
+
+.heroLead{
+  margin-top: 12px;
+  max-width: 620px;
+  font-size: clamp(15px, 1.45vw, 16px);
+  line-height: 1.7;
+}
+
+.heroPills{
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.servicePointItem,
+.platformBubble strong,
+.platformMobileCard strong{
+  display: block;
+  color: var(--text);
+}
+
+.platformBubble p,
+.platformMobileCard p{
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.sectionHead{
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.sectionHeadWide{
+  max-width: 760px;
+}
+
+.platformShowcase{
+  position: relative;
+  margin-top: 6px;
+  padding: clamp(18px, 3vw, 28px);
+  border-radius: clamp(22px, 3vw, 30px);
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(720px 300px at 16% 0%, rgba(139,92,255,.16), transparent 60%),
+    radial-gradient(620px 260px at 84% 0%, rgba(0,210,255,.14), transparent 56%),
+    rgba(255,255,255,.03);
+  overflow: hidden;
+}
+
+.platformOrbitScene{
+  position: relative;
+  min-height: 540px;
+}
+
+.platformDeviceShell{
+  position: absolute;
+  left: 50%;
+  top: 51%;
+  transform: translate(-50%, -50%);
+  width: min(30vw, 290px);
+}
+
+.platformDeviceGlow{
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(139,92,255,.22), transparent 58%),
+    radial-gradient(circle at 60% 40%, rgba(0,210,255,.18), transparent 52%);
+  filter: blur(18px);
+  opacity: .95;
+}
+
+.platformDeviceFrame{
+  position: relative;
+  border-radius: 34px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.28));
+  padding: 18px;
+  box-shadow:
+    0 28px 70px rgba(0,0,0,.55),
+    0 0 26px rgba(139,92,255,.08);
+}
+
+.platformDeviceImage{
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 24px 46px rgba(0,0,0,.45))
+    brightness(1.06)
+    saturate(1.05);
+}
+
+.platformDeviceCaption{
+  margin-top: 14px;
+  display: grid;
+  gap: 4px;
+  text-align: center;
+}
+
+.platformDeviceCaption span{
+  color: rgba(234,234,255,.66);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.platformDeviceCaption strong{
+  font-size: 16px;
+  letter-spacing: -.02em;
+}
+
+.platformNode{
+  position: absolute;
+  width: 160px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.platformNodeInner{
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(5,5,10,.72);
+  backdrop-filter: blur(14px);
+  text-align: center;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.platformNode:hover .platformNodeInner,
+.platformNode.isActive .platformNodeInner,
+.platformMobileButton.isActive{
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  box-shadow:
+    0 16px 40px rgba(0,0,0,.4),
+    0 0 18px rgba(0,210,255,.12),
+    0 0 18px rgba(139,92,255,.10);
+}
+
+.platformNodeLabel{
+  display: block;
+  color: var(--text);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  font-size: 14px;
+}
+
+.platformNodeSummary{
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.platformNode.isRecognition{ top: 8%; left: 4%; }
+.platformNode.isRespond{ top: 12%; right: 4%; }
+.platformNode.isDistribute{ top: 42%; right: 0; }
+.platformNode.isOperate{ bottom: 12%; right: 9%; }
+.platformNode.isSales{ bottom: 12%; left: 8%; }
+
+.platformBubble{
+  position: absolute;
+  max-width: 240px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(5,5,10,.82);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 26px 70px rgba(0,0,0,.46);
+}
+
+.platformBubble.isTipRecognition{ top: 18%; left: 25%; }
+.platformBubble.isTipRespond{ top: 19%; right: 24%; }
+.platformBubble.isTipDistribute{ top: 44%; right: 23%; }
+.platformBubble.isTipOperate{ bottom: 15%; right: 24%; }
+.platformBubble.isTipSales{ bottom: 15%; left: 24%; }
+
+.platformBubbleKicker{
+  display: inline-flex;
+  margin-bottom: 8px;
+  color: rgba(0,210,255,.92);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.platformBubble h3,
+.platformMobileCard h3,
+.caseOverlay h3{
+  margin: 0;
+  font-size: clamp(17px, 1.5vw, 20px);
+  letter-spacing: -.02em;
+}
+
+.platformBubble strong,
+.platformMobileCard strong{
+  margin-top: 10px;
+  color: rgba(234,234,255,.86);
+  font-size: 12px;
+}
+
+.platformMobilePanel{
+  display: none;
+}
+
+.platformMobileButtons{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.platformMobileButton{
+  padding: 14px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.platformMobileCard{
+  margin-top: 14px;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+}
+
+.serviceGrid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.serviceActions,
+.caseMetaRow{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.serviceMode,
+.caseTag{
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.05);
+  color: rgba(234,234,255,.82);
+  font-size: 12px;
+}
+
+.serviceCardTitle{
+  margin-top: 12px;
+}
+
+.serviceLead{
+  margin: 0 0 8px;
+  color: rgba(234,234,255,.9);
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.servicePoints{
+  margin-top: 14px;
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.servicePointItem{
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.serviceActions{
+  margin-top: 14px;
+}
+
+.casesGroupStack{
+  display: grid;
+  gap: 30px;
+}
+
+.casesGroupHead{
+  display: grid;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.casesGroupHead h3{
+  margin: 0;
+  font-size: clamp(18px, 2vw, 24px);
+  letter-spacing: -.02em;
+}
+
+.casesGroupHead p{
+  margin: 0;
+  color: var(--muted);
+}
+
+.casesGrid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.caseCard{
+  position: relative;
+  overflow: hidden;
+  min-height: 300px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+}
+
+.caseImageWrap,
+.caseOverlay{
+  position: absolute;
+  inset: 0;
+}
+
+.caseImage{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+}
+
+.caseOverlay{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(5,5,10,0) 0%, rgba(5,5,10,.18) 34%, rgba(5,5,10,.92) 100%);
+}
+
+.caseOverlay p{
+  margin: 6px 0 0;
+  color: rgba(234,234,255,.76);
+  line-height: 1.45;
+}
+
+.caseTagSolo{
+  align-self: flex-start;
+  min-height: 28px;
+  padding: 4px 10px;
+  margin-bottom: 8px;
+}
+
+.contactSingleCard{
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.fGrid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fLabelFull{
+  grid-column: 1 / -1;
+}
+
+.contactSubmitRow{
+  margin-top: 10px;
+  justify-content: space-between;
+}
+
+.stickyLead{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  z-index: 90;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.stickyLeadDesktop,
+.stickyLeadMobile{
+  pointer-events: auto;
+}
+
+.stickyLeadDesktop{
+  width: min(1200px, calc(100% - 24px));
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(5,5,10,.86);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 22px 70px rgba(0,0,0,.48);
+}
+
+.stickyLeadIntro{
+  display: grid;
+  gap: 4px;
+  align-content: center;
+}
+
+.stickyLeadIntro strong,
+.stickyLeadSheetHead strong{
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.stickyLeadIntro p,
+.stickyLeadSheetHead p{
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.stickyLeadForm{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.stickyLeadField{
+  display: grid;
+  gap: 6px;
+}
+
+.stickyLeadField span{
+  font-size: 11px;
+  color: rgba(234,234,255,.82);
+}
+
+.stickyLeadField input,
+.stickyLeadField select{
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 11px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  color: var(--text);
+  outline: none;
+}
+
+.stickyLeadField input:focus,
+.stickyLeadField select:focus{
+  border-color: rgba(0,210,255,.26);
+  box-shadow: 0 0 0 3px rgba(0,210,255,.10);
+}
+
+.stickyLeadSubmit{
+  white-space: nowrap;
+}
+
+.stickyLeadMobile{
+  display: none;
+  width: calc(100% - 18px);
+}
+
+.stickyLeadToggle{
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(5,5,10,.88);
+  backdrop-filter: blur(18px);
+  color: var(--text);
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  box-shadow: 0 18px 50px rgba(0,0,0,.45);
+}
+
+.stickyLeadToggle strong{
+  font-size: 14px;
+}
+
+.stickyLeadSheetOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.46);
+  display: grid;
+  align-items: end;
+  padding: 0;
+}
+
+.stickyLeadSheet{
+  width: 100%;
+  border-radius: 26px 26px 0 0;
+  border: 1px solid rgba(255,255,255,.12);
+  border-bottom: 0;
+  background: rgba(5,5,10,.96);
+  padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
+  box-shadow: 0 -24px 80px rgba(0,0,0,.55);
+}
+
+.stickyLeadSheetHead{
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.stickyLeadClose{
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.stickyLeadSheetForm{
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.stickyLeadField.isCompact input,
+.stickyLeadField.isCompact select{
+  min-height: 46px;
+}
+
+@media (max-width: 1120px){
+  .stickyLeadDesktop{
+    grid-template-columns: 1fr;
+  }
+
+  .stickyLeadForm{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stickyLeadSubmit{
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 980px){
+  .serviceGrid,
+  .casesGrid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .platformOrbitScene{
+    min-height: 560px;
+  }
+
+  .platformDeviceShell{
+    width: min(38vw, 300px);
+  }
+}
+
+@media (max-width: 960px){
+  .platformOrbitScene{
+    display: none;
+  }
+
+  .platformMobilePanel{
+    display: block;
+  }
+}
+
+@media (max-width: 860px){
+  .siteMain{
+    padding-bottom: 92px;
+  }
+
+  .serviceGrid,
+  .casesGrid,
+  .fGrid{
+    grid-template-columns: 1fr;
+  }
+
+  .heroCopy{
+    max-width: none;
+  }
+
+  .contactSubmitRow{
+    align-items: flex-start;
+  }
+
+  .stickyLeadDesktop{
+    display: none;
+  }
+
+  .stickyLeadMobile{
+    display: block;
+  }
+}
+
+@media (max-width: 640px){
+  .platformMobileButtons{
+    grid-template-columns: 1fr;
+  }
+
+  .caseCard{
+    min-height: 320px;
+  }
 }
