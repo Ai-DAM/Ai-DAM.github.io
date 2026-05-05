@@ -1,0 +1,1 @@
+import{j as e,R as s,a as t}from"./client-Celn40sT.js";import{T as a}from"./test-page-DHuldrxF.js";const n="/assets/company-business_BG-oz9a5jzL.png";function o(){return e.jsx(a,{backgroundImage:n,backgroundAlt:"Company business test page background"})}s.createRoot(document.getElementById("root")).render(e.jsx(t.StrictMode,{children:e.jsx(o,{})}));
