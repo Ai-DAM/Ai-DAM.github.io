@@ -1,1 +1,0 @@
-import{j as e,R as t,a}from"./client-Celn40sT.js";import{T as o}from"./test-page-DHuldrxF.js";const s="/assets/company-what-is-k-me_BG-BUaRaSQc.png";function n(){return e.jsx(o,{backgroundImage:s,backgroundAlt:"K-me test page background"})}t.createRoot(document.getElementById("root")).render(e.jsx(a.StrictMode,{children:e.jsx(n,{})}));

@@ -94,6 +94,14 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt }: Test
   const [mobileCompanyMenuOpen, setMobileCompanyMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
   const companyMenuRef = useRef<HTMLDivElement | null>(null);
+  const companyCloseTimeoutRef = useRef<number | null>(null);
+
+  function clearCompanyCloseTimeout() {
+    if (companyCloseTimeoutRef.current !== null) {
+      window.clearTimeout(companyCloseTimeoutRef.current);
+      companyCloseTimeoutRef.current = null;
+    }
+  }
 
   useEffect(() => {
     if (!companyMenuOpen && !mobileMenuOpen) return;
@@ -123,7 +131,10 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt }: Test
     };
   }, [companyMenuOpen, mobileMenuOpen]);
 
+  useEffect(() => () => clearCompanyCloseTimeout(), []);
+
   function closeMenus() {
+    clearCompanyCloseTimeout();
     setCompanyMenuOpen(false);
     setMobileMenuOpen(false);
     setMobileCompanyMenuOpen(false);
@@ -135,11 +146,16 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt }: Test
   }
 
   function openDesktopCompanyMenu() {
+    clearCompanyCloseTimeout();
     setCompanyMenuOpen(true);
   }
 
   function closeDesktopCompanyMenu() {
-    setCompanyMenuOpen(false);
+    clearCompanyCloseTimeout();
+    companyCloseTimeoutRef.current = window.setTimeout(() => {
+      setCompanyMenuOpen(false);
+      companyCloseTimeoutRef.current = null;
+    }, 140);
   }
 
   return (

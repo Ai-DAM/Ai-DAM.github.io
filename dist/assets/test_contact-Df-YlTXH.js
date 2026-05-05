@@ -1,0 +1,1 @@
+import{j as t,R as e,a}from"./client-Celn40sT.js";import{T as o}from"./test-page-C5f8KrAr.js";const n="/assets/contact_BG-UyWVK0Yt.png";function r(){return t.jsx(o,{backgroundImage:n,backgroundAlt:"Contact test page background"})}e.createRoot(document.getElementById("root")).render(t.jsx(a.StrictMode,{children:t.jsx(r,{})}));

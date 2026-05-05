@@ -1,1 +1,0 @@
-import{j as t,R as o,a as n}from"./client-Celn40sT.js";import{T as e}from"./test-page-DHuldrxF.js";const a="/assets/company_Introduction_BG-CugGQXDf.png";function r(){return t.jsx(e,{backgroundImage:a,backgroundAlt:"Company introduction test page background"})}o.createRoot(document.getElementById("root")).render(t.jsx(n.StrictMode,{children:t.jsx(r,{})}));
