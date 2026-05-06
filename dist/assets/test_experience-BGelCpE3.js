@@ -1,0 +1,1 @@
+import{j as e,R as t,a as r}from"./client-Celn40sT.js";import{T as n}from"./test-page-C9HaZHBp.js";import"./CustomCursor-CdUI7LKf.js";const a="/assets/experience_BG-CYeYEyGB.png";function o(){return e.jsx(n,{backgroundImage:a,backgroundAlt:"Experience test page background"})}t.createRoot(document.getElementById("root")).render(e.jsx(r.StrictMode,{children:e.jsx(o,{})}));

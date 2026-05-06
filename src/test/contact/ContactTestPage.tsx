@@ -17,6 +17,14 @@ type OverlayStyle = CSSProperties & {
   "--overlay-z-index"?: string;
 };
 
+type SocialButton = {
+  label: string;
+  href: string;
+  className: string;
+  style: OverlayStyle;
+  icon: React.ReactNode;
+};
+
 function getBottomCenterOverlayStyle(bottom: number, width: number, zIndex: number): OverlayStyle {
   return {
     bottom: `${(bottom / DESIGN_HEIGHT) * 100}%`,
@@ -47,6 +55,17 @@ function getTopRightSizedStyle(right: number, top: number, width: number, height
   };
 }
 
+function getTopLeftSizedStyle(left: number, top: number, width: number, height: number, zIndex: number): OverlayStyle {
+  return {
+    left: `${(left / DESIGN_WIDTH) * 100}%`,
+    top: `${(top / DESIGN_HEIGHT) * 100}%`,
+    width: `${(width / DESIGN_WIDTH) * 100}%`,
+    aspectRatio: `${width} / ${height}`,
+    "--overlay-z-index": `${zIndex}`,
+    "--overlay-translate-x": "0%",
+  };
+}
+
 const formPanelStyle: OverlayStyle = {
   ...getTopRightSizedStyle(41, 544, 720, 734, 2),
   left: "auto",
@@ -59,7 +78,75 @@ const submitButtonStyle: OverlayStyle = {
   left: "auto",
 };
 
+const CONTACT_SOCIAL_TOP = 955;
+const CONTACT_SOCIAL_LEFT = 290.18;
+const CONTACT_SOCIAL_GAP = 15;
+const CONTACT_SOCIAL_YOUTUBE_WIDTH = 40.0;
+const CONTACT_SOCIAL_YOUTUBE_HEIGHT = 24.2;
+const CONTACT_SOCIAL_YOUTUBE_TOP_OFFSET = 2;
+const CONTACT_SOCIAL_ICON_SIZE = 28;
+
 const contactFields = ["이름", "연락처", "이메일", "회사/기관명", "관심 서비스"] as const;
+
+const socialButtons: SocialButton[] = [
+  {
+    label: "K-me Dance YouTube",
+    href: "https://youtube.com/@k-me_dance?si=kpJROehZeop0BqQY",
+    className: "kme-test-page__social-button--youtube",
+    style: getTopLeftSizedStyle(
+      CONTACT_SOCIAL_LEFT,
+      CONTACT_SOCIAL_TOP + CONTACT_SOCIAL_YOUTUBE_TOP_OFFSET,
+      CONTACT_SOCIAL_YOUTUBE_WIDTH,
+      CONTACT_SOCIAL_YOUTUBE_HEIGHT,
+      3,
+    ),
+    icon: (
+      <svg viewBox="0 0 25 16" aria-hidden="true">
+        <rect x="1" y="1" width="23" height="14" rx="4.8" fill="currentColor" />
+        <path d="M10.1 4.45L16.6 8L10.1 11.55V4.45Z" fill="#ffffff" />
+      </svg>
+    ),
+  },
+  {
+    label: "K-me Dance Instagram",
+    href: "https://www.instagram.com/kme.dance?igsh=MW85ZnJsYTVrOWxjcg%3D%3D&utm_source=qr",
+    className: "kme-test-page__social-button--instagram",
+    style: getTopLeftSizedStyle(
+      CONTACT_SOCIAL_LEFT + CONTACT_SOCIAL_YOUTUBE_WIDTH + CONTACT_SOCIAL_GAP,
+      CONTACT_SOCIAL_TOP,
+      CONTACT_SOCIAL_ICON_SIZE,
+      CONTACT_SOCIAL_ICON_SIZE,
+      3,
+    ),
+    icon: (
+      <svg viewBox="0 0 17 17" aria-hidden="true">
+        <rect x="1.15" y="1.15" width="14.7" height="14.7" rx="4.5" fill="currentColor" />
+        <circle cx="8.5" cy="8.5" r="3.15" fill="none" stroke="#ffffff" strokeWidth="1.6" />
+        <circle cx="12.55" cy="4.45" r="1.05" fill="#ffffff" />
+      </svg>
+    ),
+  },
+  {
+    label: "K-me Dance Blog",
+    href: "https://blog.naver.com/k-me_official_kr",
+    className: "kme-test-page__social-button--blog",
+    style: getTopLeftSizedStyle(
+      CONTACT_SOCIAL_LEFT + CONTACT_SOCIAL_YOUTUBE_WIDTH + CONTACT_SOCIAL_GAP + CONTACT_SOCIAL_ICON_SIZE + CONTACT_SOCIAL_GAP,
+      CONTACT_SOCIAL_TOP,
+      CONTACT_SOCIAL_ICON_SIZE,
+      CONTACT_SOCIAL_ICON_SIZE,
+      3,
+    ),
+    icon: (
+      <svg viewBox="0 0 18 18" aria-hidden="true">
+        <rect x="1.15" y="1.15" width="15.7" height="15.7" rx="4.35" fill="currentColor" />
+        <path d="M5.2 5.65H12.8" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M5.2 8.95H12.8" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M5.2 12.25H10.35" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+];
 
 function extractErrorMessage(raw: string, fallback = "전송 실패") {
   const text = (raw ?? "").trim();
@@ -157,7 +244,7 @@ export default function ContactTestPage() {
             className="kme-test-contact-form__input"
             value={name}
             onChange={(event) => setName(event.target.value)}
-            placeholder="예) 홍길동"
+            placeholder="예) 케임희"
             required
           />
           <span className="kme-test-contact-form__line" aria-hidden="true" />
@@ -239,6 +326,20 @@ export default function ContactTestPage() {
       >
         <img src={submitButtonImage} alt={status === "sending" ? "전송 중" : "문의하기"} />
       </button>
+
+      {socialButtons.map((button) => (
+        <a
+          key={button.label}
+          aria-label={button.label}
+          className={["kme-test-page__social-button", button.className].join(" ")}
+          href={button.href}
+          rel="noreferrer"
+          style={button.style}
+          target="_blank"
+        >
+          {button.icon}
+        </a>
+      ))}
 
       {showSuccessModal && (
         <div className="kme-test-contact-modal" role="dialog" aria-modal="true" aria-labelledby="kme-test-contact-modal-title" onClick={closeSuccessModal}>

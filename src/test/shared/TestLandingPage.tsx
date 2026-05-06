@@ -70,6 +70,7 @@ const logoButtonStyle: CSSProperties = {
 
 const PAGE_TRANSITION_STORAGE_KEY = "kme-test-page-transition";
 const PAGE_TRANSITION_DURATION_MS = 220;
+const TEST_LOGO_HOME_HREF = "/test/company-what-is-k-me/";
 
 type PositionedHeaderItem = {
   top: string;
@@ -238,8 +239,7 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt, childr
   }
 
   function handleLogoClick() {
-    closeMenus();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigateWithContentTransition(TEST_LOGO_HOME_HREF);
   }
 
   function openDesktopCompanyMenu() {
