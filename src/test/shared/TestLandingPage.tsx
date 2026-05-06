@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import CustomCursor from "../../components/CustomCursor";
 import companyIcon from "../assets/Header/Company.svg";
 import contactIcon from "../assets/Header/Contact.svg";
 import experienceIcon from "../assets/Header/EXPERIENCE.svg";
@@ -67,6 +68,9 @@ const logoButtonStyle: CSSProperties = {
   aspectRatio: "81 / 25",
 };
 
+const PAGE_TRANSITION_STORAGE_KEY = "kme-test-page-transition";
+const PAGE_TRANSITION_DURATION_MS = 220;
+
 type PositionedHeaderItem = {
   top: string;
   right: string;
@@ -86,15 +90,18 @@ function getHeaderButtonStyle(button: PositionedHeaderItem): CSSProperties {
 type TestLandingPageProps = {
   backgroundImage: string;
   backgroundAlt: string;
+  children?: ReactNode;
 };
 
-export default function TestLandingPage({ backgroundImage, backgroundAlt }: TestLandingPageProps) {
+export default function TestLandingPage({ backgroundImage, backgroundAlt, children }: TestLandingPageProps) {
   const [companyMenuOpen, setCompanyMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileCompanyMenuOpen, setMobileCompanyMenuOpen] = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
   const companyMenuRef = useRef<HTMLDivElement | null>(null);
   const companyCloseTimeoutRef = useRef<number | null>(null);
+  const transitionTimerRef = useRef<number | null>(null);
 
   function clearCompanyCloseTimeout() {
     if (companyCloseTimeoutRef.current !== null) {
@@ -133,11 +140,101 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt }: Test
 
   useEffect(() => () => clearCompanyCloseTimeout(), []);
 
+  useEffect(() => {
+    try {
+      window.sessionStorage.removeItem(PAGE_TRANSITION_STORAGE_KEY);
+    } catch {
+      // ignore storage failures
+    }
+
+    const raf = window.requestAnimationFrame(() => {
+      setContentVisible(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(raf);
+
+      if (transitionTimerRef.current !== null) {
+        window.clearTimeout(transitionTimerRef.current);
+      }
+    };
+  }, []);
+
   function closeMenus() {
     clearCompanyCloseTimeout();
     setCompanyMenuOpen(false);
     setMobileMenuOpen(false);
     setMobileCompanyMenuOpen(false);
+  }
+
+  function navigateWithContentTransition(href: string) {
+    if (transitionTimerRef.current !== null) {
+      window.clearTimeout(transitionTimerRef.current);
+    }
+
+    closeMenus();
+    setContentVisible(false);
+
+    try {
+      window.sessionStorage.setItem(PAGE_TRANSITION_STORAGE_KEY, "1");
+    } catch {
+      // ignore storage failures
+    }
+
+    transitionTimerRef.current = window.setTimeout(() => {
+      window.location.assign(href);
+    }, PAGE_TRANSITION_DURATION_MS);
+  }
+
+  function handleInternalAnchorClick(event: React.MouseEvent<HTMLAnchorElement>, href: string) {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    const nextUrl = new URL(href, window.location.origin);
+
+    if (nextUrl.origin !== window.location.origin) {
+      return;
+    }
+
+    if (nextUrl.pathname === window.location.pathname && nextUrl.search === window.location.search && nextUrl.hash === window.location.hash) {
+      closeMenus();
+      return;
+    }
+
+    event.preventDefault();
+    navigateWithContentTransition(nextUrl.toString());
+  }
+
+  function handlePageClickCapture(event: React.MouseEvent<HTMLElement>) {
+    const target = event.target;
+
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+
+    const anchor = target.closest("a[href]");
+
+    if (!(anchor instanceof HTMLAnchorElement)) {
+      return;
+    }
+
+    if (anchor.target && anchor.target !== "_self") {
+      return;
+    }
+
+    if (anchor.hasAttribute("download")) {
+      return;
+    }
+
+    handleInternalAnchorClick(event as React.MouseEvent<HTMLAnchorElement>, anchor.href);
   }
 
   function handleLogoClick() {
@@ -159,7 +256,9 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt }: Test
   }
 
   return (
-    <main className="kme-test-page">
+    <main className="kme-test-page" onClickCapture={handlePageClickCapture}>
+      <CustomCursor />
+
       <header ref={headerRef} className="kme-test-header" aria-label="K-me header">
         <div className="kme-test-header__inner">
           <button
@@ -218,7 +317,7 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt }: Test
                     className="kme-test-header__submenu-link"
                     href={item.href}
                     role="menuitem"
-                    onClick={closeMenus}
+                    onClick={(event) => handleInternalAnchorClick(event, item.href)}
                   >
                     {item.label}
                   </a>
@@ -234,7 +333,7 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt }: Test
               className="kme-test-header__button kme-test-header__desktop-item"
               href={item.href}
               style={getHeaderButtonStyle(item)}
-              onClick={closeMenus}
+              onClick={(event) => handleInternalAnchorClick(event, item.href)}
             >
               <img alt={item.label} className="kme-test-header__icon" src={item.icon} />
             </a>
@@ -259,7 +358,7 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt }: Test
                       key={item.href}
                       className="kme-test-header__mobile-sublink"
                       href={item.href}
-                      onClick={closeMenus}
+                      onClick={(event) => handleInternalAnchorClick(event, item.href)}
                     >
                       {item.label}
                     </a>
@@ -272,7 +371,7 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt }: Test
                   key={item.href}
                   className="kme-test-header__mobile-link"
                   href={item.href}
-                  onClick={closeMenus}
+                  onClick={(event) => handleInternalAnchorClick(event, item.href)}
                 >
                   {item.label}
                 </a>
@@ -282,7 +381,10 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt }: Test
         </div>
       </header>
 
-      <img className="kme-test-page__image" src={backgroundImage} alt={backgroundAlt} />
+      <div className={["kme-test-page__media", contentVisible ? "kme-test-page__media--visible" : ""].filter(Boolean).join(" ")}>
+        <img className="kme-test-page__image" src={backgroundImage} alt={backgroundAlt} />
+        {children ? <div className="kme-test-page__overlay">{children}</div> : null}
+      </div>
     </main>
   );
 }

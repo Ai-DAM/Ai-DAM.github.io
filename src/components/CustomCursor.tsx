@@ -1,5 +1,50 @@
 import { useEffect, useMemo, useRef } from "react";
 
+type CursorPoint = {
+  x: number;
+  y: number;
+};
+
+const CURSOR_STORAGE_KEY = "custom-cursor-last-point";
+
+let lastCursorPoint: CursorPoint | null = null;
+
+function readStoredCursorPoint(): CursorPoint | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const rawValue = window.sessionStorage.getItem(CURSOR_STORAGE_KEY);
+
+    if (!rawValue) {
+      return null;
+    }
+
+    const parsedValue = JSON.parse(rawValue) as Partial<CursorPoint>;
+
+    if (typeof parsedValue.x !== "number" || typeof parsedValue.y !== "number") {
+      return null;
+    }
+
+    return { x: parsedValue.x, y: parsedValue.y };
+  } catch {
+    return null;
+  }
+}
+
+function storeCursorPoint(point: CursorPoint) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.sessionStorage.setItem(CURSOR_STORAGE_KEY, JSON.stringify(point));
+  } catch {
+    // ignore storage failures
+  }
+}
+
 export default function CustomCursor() {
   const isFinePointer =
     typeof window !== "undefined" &&
@@ -16,12 +61,43 @@ export default function CustomCursor() {
   const pressedRef = useRef(false);
 
   const state = useMemo(() => {
-    const cx = window.innerWidth / 2;
-    const cy = window.innerHeight / 2;
-    return { x: cx, y: cy, tx: cx, ty: cy, rx: cx, ry: cy };
+    const initialPoint = lastCursorPoint ?? readStoredCursorPoint() ?? {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+    };
+
+    return {
+      x: initialPoint.x,
+      y: initialPoint.y,
+      tx: initialPoint.x,
+      ty: initialPoint.y,
+      rx: initialPoint.x,
+      ry: initialPoint.y,
+    };
   }, []);
 
   useEffect(() => {
+    let zoomTimer: ReturnType<typeof window.setTimeout> | undefined;
+
+    const setZooming = (value: boolean) => {
+      const wrap = wrapRef.current;
+      if (!wrap) return;
+
+      wrap.classList.toggle("isZooming", value);
+    };
+
+    const handleZoomGesture = () => {
+      setZooming(true);
+
+      if (zoomTimer !== undefined) {
+        window.clearTimeout(zoomTimer);
+      }
+
+      zoomTimer = window.setTimeout(() => {
+        setZooming(false);
+      }, 180);
+    };
+
     const applyRingScale = () => {
       const ring = ringRef.current;
       if (!ring) return;
@@ -38,6 +114,8 @@ export default function CustomCursor() {
     const onMove = (e: MouseEvent) => {
       state.tx = e.clientX;
       state.ty = e.clientY;
+      lastCursorPoint = { x: e.clientX, y: e.clientY };
+      storeCursorPoint(lastCursorPoint);
     };
     window.addEventListener("mousemove", onMove, { passive: true });
 
@@ -47,9 +125,9 @@ export default function CustomCursor() {
       state.x += (state.tx - state.x) * 0.60;
       state.y += (state.ty - state.y) * 0.60;
 
-      // ring: 살짝 느리게(트레일 느낌 유지)
-      state.rx += (state.tx - state.rx) * 0.14;
-      state.ry += (state.ty - state.ry) * 0.14;
+      // ring: 조금 더 빠릿하게 따라오되 트레일은 유지
+      state.rx += (state.tx - state.rx) * 0.22;
+      state.ry += (state.ty - state.ry) * 0.22;
 
       const dot = dotRef.current;
       const ring = ringRef.current;
@@ -88,11 +166,38 @@ export default function CustomCursor() {
       applyRingScale();
     };
 
+    const onDragStart = (e: DragEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (!el) return;
+
+      const dragSource = el.closest("a,img,svg,[draggable='true']");
+      if (!dragSource) return;
+
+      e.preventDefault();
+    };
+
+    const onWheel = (event: WheelEvent) => {
+      if (event.ctrlKey) {
+        handleZoomGesture();
+      }
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!event.ctrlKey && !event.metaKey) return;
+
+      if (["+", "=", "-", "0"].includes(event.key)) {
+        handleZoomGesture();
+      }
+    };
+
     document.addEventListener("mouseover", onOver, true);
     document.addEventListener("mouseout", onOut, true);
+    document.addEventListener("dragstart", onDragStart, true);
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
 
     // ✅ 클릭 펄스 (기본 커서 대신 우리 링이 반응)
-    let clickTimer = 0 as any;
+    let clickTimer: ReturnType<typeof window.setTimeout> | undefined;
     const onDown = () => {
       pressedRef.current = true;
       applyRingScale();
@@ -103,8 +208,10 @@ export default function CustomCursor() {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         wrap.offsetWidth; // reflow
         wrap.classList.add("isClick");
-        clearTimeout(clickTimer);
-        clickTimer = setTimeout(() => wrap.classList.remove("isClick"), 450);
+        if (clickTimer !== undefined) {
+          window.clearTimeout(clickTimer);
+        }
+        clickTimer = window.setTimeout(() => wrap.classList.remove("isClick"), 450);
       }
     };
     const onUp = () => {
@@ -120,11 +227,20 @@ export default function CustomCursor() {
       window.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseover", onOver, true);
       document.removeEventListener("mouseout", onOut, true);
+      document.removeEventListener("dragstart", onDragStart, true);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
       window.removeEventListener("blur", onUp);
       cancelAnimationFrame(raf);
-      clearTimeout(clickTimer);
+      setZooming(false);
+      if (clickTimer !== undefined) {
+        window.clearTimeout(clickTimer);
+      }
+      if (zoomTimer !== undefined) {
+        window.clearTimeout(zoomTimer);
+      }
     };
   }, [state]);
 

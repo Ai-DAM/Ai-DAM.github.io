@@ -1001,6 +1001,12 @@ button{ font: inherit; color: inherit; }
   inset: 0;
   pointer-events: none;
   z-index: 9999; /* ✅ 무조건 최상단 */
+  opacity: 1;
+  transition: opacity 120ms ease;
+}
+
+.cursorWrap.isZooming{
+  opacity: 0;
 }
 
 /* 링(큰 원): 배경 거의 제거하고 테두리 + 글로우만 */
@@ -1015,10 +1021,11 @@ button{ font: inherit; color: inherit; }
   /* ✅ 불투명 배경 제거 */
   background: transparent;
 
-  border: 1px solid rgba(255,255,255,.18);
+  border: 1.15px solid rgba(255,255,255,.88);
   box-shadow:
-    0 0 16px rgba(0,210,255,.14),
-    0 0 18px rgba(139,92,255,.10);
+    0 0 0 1.15px rgba(17,17,17,.56),
+    0 0 12px rgba(255,255,255,.14),
+    0 0 22px rgba(17,17,17,.1);
 
   transform: translate(-50%, -50%) scale(1);
   transition:
@@ -1033,15 +1040,17 @@ button{ font: inherit; color: inherit; }
   position:absolute;
   inset:-10px;
   border-radius: 999px;
-  border: 1px solid rgba(0,210,255,.25);
+  border: 1.65px solid rgba(255,255,255,.86);
+  box-shadow: 0 0 0 1.1px rgba(17,17,17,.36);
   opacity: 0;
-  transform: scale(.6);
+  transform: scale(.52);
   pointer-events:none;
 }
 
 @keyframes cursorClickPulse{
-  0%   { opacity: .55; transform: scale(.55); }
-  100% { opacity: 0;   transform: scale(1.35); }
+  0%   { opacity: .82; transform: scale(.5); }
+  60%  { opacity: .42; transform: scale(1.08); }
+  100% { opacity: 0;   transform: scale(1.58); }
 }
 
 .cursorWrap.isClick .cursorRing::after{
@@ -1057,10 +1066,11 @@ button{ font: inherit; color: inherit; }
   height: 6px;
   border-radius: 999px;
 
-  background: rgba(234,234,255,.98);
+  background: rgba(255,255,255,.98);
   box-shadow:
-    0 0 10px rgba(0,210,255,.22),
-    0 0 10px rgba(255,79,216,.12);
+    0 0 0 1.8px rgba(17,17,17,.78),
+    0 0 8px rgba(255,255,255,.22),
+    0 0 16px rgba(17,17,17,.1);
 
   transform: translate(-50%, -50%);
 }
@@ -1073,6 +1083,17 @@ button{ font: inherit; color: inherit; }
 /* (옵션) 클릭 하이라이트 제거 (모바일엔 컴포넌트가 안 뜨지만 그냥 안전빵) */
 a, button, [data-cursor="hover"]{
   -webkit-tap-highlight-color: transparent;
+}
+
+@media (pointer: fine) and (hover: hover){
+  a,
+  img,
+  svg,
+  button,
+  [data-cursor="hover"]{
+    -webkit-user-drag: none;
+    user-select: none;
+  }
 }
 
 /* =========================
