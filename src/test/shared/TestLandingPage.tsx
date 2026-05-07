@@ -89,12 +89,13 @@ function getHeaderButtonStyle(button: PositionedHeaderItem): CSSProperties {
 }
 
 type TestLandingPageProps = {
-  backgroundImage: string;
-  backgroundAlt: string;
+  backgroundImage?: string;
+  backgroundAlt?: string;
+  customMedia?: ReactNode;
   children?: ReactNode;
 };
 
-export default function TestLandingPage({ backgroundImage, backgroundAlt, children }: TestLandingPageProps) {
+export default function TestLandingPage({ backgroundImage, backgroundAlt, customMedia, children }: TestLandingPageProps) {
   const [companyMenuOpen, setCompanyMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileCompanyMenuOpen, setMobileCompanyMenuOpen] = useState(false);
@@ -382,8 +383,14 @@ export default function TestLandingPage({ backgroundImage, backgroundAlt, childr
       </header>
 
       <div className={["kme-test-page__media", contentVisible ? "kme-test-page__media--visible" : ""].filter(Boolean).join(" ")}>
-        <img className="kme-test-page__image" src={backgroundImage} alt={backgroundAlt} />
-        {children ? <div className="kme-test-page__overlay">{children}</div> : null}
+        {customMedia ? (
+          customMedia
+        ) : (
+          <>
+            {backgroundImage ? <img className="kme-test-page__image" src={backgroundImage} alt={backgroundAlt ?? ""} /> : null}
+            {children ? <div className="kme-test-page__overlay">{children}</div> : null}
+          </>
+        )}
       </div>
     </main>
   );

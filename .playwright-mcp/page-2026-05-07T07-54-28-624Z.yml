@@ -1,0 +1,45 @@
+- main [ref=e3]:
+  - generic "K-me header" [ref=e4]:
+    - generic [ref=e5]:
+      - button "K-me home" [ref=e6]:
+        - img "K-me logo" [ref=e7]
+      - button "Company" [ref=e9]:
+        - img "Company" [ref=e10]
+      - link "K-me Dance" [ref=e11]:
+        - /url: /test/k-me-dance/
+        - img "K-me Dance" [ref=e12]
+      - link "K-me VisionAI" [ref=e13]:
+        - /url: /test/k-me-visionai/
+        - img "K-me VisionAI" [ref=e14]
+      - link "EXPERIENCE" [ref=e15]:
+        - /url: /test/experience/
+        - img "EXPERIENCE" [ref=e16]
+      - link "Contact" [ref=e17]:
+        - /url: /test/contact/
+        - img "Contact" [ref=e18]
+  - generic [ref=e21]:
+    - generic [ref=e22]:
+      - img "Company introduction test page background" [ref=e23]
+      - generic:
+        - img
+        - img [ref=e24]
+        - img "Company introduction slogan" [ref=e25]
+        - img "Company introduction section 1"
+        - img "Company introduction section 1 visual" [ref=e26]
+        - img "Company introduction section 2"
+        - img "Company introduction section 2 visual" [ref=e27]
+        - img "Company introduction section 3"
+        - img "Company introduction section 3 visual" [ref=e28]
+    - img [ref=e29]
+    - img "Footer text" [ref=e30]
+    - link "K-me Dance YouTube" [ref=e31]:
+      - /url: https://youtube.com/@k-me_dance?si=kpJROehZeop0BqQY
+      - img [ref=e32]
+    - link "K-me Dance Instagram" [ref=e35]:
+      - /url: https://www.instagram.com/kme.dance?igsh=MW85ZnJsYTVrOWxjcg%3D%3D&utm_source=qr
+      - img [ref=e36]
+    - link "K-me Dance Blog" [ref=e40]:
+      - /url: https://blog.naver.com/k-me_official_kr
+      - img [ref=e41]
+    - button "Scroll to top" [ref=e43]:
+      - img [ref=e44]

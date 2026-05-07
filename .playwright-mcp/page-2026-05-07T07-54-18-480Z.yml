@@ -1,0 +1,42 @@
+- main [ref=e3]:
+  - generic "K-me header" [ref=e4]:
+    - generic [ref=e5]:
+      - button "K-me home" [ref=e6]:
+        - img "K-me logo" [ref=e7]
+      - button "Company" [ref=e9]:
+        - img "Company" [ref=e10]
+      - link "K-me Dance" [ref=e11]:
+        - /url: /test/k-me-dance/
+        - img "K-me Dance" [ref=e12]
+      - link "K-me VisionAI" [ref=e13]:
+        - /url: /test/k-me-visionai/
+        - img "K-me VisionAI" [ref=e14]
+      - link "EXPERIENCE" [ref=e15]:
+        - /url: /test/experience/
+        - img "EXPERIENCE" [ref=e16]
+      - link "Contact" [ref=e17]:
+        - /url: /test/contact/
+        - img "Contact" [ref=e18]
+  - generic [ref=e21]:
+    - generic [ref=e22]:
+      - img "Company business test page background" [ref=e23]
+      - generic:
+        - img "Technology section"
+        - img "Technology experience capture" [ref=e24]
+        - img "Technology spatial interaction" [ref=e25]
+        - img "Technology content overlay" [ref=e26]
+        - img "Technology motion recognition" [ref=e27]
+        - img "Process section"
+        - img "Process step 1" [ref=e28]
+        - img "Process step 2" [ref=e29]
+        - img "Process step 3" [ref=e30]
+        - img "Process step 4" [ref=e31]
+        - img "Process step 5" [ref=e32]
+        - img "Process step 6" [ref=e33]
+        - img "K-me Dance Studio section"
+        - img "K-me Dance Studio feature" [ref=e34]
+        - img "Team section"
+        - img "Thinking Monster team" [ref=e35]
+    - img [ref=e36]
+    - button "Scroll to top" [ref=e37]:
+      - img [ref=e38]

@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-import backgroundImage from "../assets/company-business_BG.svg";
+import backgroundImage from "../assets/company-business/company-business_BG.svg";
 import footerImage from "../assets/footer/footer.svg";
 import topButtonImage from "../assets/footer/top_button.svg";
 import kmeDanceStudioFeatureImage from "../assets/company-business/kmedancestudio_1.svg";
@@ -28,6 +28,12 @@ const TECHNOLOGY_ROW_GAP = 60;
 type OverlayStyle = CSSProperties & {
   "--overlay-translate-x"?: string;
   "--overlay-z-index"?: string;
+};
+
+type CanvasStageStyle = CSSProperties & {
+  "--canvas-design-width": string;
+  "--canvas-design-height": string;
+  "--canvas-max-width": string;
 };
 
 type OverlayItem = {
@@ -58,18 +64,20 @@ function getTopLeftSizedStyle(left: number, top: number, width: number, height: 
   };
 }
 
-function getBottomCenterOverlayStyle(bottom: number, width: number, zIndex: number): OverlayStyle {
+function getBottomFullBleedOverlayStyle(bottom: number, zIndex: number): OverlayStyle {
   return {
+    left: "50%",
     bottom: `${(bottom / DESIGN_HEIGHT) * 100}%`,
-    width: `${(width / DESIGN_WIDTH) * 100}%`,
+    width: "100vw",
+    maxWidth: "none",
     "--overlay-z-index": `${zIndex}`,
   };
 }
 
-function getBottomLeftSizedStyle(left: number, bottom: number, width: number, height: number, zIndex: number): OverlayStyle {
+function getFooterChildStyle(left: number, top: number, width: number, height: number, zIndex: number): OverlayStyle {
   return {
     left: `${(left / DESIGN_WIDTH) * 100}%`,
-    bottom: `${(bottom / DESIGN_HEIGHT) * 100}%`,
+    top: `${(top / 152) * 100}%`,
     width: `${(width / DESIGN_WIDTH) * 100}%`,
     aspectRatio: `${width} / ${height}`,
     zIndex,
@@ -96,25 +104,21 @@ const overlayItems: OverlayItem[] = [
   {
     src: technologyExperienceCaptureImage,
     alt: "Technology experience capture",
-    className: "kme-test-page__overlay-item--hover-grow",
     style: getTopLeftSizedStyle(0, 880, 720, 572, 2),
   },
   {
     src: technologySpatialInteractionImage,
     alt: "Technology spatial interaction",
-    className: "kme-test-page__overlay-item--hover-grow",
     style: getTopLeftSizedStyle(720, 880, 720, 572, 2),
   },
   {
     src: technologyContentOverlayImage,
     alt: "Technology content overlay",
-    className: "kme-test-page__overlay-item--hover-grow",
     style: getTopLeftSizedStyle(0, 1452 + TECHNOLOGY_ROW_GAP, 720, 572, 2),
   },
   {
     src: technologyMotionRecognitionImage,
     alt: "Technology motion recognition",
-    className: "kme-test-page__overlay-item--hover-grow",
     style: getTopLeftSizedStyle(720, 1452 + TECHNOLOGY_ROW_GAP, 720, 572, 2),
   },
   {
@@ -184,33 +188,62 @@ const overlayItems: OverlayItem[] = [
     src: footerImage,
     alt: "",
     ariaHidden: true,
-    style: getBottomCenterOverlayStyle(0, 1440, 1),
+    style: getBottomFullBleedOverlayStyle(0, 1),
   },
 ];
 
+const footerOverlayItem = overlayItems[overlayItems.length - 1];
+const bodyOverlayItems = overlayItems.slice(0, -1);
+const canvasStageStyle: CanvasStageStyle = {
+  "--canvas-design-width": `${DESIGN_WIDTH}`,
+  "--canvas-design-height": `${DESIGN_HEIGHT}`,
+  "--canvas-max-width": "1920",
+};
+
 export default function CompanyBusinessTestPage() {
   return (
-    <TestLandingPage backgroundImage={backgroundImage} backgroundAlt="Company business test page background">
-      {overlayItems.map((item) => (
-        <img
-          key={`${item.src}-${item.alt || "decorative"}`}
-          className={["kme-test-page__overlay-item", item.className].filter(Boolean).join(" ")}
-          src={item.src}
-          alt={item.alt}
-          aria-hidden={item.ariaHidden}
-          style={item.style}
-        />
-      ))}
+    <TestLandingPage
+      customMedia={
+        <div className="kme-test-page__canvas-shell">
+          <div className="kme-test-page__canvas-stage" style={canvasStageStyle}>
+            <div className="kme-test-page__canvas-body">
+              <img className="kme-test-page__canvas-background" src={backgroundImage} alt="Company business test page background" />
 
-      <button
-        aria-label="Scroll to top"
-        className="kme-test-page__top-button"
-        style={getBottomLeftSizedStyle(1375, 45, 35, 35, 3)}
-        type="button"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      >
-        <img src={topButtonImage} alt="" aria-hidden="true" />
-      </button>
-    </TestLandingPage>
+              <div className="kme-test-page__canvas-overlay">
+                {bodyOverlayItems.map((item) => (
+                  <img
+                    key={`${item.src}-${item.alt || "decorative"}`}
+                    className={["kme-test-page__overlay-item", item.className].filter(Boolean).join(" ")}
+                    src={item.src}
+                    alt={item.alt}
+                    aria-hidden={item.ariaHidden}
+                    style={item.style}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className={["kme-test-page__overlay-item", footerOverlayItem.className].filter(Boolean).join(" ")} aria-hidden="true" style={footerOverlayItem.style}>
+              <img
+                src={footerOverlayItem.src}
+                alt={footerOverlayItem.alt}
+                aria-hidden={footerOverlayItem.ariaHidden}
+                style={{ display: "block", width: "100%", height: "100%" }}
+              />
+
+              <button
+                aria-label="Scroll to top"
+                className="kme-test-page__top-button"
+                style={getFooterChildStyle(1375, 72, 35, 35, 3)}
+                type="button"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              >
+                <img src={topButtonImage} alt="" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    />
   );
 }

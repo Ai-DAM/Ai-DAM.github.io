@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 
-import backgroundImage from "../assets/company_Introduction_BG.svg";
+import backgroundImage from "../assets/company_Introduction/company_Introduction_BG.svg";
 import blockOneImage from "../assets/company_introduction/1.svg";
 import blockOneSideImage from "../assets/company_introduction/1_img.svg";
 import blockTwoImage from "../assets/company_introduction/2.svg";
@@ -22,6 +22,12 @@ type OverlayStyle = CSSProperties & {
   "--overlay-translate-x"?: string;
 };
 
+type CanvasStageStyle = CSSProperties & {
+  "--canvas-design-width": string;
+  "--canvas-design-height": string;
+  "--canvas-max-width": string;
+};
+
 function getOverlayStyle(top: number, width: number, zIndex: number): OverlayStyle {
   return {
     top: `${(top / DESIGN_HEIGHT) * 100}%`,
@@ -30,34 +36,20 @@ function getOverlayStyle(top: number, width: number, zIndex: number): OverlaySty
   };
 }
 
-function getBottomCenterOverlayStyle(bottom: number, width: number, zIndex: number): OverlayStyle {
+function getBottomFullBleedOverlayStyle(bottom: number, zIndex: number): OverlayStyle {
   return {
+    left: "50%",
     bottom: `${(bottom / DESIGN_HEIGHT) * 100}%`,
-    width: `${(width / DESIGN_WIDTH) * 100}%`,
+    width: "100vw",
+    maxWidth: "none",
     zIndex,
   };
 }
 
-function getBottomLeftOverlayStyle(left: number, bottom: number, width: number, zIndex: number): OverlayStyle {
+function getFooterChildStyle(left: number, top: number, width: number, height: number, zIndex: number): OverlayStyle {
   return {
     left: `${(left / DESIGN_WIDTH) * 100}%`,
-    bottom: `${(bottom / DESIGN_HEIGHT) * 100}%`,
-    width: `${(width / DESIGN_WIDTH) * 100}%`,
-    zIndex,
-    "--overlay-translate-x": "0%",
-  };
-}
-
-function getBottomLeftSizedStyle(
-  left: number,
-  bottom: number,
-  width: number,
-  height: number,
-  zIndex: number,
-): OverlayStyle {
-  return {
-    left: `${(left / DESIGN_WIDTH) * 100}%`,
-    bottom: `${(bottom / DESIGN_HEIGHT) * 100}%`,
+    top: `${(top / 557) * 100}%`,
     width: `${(width / DESIGN_WIDTH) * 100}%`,
     aspectRatio: `${width} / ${height}`,
     zIndex,
@@ -152,12 +144,12 @@ const overlayItems: OverlayItem[] = [
     src: footerImage,
     alt: "",
     ariaHidden: true,
-    style: getBottomCenterOverlayStyle(0, 1440, 1),
+    style: getBottomFullBleedOverlayStyle(0, 1),
   },
   {
     src: footerTextImage,
     alt: "Footer text",
-    style: getBottomLeftOverlayStyle(542, 177, 597, 2),
+    style: getFooterChildStyle(542, 149, 597, 231, 2),
   },
 ] as const;
 
@@ -166,7 +158,7 @@ const socialButtons: SocialButton[] = [
     label: "K-me Dance YouTube",
     href: "https://youtube.com/@k-me_dance?si=kpJROehZeop0BqQY",
     className: "kme-test-page__social-button--youtube",
-    style: getBottomLeftSizedStyle(996, 182, 24, 16, 3),
+    style: getFooterChildStyle(996, 359, 24, 16, 3),
     icon: (
       <svg viewBox="0 0 25 16" aria-hidden="true">
         <rect x="1" y="1" width="23" height="14" rx="4.8" fill="currentColor" />
@@ -178,7 +170,7 @@ const socialButtons: SocialButton[] = [
     label: "K-me Dance Instagram",
     href: "https://www.instagram.com/kme.dance?igsh=MW85ZnJsYTVrOWxjcg%3D%3D&utm_source=qr",
     className: "kme-test-page__social-button--instagram",
-    style: getBottomLeftSizedStyle(1032, 182, 18, 18, 3),
+    style: getFooterChildStyle(1032, 357, 18, 18, 3),
     icon: (
       <svg viewBox="0 0 17 17" aria-hidden="true">
         <rect x="1.15" y="1.15" width="14.7" height="14.7" rx="4.5" fill="currentColor" />
@@ -191,7 +183,7 @@ const socialButtons: SocialButton[] = [
     label: "K-me Dance Blog",
     href: "https://blog.naver.com/k-me_official_kr",
     className: "kme-test-page__social-button--blog",
-    style: getBottomLeftSizedStyle(1066, 182, 18, 18, 3),
+    style: getFooterChildStyle(1066, 357, 18, 18, 3),
     icon: (
       <svg viewBox="0 0 18 18" aria-hidden="true">
         <rect x="1.15" y="1.15" width="15.7" height="15.7" rx="4.35" fill="currentColor" />
@@ -203,43 +195,80 @@ const socialButtons: SocialButton[] = [
   },
 ];
 
+const bodyOverlayItems = overlayItems.slice(0, -2);
+const footerOverlayItems = overlayItems.slice(-2);
+const canvasStageStyle: CanvasStageStyle = {
+  "--canvas-design-width": `${DESIGN_WIDTH}`,
+  "--canvas-design-height": `${DESIGN_HEIGHT}`,
+  "--canvas-max-width": "1920",
+};
+
 export default function CompanyIntroductionTestPage() {
   return (
-    <TestLandingPage backgroundImage={backgroundImage} backgroundAlt="Company introduction test page background">
-      {overlayItems.map((item) => (
-        <img
-          key={`${item.src}-${item.alt || "decorative"}`}
-          className={["kme-test-page__overlay-item", item.className].filter(Boolean).join(" ")}
-          src={item.src}
-          alt={item.alt}
-          aria-hidden={item.ariaHidden}
-          style={item.style}
-        />
-      ))}
+    <TestLandingPage
+      customMedia={
+        <div className="kme-test-page__canvas-shell">
+          <div className="kme-test-page__canvas-stage" style={canvasStageStyle}>
+            <div className="kme-test-page__canvas-body">
+              <img className="kme-test-page__canvas-background" src={backgroundImage} alt="Company introduction test page background" />
 
-      {socialButtons.map((button) => (
-        <a
-          key={button.label}
-          aria-label={button.label}
-          className={["kme-test-page__social-button", button.className].join(" ")}
-          href={button.href}
-          rel="noreferrer"
-          style={button.style}
-          target="_blank"
-        >
-          {button.icon}
-        </a>
-      ))}
+              <div className="kme-test-page__canvas-overlay">
+                {bodyOverlayItems.map((item) => (
+                  <img
+                    key={`${item.src}-${item.alt || "decorative"}`}
+                    className={["kme-test-page__overlay-item", item.className].filter(Boolean).join(" ")}
+                    src={item.src}
+                    alt={item.alt}
+                    aria-hidden={item.ariaHidden}
+                    style={item.style}
+                  />
+                ))}
+              </div>
+            </div>
 
-      <button
-        aria-label="Scroll to top"
-        className="kme-test-page__top-button"
-        style={getBottomLeftSizedStyle(1375, 47, 35, 35, 3)}
-        type="button"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      >
-        <img src={topButtonImage} alt="" aria-hidden="true" />
-      </button>
-    </TestLandingPage>
+            <div className={["kme-test-page__overlay-item", footerOverlayItems[0]?.className].filter(Boolean).join(" ")} aria-hidden="true" style={footerOverlayItems[0]?.style}>
+              <img
+                src={footerOverlayItems[0]?.src}
+                alt={footerOverlayItems[0]?.alt}
+                aria-hidden={footerOverlayItems[0]?.ariaHidden}
+                style={{ display: "block", width: "100%", height: "100%" }}
+              />
+
+              <img
+                className={["kme-test-page__overlay-item", footerOverlayItems[1]?.className].filter(Boolean).join(" ")}
+                src={footerOverlayItems[1]?.src}
+                alt={footerOverlayItems[1]?.alt}
+                aria-hidden={footerOverlayItems[1]?.ariaHidden}
+                style={footerOverlayItems[1]?.style}
+              />
+
+              {socialButtons.map((button) => (
+                <a
+                  key={button.label}
+                  aria-label={button.label}
+                  className={["kme-test-page__social-button", button.className].join(" ")}
+                  href={button.href}
+                  rel="noreferrer"
+                  style={button.style}
+                  target="_blank"
+                >
+                  {button.icon}
+                </a>
+              ))}
+
+              <button
+                aria-label="Scroll to top"
+                className="kme-test-page__top-button"
+                style={getFooterChildStyle(1375, 475, 35, 35, 3)}
+                type="button"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              >
+                <img src={topButtonImage} alt="" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    />
   );
 }

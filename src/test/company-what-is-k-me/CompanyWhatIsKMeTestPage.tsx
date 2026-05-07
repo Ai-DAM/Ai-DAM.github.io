@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-import backgroundImage from "../assets/company-what-is-k-me_BG.svg";
+import backgroundImage from "../assets/company-what-is-k-me/company-what-is-k-me_BG.svg";
 import danceButtonImage from "../assets/company-what-is-k-me/VIEW-KME-DANCE_button.svg";
 import visionAiButtonImage from "../assets/company-what-is-k-me/VIEW-KME-VISIONAI_button.svg";
 import danceImage from "../assets/company-what-is-k-me/K-me-Dance.png";
@@ -16,6 +16,12 @@ const DESIGN_HEIGHT = 3788;
 
 type OverlayStyle = CSSProperties & {
   "--overlay-translate-x"?: string;
+};
+
+type CanvasStageStyle = CSSProperties & {
+  "--canvas-design-width": string;
+  "--canvas-design-height": string;
+  "--canvas-max-width": string;
 };
 
 function getTopCenterSizedStyle(top: number, width: number, height: number, zIndex: number): OverlayStyle {
@@ -48,6 +54,28 @@ function getTopCenterOffsetSizedStyle(
   return getTopLeftSizedStyle(centerX - width / 2, top, width, height, zIndex);
 }
 
+function getTopFullBleedStyle(top: number, width: number, height: number, zIndex: number): OverlayStyle {
+  return {
+    left: "50%",
+    top: `${(top / DESIGN_HEIGHT) * 100}%`,
+    width: "100vw",
+    maxWidth: "none",
+    aspectRatio: `${width} / ${height}`,
+    zIndex,
+  };
+}
+
+function getFooterChildStyle(left: number, top: number, width: number, height: number, zIndex: number): OverlayStyle {
+  return {
+    left: `${(left / DESIGN_WIDTH) * 100}%`,
+    top: `${(top / 152) * 100}%`,
+    width: `${(width / DESIGN_WIDTH) * 100}%`,
+    aspectRatio: `${width} / ${height}`,
+    zIndex,
+    "--overlay-translate-x": "0%",
+  };
+}
+
 const headlineStyle = getTopCenterSizedStyle(0, 1440, 756.11, 1);
 const videoStyle = getTopCenterSizedStyle(1196, 1067, 600, 2);
 const danceStyle = getTopLeftSizedStyle(0, 2213, 900, 500, 2);
@@ -55,70 +83,94 @@ const visionAiStyle = getTopLeftSizedStyle(DESIGN_WIDTH - 900, 2913, 900, 545, 2
 
 const danceButtonStyle = getTopCenterOffsetSizedStyle(DESIGN_WIDTH / 2 + 389, 2624, 304, 61, 3);
 const visionAiButtonStyle = getTopCenterOffsetSizedStyle(DESIGN_WIDTH / 2 - 392, 3319, 304, 61, 3);
-const footerStyle = getTopLeftSizedStyle(0, 3638, 1440, 150, 1);
-const topButtonStyle = getTopLeftSizedStyle(1375, 3708, 35, 35, 3);
+const footerStyle = getTopFullBleedStyle(3638, 1440, 150, 1);
+const topButtonStyle = getFooterChildStyle(1375, 72, 35, 35, 3);
+const canvasStageStyle: CanvasStageStyle = {
+  "--canvas-design-width": `${DESIGN_WIDTH}`,
+  "--canvas-design-height": `${DESIGN_HEIGHT}`,
+  "--canvas-max-width": "1920",
+};
 
 export default function CompanyWhatIsKMeTestPage() {
   return (
-    <TestLandingPage backgroundImage={backgroundImage} backgroundAlt="What is K-me test page background">
-      <img className="kme-test-page__overlay-item" src={headlineImage} alt="What is K-me headline" style={headlineStyle} />
+    <TestLandingPage
+      customMedia={
+        <div className="kme-test-page__canvas-shell">
+          <div className="kme-test-page__canvas-stage" style={canvasStageStyle}>
+            <img className="kme-test-page__overlay-item" src={headlineImage} alt="What is K-me headline" style={headlineStyle} />
 
-      <video
-        aria-label="Smart mirror modeling video"
-        autoPlay
-        className="kme-test-page__overlay-item"
-        loop
-        muted
-        playsInline
-        preload="auto"
-        style={videoStyle}
-      >
-        <source src={smartMirrorVideo} type="video/mp4" />
-      </video>
+            <div className="kme-test-page__canvas-body">
+              <img className="kme-test-page__canvas-background" src={backgroundImage} alt="What is K-me test page background" />
 
-      <img
-        className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow"
-        src={danceImage}
-        alt="K-me Dance"
-        style={danceStyle}
-      />
+              <div className="kme-test-page__canvas-overlay">
+                <video
+                  aria-label="Smart mirror modeling video"
+                  autoPlay
+                  className="kme-test-page__overlay-item"
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  style={videoStyle}
+                >
+                  <source src={smartMirrorVideo} type="video/mp4" />
+                </video>
 
-      <a
-        aria-label="View K-me Dance"
-        className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow"
-        href="/test/k-me-dance/"
-        style={danceButtonStyle}
-      >
-        <img src={danceButtonImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
-      </a>
+                <img
+                  className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow"
+                  src={danceImage}
+                  alt="K-me Dance"
+                  style={danceStyle}
+                />
 
-      <img
-        className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow"
-        src={visionAiImage}
-        alt="K-me Vision AI"
-        style={visionAiStyle}
-      />
+                <a
+                  aria-label="View K-me Dance"
+                  className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-invert kme-test-page__overlay-item--cta-outline"
+                  href="/test/k-me-dance/"
+                  style={danceButtonStyle}
+                >
+                  <img src={danceButtonImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
+                </a>
 
-      <a
-        aria-label="View K-me Vision AI"
-        className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow"
-        href="/test/k-me-visionai/"
-        style={visionAiButtonStyle}
-      >
-        <img src={visionAiButtonImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
-      </a>
+                <img
+                  className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow"
+                  src={visionAiImage}
+                  alt="K-me Vision AI"
+                  style={visionAiStyle}
+                />
 
-      <img className="kme-test-page__overlay-item" src={footerImage} alt="" aria-hidden="true" style={footerStyle} />
+                <a
+                  aria-label="View K-me Vision AI"
+                  className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-invert kme-test-page__overlay-item--cta-outline"
+                  href="/test/k-me-visionai/"
+                  style={visionAiButtonStyle}
+                >
+                  <img src={visionAiButtonImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
+                </a>
+              </div>
+            </div>
 
-      <button
-        aria-label="Scroll to top"
-        className="kme-test-page__top-button"
-        style={topButtonStyle}
-        type="button"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      >
-        <img src={topButtonImage} alt="" aria-hidden="true" />
-      </button>
-    </TestLandingPage>
+            <div className="kme-test-page__overlay-item" aria-hidden="true" style={footerStyle}>
+              <img
+                src={footerImage}
+                alt=""
+                aria-hidden="true"
+                style={{ display: "block", width: "100%", height: "100%" }}
+              />
+
+              <button
+                aria-label="Scroll to top"
+                className="kme-test-page__top-button"
+                style={topButtonStyle}
+                type="button"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              >
+                <img src={topButtonImage} alt="" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    />
   );
 }

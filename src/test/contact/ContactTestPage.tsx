@@ -1,6 +1,6 @@
 import { useMemo, useState, type CSSProperties } from "react";
 
-import backgroundImage from "../assets/contact_BG.svg";
+import backgroundImage from "../assets/contact/contact_BG.svg";
 import footerImage from "../assets/footer/footer.svg";
 import topButtonImage from "../assets/footer/top_button.svg";
 import submitButtonImage from "../assets/contact/문의하기.svg";
