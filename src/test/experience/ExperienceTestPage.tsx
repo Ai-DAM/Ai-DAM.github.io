@@ -18,6 +18,9 @@ import TestLandingPage from "../shared/TestLandingPage";
 
 const DESIGN_WIDTH = 1440;
 const DESIGN_HEIGHT = 2576;
+const FOOTER_HEIGHT = 150;
+const MIDDLE_DESIGN_HEIGHT = DESIGN_HEIGHT - FOOTER_HEIGHT;
+
 type OverlayStyle = CSSProperties & {
   "--overlay-translate-x"?: string;
 };
@@ -47,7 +50,7 @@ type NewsCard = {
 function getTopLeftSizedStyle(left: number, top: number, width: number, height: number, zIndex: number): OverlayStyle {
   return {
     left: `${(left / DESIGN_WIDTH) * 100}%`,
-    top: `${(top / DESIGN_HEIGHT) * 100}%`,
+    top: `${(top / MIDDLE_DESIGN_HEIGHT) * 100}%`,
     width: `${(width / DESIGN_WIDTH) * 100}%`,
     aspectRatio: `${width} / ${height}`,
     zIndex,
@@ -58,23 +61,12 @@ function getTopLeftSizedStyle(left: number, top: number, width: number, height: 
 function getTopRightSizedStyle(right: number, top: number, width: number, height: number, zIndex: number): OverlayStyle {
   return {
     right: `${(right / DESIGN_WIDTH) * 100}%`,
-    top: `${(top / DESIGN_HEIGHT) * 100}%`,
+    top: `${(top / MIDDLE_DESIGN_HEIGHT) * 100}%`,
     width: `${(width / DESIGN_WIDTH) * 100}%`,
     aspectRatio: `${width} / ${height}`,
     zIndex,
     left: "auto",
     "--overlay-translate-x": "0%",
-  };
-}
-
-function getBottomFullBleedStyle(bottom: number, width: number, height: number, zIndex: number): OverlayStyle {
-  return {
-    left: "50%",
-    bottom: `${(bottom / DESIGN_HEIGHT) * 100}%`,
-    width: "100vw",
-    maxWidth: "none",
-    aspectRatio: `${width} / ${height}`,
-    zIndex,
   };
 }
 
@@ -137,15 +129,48 @@ const EXPERIENCE_VISIONAI_GAP = 30;
 const EXPERIENCE_VISIONAI_VIEWPORT_WIDTH = EXPERIENCE_VISIONAI_CARD_WIDTH * 3 + EXPERIENCE_VISIONAI_GAP * 2;
 const EXPERIENCE_VISIONAI_TRACK_SHIFT = EXPERIENCE_VISIONAI_CARD_WIDTH + EXPERIENCE_VISIONAI_GAP;
 const EXPERIENCE_VISIONAI_TRACK_WIDTH = EXPERIENCE_VISIONAI_CARD_WIDTH * 4 + EXPERIENCE_VISIONAI_GAP * 3;
-const footerStyle = getBottomFullBleedStyle(0, 1440, 150, 1);
 const topButtonStyle = getFooterChildStyle(1375, 72, 35, 35, 3);
 const canvasStageStyle: CanvasStageStyle = {
   "--canvas-design-width": `${DESIGN_WIDTH}`,
-  "--canvas-design-height": `${DESIGN_HEIGHT}`,
+  "--canvas-design-height": `${MIDDLE_DESIGN_HEIGHT}`,
   "--canvas-max-width": "1920",
 };
 const whiteCanvasStyle: CSSProperties = {
   background: "#ffffff",
+};
+const shellStyle: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "stretch",
+  width: "100%",
+  background: "#ffffff",
+};
+const middleSectionStyle: CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  width: "100%",
+  flex: "0 0 auto",
+  background: "#ffffff",
+};
+const fullBleedSectionStyle: CSSProperties = {
+  position: "relative",
+  width: "100%",
+  flex: "0 0 auto",
+};
+const fullBleedImageStyle: CSSProperties = {
+  display: "block",
+  width: "100%",
+  height: "auto",
+};
+const middleBackgroundStyle: CSSProperties = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  display: "block",
+  width: "100%",
+  height: `${(DESIGN_HEIGHT / MIDDLE_DESIGN_HEIGHT) * 100}%`,
+  maxWidth: "none",
+  objectFit: "fill",
 };
 
 const visionAiImages = [
@@ -161,156 +186,115 @@ export default function ExperienceTestPage() {
   return (
     <TestLandingPage
       customMedia={
-        <div className="kme-test-page__canvas-shell" style={whiteCanvasStyle}>
-          <div className="kme-test-page__canvas-stage" style={{ ...canvasStageStyle, ...whiteCanvasStyle }}>
-            <div className="kme-test-page__canvas-body" style={whiteCanvasStyle}>
-              <img className="kme-test-page__canvas-background" src={backgroundImage} alt="Experience test page background" />
+        <div className="kme-test-page__canvas-shell" style={shellStyle}>
+          <div style={middleSectionStyle}>
+            <div className="kme-test-page__canvas-stage" style={{ ...canvasStageStyle, ...whiteCanvasStyle, overflow: "hidden" }}>
+              <div className="kme-test-page__canvas-body" style={whiteCanvasStyle}>
+                <img className="kme-test-page__canvas-background" src={backgroundImage} alt="Experience test page background" style={middleBackgroundStyle} />
 
-              <div className="kme-test-page__canvas-overlay">
-                {cards.map((card) => (
-                  <a
-                    key={card.href}
-                    aria-label={card.alt}
-                    className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow"
-                    href={card.href}
-                    rel="noreferrer"
-                    style={card.imageStyle}
-                    target="_blank"
-                  >
-                    <img src={card.src} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
-                  </a>
-                ))}
+                <div className="kme-test-page__canvas-overlay">
+                  {cards.map((card) => (
+                    <a key={card.href} aria-label={card.alt} className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow" href={card.href} rel="noreferrer" style={card.imageStyle} target="_blank">
+                      <img src={card.src} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
+                    </a>
+                  ))}
 
-                <div
-                  className="kme-test-page__overlay-item"
-                  aria-hidden="true"
-                  style={{
-                    ...getTopLeftSizedStyle(EXPERIENCE_VISIONAI_ROW_LEFT, EXPERIENCE_VISIONAI_ROW_TOP, EXPERIENCE_VISIONAI_VIEWPORT_WIDTH, EXPERIENCE_VISIONAI_CARD_HEIGHT, 2),
-                    overflow: "hidden",
-                    pointerEvents: "none",
-                  }}
-                >
                   <div
-                    className="kme-test-page__experience-slider-track"
+                    className="kme-test-page__overlay-item"
+                    aria-hidden="true"
                     style={{
-                      width: `${((EXPERIENCE_VISIONAI_CARD_WIDTH * visionAiImages.length + EXPERIENCE_VISIONAI_GAP * (visionAiImages.length - 1)) / EXPERIENCE_VISIONAI_VIEWPORT_WIDTH) * 100}%`,
-                      gap: `${(EXPERIENCE_VISIONAI_GAP / EXPERIENCE_VISIONAI_TRACK_WIDTH) * 100}%`,
-                      transform: `translateX(-${visionAiShifted ? (EXPERIENCE_VISIONAI_TRACK_SHIFT / EXPERIENCE_VISIONAI_TRACK_WIDTH) * 100 : 0}%)`,
+                      ...getTopLeftSizedStyle(EXPERIENCE_VISIONAI_ROW_LEFT, EXPERIENCE_VISIONAI_ROW_TOP, EXPERIENCE_VISIONAI_VIEWPORT_WIDTH, EXPERIENCE_VISIONAI_CARD_HEIGHT, 2),
+                      overflow: "hidden",
+                      pointerEvents: "none",
                     }}
                   >
-                    {visionAiImages.map((image) => (
-                      <div
-                        key={image.alt}
-                        className="kme-test-page__experience-slider-card kme-test-page__experience-slider-card--hover-grow"
-                        style={{ width: `${(EXPERIENCE_VISIONAI_CARD_WIDTH / EXPERIENCE_VISIONAI_TRACK_WIDTH) * 100}%` }}
-                      >
-                        <img src={image.src} alt={image.alt} style={{ display: "block", width: "100%", height: "100%" }} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {!visionAiShifted ? (
-                  <button
-                    aria-label="Show next VisionAI experience image"
-                    className="kme-test-page__overlay-item kme-test-page__experience-slider-nav"
-                    style={getTopRightSizedStyle(24, 1087, 35, 35, 3)}
-                    type="button"
-                    onClick={() => setVisionAiShifted(true)}
-                  >
-                    <img src={rightArrowImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
-                  </button>
-                ) : null}
-
-                {visionAiShifted ? (
-                  <button
-                    aria-label="Show previous VisionAI experience images"
-                    className="kme-test-page__overlay-item kme-test-page__experience-slider-nav"
-                    style={getTopLeftSizedStyle(24, 1087, 35, 35, 3)}
-                    type="button"
-                    onClick={() => setVisionAiShifted(false)}
-                  >
-                    <img src={leftArrowImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
-                  </button>
-                ) : null}
-
-                {newsCards.map((card) => (
-                  <a
-                    key={card.href}
-                    aria-label={card.alt}
-                    className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow"
-                    href={card.href}
-                    rel="noreferrer"
-                    style={{ ...card.imageStyle, overflow: "hidden" }}
-                    target="_blank"
-                  >
-                    <img src={card.src} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
                     <div
-                      aria-hidden="true"
+                      className="kme-test-page__experience-slider-track"
                       style={{
-                        position: "absolute",
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "flex-end",
-                        gap: "0.25vw",
-                        padding: "1.25vw 1.319444vw 1.111111vw",
-                        background: "linear-gradient(180deg, rgba(17, 17, 17, 0) 0%, rgba(17, 17, 17, 0.76) 58%, rgba(17, 17, 17, 0.92) 100%)",
-                        color: "#ffffff",
+                        width: `${((EXPERIENCE_VISIONAI_CARD_WIDTH * visionAiImages.length + EXPERIENCE_VISIONAI_GAP * (visionAiImages.length - 1)) / EXPERIENCE_VISIONAI_VIEWPORT_WIDTH) * 100}%`,
+                        gap: `${(EXPERIENCE_VISIONAI_GAP / EXPERIENCE_VISIONAI_TRACK_WIDTH) * 100}%`,
+                        transform: `translateX(-${visionAiShifted ? (EXPERIENCE_VISIONAI_TRACK_SHIFT / EXPERIENCE_VISIONAI_TRACK_WIDTH) * 100 : 0}%)`,
                       }}
                     >
-                      <span
-                        style={{
-                          display: "block",
-                          marginBottom: "0.24vw",
-                          color: "rgba(255, 255, 255, 0.78)",
-                          fontSize: "0.833333vw",
-                          fontWeight: 600,
-                          lineHeight: 1.15,
-                          letterSpacing: "0.02em",
-                        }}
-                      >
-                        {card.source}
-                      </span>
-                      {card.title.map((line) => (
-                        <span
-                          key={line}
-                          style={{
-                            display: "block",
-                            fontSize: "1.319444vw",
-                            fontWeight: 700,
-                            lineHeight: 1.18,
-                            letterSpacing: "-0.035em",
-                          }}
-                        >
-                          {line}
-                        </span>
+                      {visionAiImages.map((image) => (
+                        <div key={image.alt} className="kme-test-page__experience-slider-card kme-test-page__experience-slider-card--hover-grow" style={{ width: `${(EXPERIENCE_VISIONAI_CARD_WIDTH / EXPERIENCE_VISIONAI_TRACK_WIDTH) * 100}%` }}>
+                          <img src={image.src} alt={image.alt} style={{ display: "block", width: "100%", height: "100%" }} />
+                        </div>
                       ))}
                     </div>
-                  </a>
-                ))}
+                  </div>
+
+                  {!visionAiShifted ? (
+                    <button aria-label="Show next VisionAI experience image" className="kme-test-page__overlay-item kme-test-page__experience-slider-nav" style={getTopRightSizedStyle(24, 1087, 35, 35, 3)} type="button" onClick={() => setVisionAiShifted(true)}>
+                      <img src={rightArrowImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
+                    </button>
+                  ) : null}
+
+                  {visionAiShifted ? (
+                    <button aria-label="Show previous VisionAI experience images" className="kme-test-page__overlay-item kme-test-page__experience-slider-nav" style={getTopLeftSizedStyle(24, 1087, 35, 35, 3)} type="button" onClick={() => setVisionAiShifted(false)}>
+                      <img src={leftArrowImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
+                    </button>
+                  ) : null}
+
+                  {newsCards.map((card) => (
+                    <a key={card.href} aria-label={card.alt} className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow" href={card.href} rel="noreferrer" style={{ ...card.imageStyle, overflow: "hidden" }} target="_blank">
+                      <img src={card.src} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
+                      <div
+                        aria-hidden="true"
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-end",
+                          gap: "0.25vw",
+                          padding: "1.25vw 1.319444vw 1.111111vw",
+                          background: "linear-gradient(180deg, rgba(17, 17, 17, 0) 0%, rgba(17, 17, 17, 0.76) 58%, rgba(17, 17, 17, 0.92) 100%)",
+                          color: "#ffffff",
+                        }}
+                      >
+                        <span
+                          style={{
+                            display: "block",
+                            marginBottom: "0.24vw",
+                            color: "rgba(255, 255, 255, 0.78)",
+                            fontSize: "0.833333vw",
+                            fontWeight: 600,
+                            lineHeight: 1.15,
+                            letterSpacing: "0.02em",
+                          }}
+                        >
+                          {card.source}
+                        </span>
+                        {card.title.map((line) => (
+                          <span
+                            key={line}
+                            style={{
+                              display: "block",
+                              fontSize: "1.319444vw",
+                              fontWeight: 700,
+                              lineHeight: 1.18,
+                              letterSpacing: "-0.035em",
+                            }}
+                          >
+                            {line}
+                          </span>
+                        ))}
+                      </div>
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
+          </div>
 
-            <div className="kme-test-page__overlay-item" aria-hidden="true" style={footerStyle}>
-              <img
-                src={footerImage}
-                alt=""
-                aria-hidden="true"
-                style={{ display: "block", width: "100%", height: "100%" }}
-              />
-              <button
-                aria-label="Scroll to top"
-                className="kme-test-page__top-button"
-                style={topButtonStyle}
-                type="button"
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              >
-                <img src={topButtonImage} alt="" aria-hidden="true" />
-              </button>
-            </div>
+          <div style={{ ...fullBleedSectionStyle, background: "#ffffff", overflow: "hidden" }}>
+            <img src={footerImage} alt="" aria-hidden="true" style={fullBleedImageStyle} />
+            <button aria-label="Scroll to top" className="kme-test-page__top-button" style={topButtonStyle} type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+              <img src={topButtonImage} alt="" aria-hidden="true" />
+            </button>
           </div>
         </div>
       }

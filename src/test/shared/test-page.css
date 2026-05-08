@@ -446,6 +446,19 @@ button,
   filter: drop-shadow(0 10px 16px rgba(17, 17, 17, 0.08)) drop-shadow(0 0 16px rgba(145, 240, 255, 0.18)) drop-shadow(0 0 30px rgba(88, 188, 255, 0.12)) drop-shadow(0 0 48px rgba(77, 122, 255, 0.08));
 }
 
+.kme-test-page__overlay-item--hover-scale-soft {
+  pointer-events: auto;
+  transform-origin: center;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.kme-test-page__overlay-item--hover-scale-soft:hover,
+.kme-test-page__overlay-item--hover-scale-soft:focus-visible {
+  --overlay-scale: 1.028;
+  z-index: calc(var(--overlay-z-index, 1) + 2);
+}
+
 .kme-test-page__overlay-item--hover-sport {
   pointer-events: auto;
   transform-origin: center;
@@ -680,14 +693,24 @@ button,
   border-radius: 999px;
 }
 
-.kme-test-contact-form {
+.kme-test-contact-panel {
   position: absolute;
   display: flex;
   flex-direction: column;
-  gap: 1.527778vw;
-  padding-top: 0;
+  justify-content: space-between;
+  container-type: inline-size;
   pointer-events: auto;
   z-index: var(--overlay-z-index, auto);
+}
+
+.kme-test-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4.0cqw;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  pointer-events: auto;
 }
 
 .kme-test-contact-form__field,
@@ -697,12 +720,12 @@ button,
 }
 
 .kme-test-contact-form__field {
-  gap: 0.555556vw;
+  gap: 0.833333cqw;
 }
 
 .kme-test-contact-form__label {
   color: #ffffff;
-  font-size: 1.527778vw;
+  font-size: 3.0cqw;
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -716,7 +739,7 @@ button,
   outline: 0;
   color: #ffffff;
   font: inherit;
-  font-size: 1.111111vw;
+  font-size: 1.944444cqw;
   line-height: 1.45;
   background: transparent;
   pointer-events: auto;
@@ -735,15 +758,15 @@ button,
 }
 
 .kme-test-contact-form__message-group {
-  gap: 0.972222vw;
+  gap: 1.388889cqw;
   margin-top: 0;
 }
 
 .kme-test-contact-form__message-box {
-  height: 9.166667vw;
-  min-height: 9.166667vw;
-  padding: 0.972222vw 1.25vw;
-  border-radius: 0.694444vw;
+  height: 14.444444cqw;
+  min-height: 14.444444cqw;
+  padding: 1.666667cqw 2.222222cqw;
+  border-radius: 1.111111cqw;
   color: #111111;
   background: #ffffff;
   pointer-events: auto;
@@ -751,6 +774,11 @@ button,
 }
 
 .kme-test-contact-form__submit {
+  align-self: flex-end;
+  width: 33.194444cqw;
+  aspect-ratio: 239 / 74;
+  margin-top: 87cqw;
+  flex: 0 0 auto;
   padding: 0;
   border: 0;
   background: transparent;
@@ -770,13 +798,13 @@ button,
 }
 
 .kme-test-contact-form__status {
-  min-height: 1.666667vw;
+  min-height: 2.5cqw;
   margin-top: 0;
 }
 
 .kme-test-contact-form__status-text {
   display: inline-block;
-  font-size: 0.972222vw;
+  font-size: 1.666667cqw;
   line-height: 1.45;
 }
 

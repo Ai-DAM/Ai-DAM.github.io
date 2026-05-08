@@ -23,6 +23,8 @@ import TestLandingPage from "../shared/TestLandingPage";
 
 const DESIGN_WIDTH = 1440;
 const DESIGN_HEIGHT = 5325;
+const FOOTER_HEIGHT = 150;
+const MIDDLE_DESIGN_HEIGHT = DESIGN_HEIGHT - FOOTER_HEIGHT;
 const TECHNOLOGY_ROW_GAP = 60;
 
 type OverlayStyle = CSSProperties & {
@@ -46,7 +48,7 @@ type OverlayItem = {
 
 function getTopCenterSizedStyle(top: number, width: number, height: number, zIndex: number): OverlayStyle {
   return {
-    top: `${(top / DESIGN_HEIGHT) * 100}%`,
+    top: `${(top / MIDDLE_DESIGN_HEIGHT) * 100}%`,
     width: `${(width / DESIGN_WIDTH) * 100}%`,
     aspectRatio: `${width} / ${height}`,
     "--overlay-z-index": `${zIndex}`,
@@ -56,21 +58,11 @@ function getTopCenterSizedStyle(top: number, width: number, height: number, zInd
 function getTopLeftSizedStyle(left: number, top: number, width: number, height: number, zIndex: number): OverlayStyle {
   return {
     left: `${(left / DESIGN_WIDTH) * 100}%`,
-    top: `${(top / DESIGN_HEIGHT) * 100}%`,
+    top: `${(top / MIDDLE_DESIGN_HEIGHT) * 100}%`,
     width: `${(width / DESIGN_WIDTH) * 100}%`,
     aspectRatio: `${width} / ${height}`,
     "--overlay-z-index": `${zIndex}`,
     "--overlay-translate-x": "0%",
-  };
-}
-
-function getBottomFullBleedOverlayStyle(bottom: number, zIndex: number): OverlayStyle {
-  return {
-    left: "50%",
-    bottom: `${(bottom / DESIGN_HEIGHT) * 100}%`,
-    width: "100vw",
-    maxWidth: "none",
-    "--overlay-z-index": `${zIndex}`,
   };
 }
 
@@ -184,63 +176,91 @@ const overlayItems: OverlayItem[] = [
     className: "kme-test-page__overlay-item--slogan-hover",
     style: getTopCenterSizedStyle(4787, 812, 199, 2),
   },
-  {
-    src: footerImage,
-    alt: "",
-    ariaHidden: true,
-    style: getBottomFullBleedOverlayStyle(0, 1),
-  },
 ];
 
-const footerOverlayItem = overlayItems[overlayItems.length - 1];
-const bodyOverlayItems = overlayItems.slice(0, -1);
 const canvasStageStyle: CanvasStageStyle = {
   "--canvas-design-width": `${DESIGN_WIDTH}`,
-  "--canvas-design-height": `${DESIGN_HEIGHT}`,
+  "--canvas-design-height": `${MIDDLE_DESIGN_HEIGHT}`,
   "--canvas-max-width": "1920",
+};
+const shellStyle: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "stretch",
+  width: "100%",
+  background: "#000000",
+};
+const middleSectionStyle: CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  width: "100%",
+  flex: "0 0 auto",
+  background: "#000000",
+};
+const fullBleedSectionStyle: CSSProperties = {
+  position: "relative",
+  width: "100%",
+  flex: "0 0 auto",
+};
+const fullBleedImageStyle: CSSProperties = {
+  display: "block",
+  width: "100%",
+  height: "auto",
+};
+const middleBackgroundStyle: CSSProperties = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  display: "block",
+  width: "100%",
+  height: `${(DESIGN_HEIGHT / MIDDLE_DESIGN_HEIGHT) * 100}%`,
+  maxWidth: "none",
+  objectFit: "fill",
 };
 
 export default function CompanyBusinessTestPage() {
   return (
     <TestLandingPage
       customMedia={
-        <div className="kme-test-page__canvas-shell">
-          <div className="kme-test-page__canvas-stage" style={canvasStageStyle}>
-            <div className="kme-test-page__canvas-body">
-              <img className="kme-test-page__canvas-background" src={backgroundImage} alt="Company business test page background" />
+        <div className="kme-test-page__canvas-shell" style={shellStyle}>
+          <div style={middleSectionStyle}>
+            <div className="kme-test-page__canvas-stage" style={canvasStageStyle}>
+              <div className="kme-test-page__canvas-body">
+                <img className="kme-test-page__canvas-background" src={backgroundImage} alt="Company business test page background" style={middleBackgroundStyle} />
 
-              <div className="kme-test-page__canvas-overlay">
-                {bodyOverlayItems.map((item) => (
-                  <img
-                    key={`${item.src}-${item.alt || "decorative"}`}
-                    className={["kme-test-page__overlay-item", item.className].filter(Boolean).join(" ")}
-                    src={item.src}
-                    alt={item.alt}
-                    aria-hidden={item.ariaHidden}
-                    style={item.style}
-                  />
-                ))}
+                <div className="kme-test-page__canvas-overlay">
+                  {overlayItems.map((item) => (
+                    <img
+                      key={`${item.src}-${item.alt || "decorative"}`}
+                      className={["kme-test-page__overlay-item", item.className].filter(Boolean).join(" ")}
+                      src={item.src}
+                      alt={item.alt}
+                      aria-hidden={item.ariaHidden}
+                      style={item.style}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
+          </div>
 
-            <div className={["kme-test-page__overlay-item", footerOverlayItem.className].filter(Boolean).join(" ")} aria-hidden="true" style={footerOverlayItem.style}>
-              <img
-                src={footerOverlayItem.src}
-                alt={footerOverlayItem.alt}
-                aria-hidden={footerOverlayItem.ariaHidden}
-                style={{ display: "block", width: "100%", height: "100%" }}
-              />
+          <div style={{ ...fullBleedSectionStyle, background: "#ffffff", overflow: "hidden" }}>
+            <img
+              src={footerImage}
+              alt=""
+              aria-hidden="true"
+              style={fullBleedImageStyle}
+            />
 
-              <button
-                aria-label="Scroll to top"
-                className="kme-test-page__top-button"
-                style={getFooterChildStyle(1375, 72, 35, 35, 3)}
-                type="button"
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              >
-                <img src={topButtonImage} alt="" aria-hidden="true" />
-              </button>
-            </div>
+            <button
+              aria-label="Scroll to top"
+              className="kme-test-page__top-button"
+              style={getFooterChildStyle(1375, 72, 35, 35, 3)}
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              <img src={topButtonImage} alt="" aria-hidden="true" />
+            </button>
           </div>
         </div>
       }
