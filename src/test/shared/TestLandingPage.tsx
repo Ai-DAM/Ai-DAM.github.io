@@ -11,7 +11,7 @@ const headerButtons = [
   {
     label: "K-me Dance",
     icon: danceIcon,
-    href: "/test/k-me-dance/",
+    href: "/k-me-dance/",
     top: "35.4%",
     right: "34.375%",
     width: "5.208333%",
@@ -20,7 +20,7 @@ const headerButtons = [
   {
     label: "K-me VisionAI",
     icon: visionAiIcon,
-    href: "/test/k-me-visionai/",
+    href: "/k-me-visionai/",
     top: "35%",
     right: "22.430556%",
     width: "6.041667%",
@@ -29,7 +29,7 @@ const headerButtons = [
   {
     label: "EXPERIENCE",
     icon: experienceIcon,
-    href: "/test/experience/",
+    href: "/experience/",
     top: "35%",
     right: "11.805556%",
     width: "5.138889%",
@@ -38,7 +38,7 @@ const headerButtons = [
   {
     label: "Contact",
     icon: contactIcon,
-    href: "/test/contact/",
+    href: "/contact/",
     top: "35%",
     right: "3.333333%",
     width: "3.75%",
@@ -56,9 +56,9 @@ const companyButton = {
 } as const;
 
 const companySubmenuItems = [
-  { label: "What is K-me", href: "/test/company-what-is-k-me/" },
-  { label: "Business", href: "/test/company-business/" },
-  { label: "Introduction", href: "/test/company_Introduction/" },
+  { label: "What is K-me", href: "/company-what-is-k-me/" },
+  { label: "Business", href: "/company-business/" },
+  { label: "Introduction", href: "/company_Introduction/" },
 ] as const;
 
 const logoButtonStyle: CSSProperties = {
@@ -70,7 +70,7 @@ const logoButtonStyle: CSSProperties = {
 
 const PAGE_TRANSITION_STORAGE_KEY = "kme-test-page-transition";
 const PAGE_TRANSITION_DURATION_MS = 220;
-const TEST_LOGO_HOME_HREF = "/test/company-what-is-k-me/";
+const TEST_LOGO_HOME_HREF = "/company-what-is-k-me/";
 
 type PositionedHeaderItem = {
   top: string;

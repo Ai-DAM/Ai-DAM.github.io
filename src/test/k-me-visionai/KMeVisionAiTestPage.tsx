@@ -168,7 +168,7 @@ export default function KMeVisionAiTestPage() {
                   <img className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow" src={featureTwoTwoImage} alt="K-me VisionAI section 2-2" style={featureTwoTwoStyle} />
                   <img className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow" src={featureTwoThreeImage} alt="K-me VisionAI section 2-3" style={featureTwoThreeStyle} />
                   <img className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow" src={featureTwoFourImage} alt="K-me VisionAI section 2-4" style={featureTwoFourStyle} />
-                  <a aria-label="Go to contact page" className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-invert" href="/test/contact/" style={contactButtonStyle}>
+                  <a aria-label="Go to contact page" className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-invert" href="/contact/" style={contactButtonStyle}>
                     <img src={contactButtonImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
                   </a>
                 </div>

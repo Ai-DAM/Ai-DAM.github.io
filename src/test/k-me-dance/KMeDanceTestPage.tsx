@@ -188,7 +188,7 @@ export default function KMeDanceTestPage() {
                   <img className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow" src={collageThreeOneImage} alt="K-me Dance collage 3-1" style={collageThreeOneStyle} />
                   <img className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow" src={collageThreeTwoImage} alt="K-me Dance collage 3-2" style={collageThreeTwoStyle} />
                   <img className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-grow" src={collageThreeThreeImage} alt="K-me Dance collage 3-3" style={collageThreeThreeStyle} />
-                  <a aria-label="Go to contact page" className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-invert" href="/test/contact/" style={contactButtonStyle}>
+                  <a aria-label="Go to contact page" className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-invert" href="/contact/" style={contactButtonStyle}>
                     <img src={contactButtonImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
                   </a>
                 </div>

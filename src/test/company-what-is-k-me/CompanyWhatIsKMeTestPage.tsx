@@ -138,7 +138,7 @@ export default function CompanyWhatIsKMeTestPage() {
                   <a
                     aria-label="Go to K-me Dance page"
                     className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-scale-soft"
-                    href="/test/k-me-dance/"
+                    href="/k-me-dance/"
                     style={danceStyle}
                   >
                     <img src={danceImage} alt="K-me Dance" style={{ display: "block", width: "100%", height: "100%" }} />
@@ -147,7 +147,7 @@ export default function CompanyWhatIsKMeTestPage() {
                   <a
                     aria-label="View K-me Dance"
                     className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-invert"
-                    href="/test/k-me-dance/"
+                    href="/k-me-dance/"
                     style={{ ...danceButtonStyle, ...ctaButtonFrameStyle }}
                   >
                     <img src={danceButtonImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
@@ -156,7 +156,7 @@ export default function CompanyWhatIsKMeTestPage() {
                   <a
                     aria-label="Go to K-me Vision AI page"
                     className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-scale-soft"
-                    href="/test/k-me-visionai/"
+                    href="/k-me-visionai/"
                     style={visionAiStyle}
                   >
                     <img src={visionAiImage} alt="K-me Vision AI" style={{ display: "block", width: "100%", height: "100%" }} />
@@ -165,7 +165,7 @@ export default function CompanyWhatIsKMeTestPage() {
                   <a
                     aria-label="View K-me Vision AI"
                     className="kme-test-page__overlay-item kme-test-page__overlay-item--hover-invert"
-                    href="/test/k-me-visionai/"
+                    href="/k-me-visionai/"
                     style={{ ...visionAiButtonStyle, ...ctaButtonFrameStyle }}
                   >
                     <img src={visionAiButtonImage} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "100%" }} />
