@@ -1,0 +1,28 @@
+- main [ref=e3]:
+  - generic "K-me header" [ref=e4]:
+    - generic [ref=e5]:
+      - button "K-me home" [ref=e6]:
+        - img "K-me logo" [ref=e7]
+      - button "Open navigation menu" [ref=e8]
+  - generic [ref=e13]:
+    - img "What is K-me headline" [ref=e15]
+    - generic [ref=e18]:
+      - img "What is K-me test page background" [ref=e19]
+      - generic:
+        - generic "Smart mirror modeling video"
+        - link "Go to K-me Dance page" [ref=e20]:
+          - /url: /k-me-dance/
+          - img "K-me Dance" [ref=e21]
+        - link "View K-me Dance" [ref=e22]:
+          - /url: /k-me-dance/
+          - img [ref=e23]
+        - link "Go to K-me Vision AI page" [ref=e24]:
+          - /url: /k-me-visionai/
+          - img "K-me Vision AI" [ref=e25]
+        - link "View K-me Vision AI" [ref=e26]:
+          - /url: /k-me-visionai/
+          - img [ref=e27]
+    - generic [ref=e28]:
+      - img [ref=e29]
+      - button "Scroll to top" [ref=e30]:
+        - img [ref=e31]

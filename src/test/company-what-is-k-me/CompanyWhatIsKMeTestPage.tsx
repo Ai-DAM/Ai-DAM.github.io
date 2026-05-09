@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 
 import backgroundImage from "../assets/company-what-is-k-me/company-what-is-k-me_BG.svg";
 import danceButtonImage from "../assets/company-what-is-k-me/VIEW-KME-DANCE_button.svg";
@@ -108,6 +108,37 @@ const middleSectionStyle: CSSProperties = {
 };
 
 export default function CompanyWhatIsKMeTestPage() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    const attemptPlay = () => {
+      video.muted = true;
+
+      const playResult = video.play();
+
+      if (playResult && typeof playResult.catch === "function") {
+        playResult.catch(() => {
+          // Ignore autoplay rejections on mobile browsers.
+        });
+      }
+    };
+
+    attemptPlay();
+    video.addEventListener("loadedmetadata", attemptPlay);
+    video.addEventListener("canplay", attemptPlay);
+
+    return () => {
+      video.removeEventListener("loadedmetadata", attemptPlay);
+      video.removeEventListener("canplay", attemptPlay);
+    };
+  }, []);
+
   return (
     <TestLandingPage
       customMedia={
@@ -125,11 +156,13 @@ export default function CompanyWhatIsKMeTestPage() {
                   <video
                     aria-label="Smart mirror modeling video"
                     autoPlay
-                    className="kme-test-page__overlay-item"
+                    className="kme-test-page__overlay-item kme-test-page__overlay-video"
+                    disablePictureInPicture
                     loop
                     muted
                     playsInline
                     preload="auto"
+                    ref={videoRef}
                     style={videoStyle}
                   >
                     <source src={smartMirrorVideo} type="video/mp4" />

@@ -393,6 +393,18 @@ button,
   transform: translateX(var(--overlay-translate-x)) scale(var(--overlay-scale));
 }
 
+.kme-test-page__overlay-video {
+  overflow: hidden;
+}
+
+.kme-test-page__overlay-video::-webkit-media-controls,
+.kme-test-page__overlay-video::-webkit-media-controls-panel,
+.kme-test-page__overlay-video::-webkit-media-controls-play-button,
+.kme-test-page__overlay-video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
 .kme-test-page__overlay-item--neon {
   opacity: 0.68;
   mix-blend-mode: screen;
