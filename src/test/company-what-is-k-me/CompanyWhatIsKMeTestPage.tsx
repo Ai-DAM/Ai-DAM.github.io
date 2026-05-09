@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useLayoutEffect, useRef, type CSSProperties } from "react";
 
 import backgroundImage from "../assets/company-what-is-k-me/company-what-is-k-me_BG.svg";
 import danceButtonImage from "../assets/company-what-is-k-me/VIEW-KME-DANCE_button.svg";
@@ -110,32 +110,38 @@ const middleSectionStyle: CSSProperties = {
 export default function CompanyWhatIsKMeTestPage() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const video = videoRef.current;
 
     if (!video) {
       return;
     }
 
-    const attemptPlay = () => {
-      video.muted = true;
+    video.defaultMuted = true;
+    video.muted = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("autoplay", "");
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "true");
+    video.load();
 
+    const attemptPlay = () => {
       const playResult = video.play();
 
       if (playResult && typeof playResult.catch === "function") {
         playResult.catch(() => {
-          // Ignore autoplay rejections on mobile browsers.
+          // Ignore autoplay rejections on browsers with stricter power-saving policies.
         });
       }
     };
 
     attemptPlay();
-    video.addEventListener("loadedmetadata", attemptPlay);
-    video.addEventListener("canplay", attemptPlay);
+    const timeoutId = window.setTimeout(attemptPlay, 120);
 
     return () => {
-      video.removeEventListener("loadedmetadata", attemptPlay);
-      video.removeEventListener("canplay", attemptPlay);
+      window.clearTimeout(timeoutId);
     };
   }, []);
 
