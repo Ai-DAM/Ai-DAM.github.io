@@ -1,6 +1,7 @@
 import { useMemo, useState, type CSSProperties } from "react";
 
 import backgroundImage from "../assets/contact/contact_BG.svg";
+import blogIconImage from "../assets/contact/blog_icon_black_white_tight.svg";
 import footerImage from "../assets/footer/footer.svg";
 import topButtonImage from "../assets/footer/top_button.svg";
 import submitButtonImage from "../assets/contact/문의하기.svg";
@@ -72,27 +73,17 @@ const CONTACT_SOCIAL_YOUTUBE_WIDTH = 40.0;
 const CONTACT_SOCIAL_YOUTUBE_HEIGHT = 24.2;
 const CONTACT_SOCIAL_YOUTUBE_TOP_OFFSET = 2;
 const CONTACT_SOCIAL_ICON_SIZE = 28;
+const CONTACT_SOCIAL_YOUTUBE_LEFT = CONTACT_SOCIAL_LEFT + CONTACT_SOCIAL_ICON_SIZE + CONTACT_SOCIAL_GAP;
+const CONTACT_SOCIAL_BLOG_LEFT = CONTACT_SOCIAL_YOUTUBE_LEFT + CONTACT_SOCIAL_YOUTUBE_WIDTH + CONTACT_SOCIAL_GAP;
 
 const contactFields = ["이름", "연락처", "이메일", "회사/기관명", "관심 서비스"] as const;
 
 const socialButtons: SocialButton[] = [
   {
-    label: "K-me Dance YouTube",
-    href: "https://youtube.com/@k-me_dance?si=kpJROehZeop0BqQY",
-    className: "kme-test-page__social-button--youtube",
-    style: getTopLeftSizedStyle(CONTACT_SOCIAL_LEFT, CONTACT_SOCIAL_TOP + CONTACT_SOCIAL_YOUTUBE_TOP_OFFSET, CONTACT_SOCIAL_YOUTUBE_WIDTH, CONTACT_SOCIAL_YOUTUBE_HEIGHT, 3),
-    icon: (
-      <svg viewBox="0 0 25 16" aria-hidden="true">
-        <rect x="1" y="1" width="23" height="14" rx="4.8" fill="currentColor" />
-        <path d="M10.1 4.45L16.6 8L10.1 11.55V4.45Z" fill="#ffffff" />
-      </svg>
-    ),
-  },
-  {
     label: "K-me Dance Instagram",
     href: "https://www.instagram.com/kme.dance?igsh=MW85ZnJsYTVrOWxjcg%3D%3D&utm_source=qr",
     className: "kme-test-page__social-button--instagram",
-    style: getTopLeftSizedStyle(CONTACT_SOCIAL_LEFT + CONTACT_SOCIAL_YOUTUBE_WIDTH + CONTACT_SOCIAL_GAP, CONTACT_SOCIAL_TOP, CONTACT_SOCIAL_ICON_SIZE, CONTACT_SOCIAL_ICON_SIZE, 3),
+    style: getTopLeftSizedStyle(CONTACT_SOCIAL_LEFT, CONTACT_SOCIAL_TOP, CONTACT_SOCIAL_ICON_SIZE, CONTACT_SOCIAL_ICON_SIZE, 3),
     icon: (
       <svg viewBox="0 0 17 17" aria-hidden="true">
         <rect x="1.15" y="1.15" width="14.7" height="14.7" rx="4.5" fill="currentColor" />
@@ -102,18 +93,23 @@ const socialButtons: SocialButton[] = [
     ),
   },
   {
+    label: "K-me Dance YouTube",
+    href: "https://youtube.com/@k-me_dance?si=kpJROehZeop0BqQY",
+    className: "kme-test-page__social-button--youtube",
+    style: getTopLeftSizedStyle(CONTACT_SOCIAL_YOUTUBE_LEFT, CONTACT_SOCIAL_TOP + CONTACT_SOCIAL_YOUTUBE_TOP_OFFSET, CONTACT_SOCIAL_YOUTUBE_WIDTH, CONTACT_SOCIAL_YOUTUBE_HEIGHT, 3),
+    icon: (
+      <svg viewBox="0 0 25 16" aria-hidden="true">
+        <rect x="1" y="1" width="23" height="14" rx="4.8" fill="currentColor" />
+        <path d="M10.1 4.45L16.6 8L10.1 11.55V4.45Z" fill="#ffffff" />
+      </svg>
+    ),
+  },
+  {
     label: "K-me Dance Blog",
     href: "https://blog.naver.com/k-me_official_kr",
     className: "kme-test-page__social-button--blog",
-    style: getTopLeftSizedStyle(CONTACT_SOCIAL_LEFT + CONTACT_SOCIAL_YOUTUBE_WIDTH + CONTACT_SOCIAL_GAP + CONTACT_SOCIAL_ICON_SIZE + CONTACT_SOCIAL_GAP, CONTACT_SOCIAL_TOP, CONTACT_SOCIAL_ICON_SIZE, CONTACT_SOCIAL_ICON_SIZE, 3),
-    icon: (
-      <svg viewBox="0 0 18 18" aria-hidden="true">
-        <rect x="1.15" y="1.15" width="15.7" height="15.7" rx="4.35" fill="currentColor" />
-        <path d="M5.2 5.65H12.8" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M5.2 8.95H12.8" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M5.2 12.25H10.35" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
+    style: getTopLeftSizedStyle(CONTACT_SOCIAL_BLOG_LEFT, CONTACT_SOCIAL_TOP, CONTACT_SOCIAL_ICON_SIZE, CONTACT_SOCIAL_ICON_SIZE, 3),
+    icon: <img className="kme-test-page__social-blog-badge" src={blogIconImage} alt="" aria-hidden="true" />,
   },
 ];
 
