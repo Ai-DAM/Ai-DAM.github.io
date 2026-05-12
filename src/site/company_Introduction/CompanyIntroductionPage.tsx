@@ -8,6 +8,7 @@ import blockTwoSideImage from "../assets/company_introduction/2_img.svg";
 import blockThreeImage from "../assets/company_introduction/3.svg";
 import blockThreeSideImage from "../assets/company_introduction/3_img.svg";
 import bgCenterImage from "../assets/company_introduction/bg_center.svg";
+import blogIconImage from "../assets/company_introduction/blog_icon_black_white_tight.svg";
 import footerImage from "../assets/company_introduction/footer.svg";
 import footerTextImage from "../assets/company_introduction/footer_text.svg";
 import neonImage from "../assets/company_introduction/neon.svg";
@@ -136,22 +137,10 @@ const overlayItems: OverlayItem[] = [
 
 const socialButtons: SocialButton[] = [
   {
-    label: "K-me Dance YouTube",
-    href: "https://youtube.com/@k-me_dance?si=kpJROehZeop0BqQY",
-    className: "kme-test-page__social-button--youtube",
-    style: getFooterChildStyle(996, 359, 24, 16, 3),
-    icon: (
-      <svg viewBox="0 0 25 16" aria-hidden="true">
-        <rect x="1" y="1" width="23" height="14" rx="4.8" fill="currentColor" />
-        <path d="M10.1 4.45L16.6 8L10.1 11.55V4.45Z" fill="#ffffff" />
-      </svg>
-    ),
-  },
-  {
     label: "K-me Dance Instagram",
     href: "https://www.instagram.com/kme.dance?igsh=MW85ZnJsYTVrOWxjcg%3D%3D&utm_source=qr",
     className: "kme-test-page__social-button--instagram",
-    style: getFooterChildStyle(1032, 357, 18, 18, 3),
+    style: getFooterChildStyle(996, 357, 18, 18, 3),
     icon: (
       <svg viewBox="0 0 17 17" aria-hidden="true">
         <rect x="1.15" y="1.15" width="14.7" height="14.7" rx="4.5" fill="currentColor" />
@@ -161,18 +150,23 @@ const socialButtons: SocialButton[] = [
     ),
   },
   {
+    label: "K-me Dance YouTube",
+    href: "https://youtube.com/@k-me_dance?si=kpJROehZeop0BqQY",
+    className: "kme-test-page__social-button--youtube",
+    style: getFooterChildStyle(1030, 359, 24, 16, 3),
+    icon: (
+      <svg viewBox="0 0 25 16" aria-hidden="true">
+        <rect x="1" y="1" width="23" height="14" rx="4.8" fill="currentColor" />
+        <path d="M10.1 4.45L16.6 8L10.1 11.55V4.45Z" fill="#ffffff" />
+      </svg>
+    ),
+  },
+  {
     label: "K-me Dance Blog",
     href: "https://blog.naver.com/k-me_official_kr",
     className: "kme-test-page__social-button--blog",
-    style: getFooterChildStyle(1066, 357, 18, 18, 3),
-    icon: (
-      <svg viewBox="0 0 18 18" aria-hidden="true">
-        <rect x="1.15" y="1.15" width="15.7" height="15.7" rx="4.35" fill="currentColor" />
-        <path d="M5.2 5.65H12.8" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M5.2 8.95H12.8" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M5.2 12.25H10.35" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
+    style: getFooterChildStyle(1064, 357, 18, 18, 3),
+    icon: <img className="kme-test-page__social-blog-badge" src={blogIconImage} alt="" aria-hidden="true" />,
   },
 ];
 
