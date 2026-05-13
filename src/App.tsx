@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import CustomCursor from "./components/CustomCursor";
 import BackgroundFX from "./components/BackgroundFX";
 import HeroWormBorder from "./components/HeroWormBorder";
 import ContactForm from "./components/ContactForm";
@@ -196,7 +195,6 @@ export default function App() {
 
   return (
     <>
-      <CustomCursor />
       <BackgroundFX />
 
       <header className="topbar">

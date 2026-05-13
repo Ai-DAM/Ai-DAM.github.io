@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import CustomCursor from "../../components/CustomCursor";
 import companyIcon from "../assets/Header/Company.svg";
 import contactIcon from "../assets/Header/Contact.svg";
 import experienceIcon from "../assets/Header/EXPERIENCE.svg";
@@ -258,8 +257,6 @@ export default function SitePage({ backgroundImage, backgroundAlt, customMedia, 
 
   return (
     <main className="kme-test-page" onClickCapture={handlePageClickCapture}>
-      <CustomCursor />
-
       <header ref={headerRef} className="kme-test-header" aria-label="K-me header">
         <div className="kme-test-header__inner">
           <button
