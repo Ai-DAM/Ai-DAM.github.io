@@ -1,0 +1,61 @@
+- main [ref=e3]:
+  - generic "K-me header" [ref=e4]:
+    - generic [ref=e5]:
+      - button "K-me home" [ref=e6]:
+        - img "K-me logo" [ref=e7]
+      - button "Company" [ref=e9]:
+        - img "Company" [ref=e10]
+      - link "K-me Dance" [ref=e11]:
+        - /url: /k-me-dance/
+        - img "K-me Dance" [ref=e12]
+      - link "K-me VisionAI" [ref=e13]:
+        - /url: /k-me-visionai/
+        - img "K-me VisionAI" [ref=e14]
+      - link "EXPERIENCE" [ref=e15]:
+        - /url: /experience/
+        - img "EXPERIENCE" [ref=e16]
+      - link "Contact" [ref=e17]:
+        - /url: /contact/
+        - img "Contact" [ref=e18]
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - img "K-me Dance headline" [ref=e22]
+      - generic:
+        - generic:
+          - generic:
+            - generic: K-POP
+            - generic: CHOREOGRAPHY
+            - generic: HIP-HOP
+            - generic: LOCKING
+            - generic: POPPING
+            - generic: WAACKING
+            - generic: BREAKING
+            - generic: FREESTYLE
+          - generic:
+            - generic: K-POP
+            - generic: CHOREOGRAPHY
+            - generic: HIP-HOP
+            - generic: LOCKING
+            - generic: POPPING
+            - generic: WAACKING
+            - generic: BREAKING
+            - generic: FREESTYLE
+    - generic [ref=e25]:
+      - img "K-me Dance test page background" [ref=e26]
+      - generic:
+        - img "K-me Dance section 1" [ref=e27]
+        - img "K-me Dance collage 2-1" [ref=e28]
+        - img "K-me Dance collage 2-2" [ref=e29]
+        - img "K-me Dance collage 2-3" [ref=e30]
+        - img "K-me Dance collage 2-4" [ref=e31]
+        - img "K-me Dance collage 2-5" [ref=e32]
+        - img "K-me Dance collage 2-6" [ref=e33]
+        - img "K-me Dance collage 2-7" [ref=e34]
+        - img "K-me Dance collage 3-1" [ref=e35]
+        - img "K-me Dance collage 3-2" [ref=e36]
+        - img "K-me Dance collage 3-3" [ref=e37]
+        - link "Go to contact page" [ref=e38]:
+          - /url: /contact/
+          - img [ref=e39]
+    - button "Scroll to top" [ref=e40]:
+      - img [ref=e41]
