@@ -12,9 +12,9 @@ import smartMirrorVideo from "../assets/company-what-is-k-me/스마트미러 모
 import SitePage from "../shared/SitePage";
 
 const DESIGN_WIDTH = 1440;
-const DESIGN_HEIGHT = 3788;
 const HEADLINE_HEIGHT = 756.11;
 const FOOTER_HEIGHT = 150;
+const DESIGN_HEIGHT = 3450 + HEADLINE_HEIGHT + FOOTER_HEIGHT;
 const MIDDLE_DESIGN_HEIGHT = DESIGN_HEIGHT - HEADLINE_HEIGHT - FOOTER_HEIGHT;
 
 type OverlayStyle = CSSProperties & {
@@ -58,12 +58,12 @@ function getFooterChildStyle(left: number, top: number, width: number, height: n
   };
 }
 
-const videoStyle = getTopCenterSizedStyle(1196 - HEADLINE_HEIGHT, 1067, 600, 2);
-const danceStyle = getTopLeftSizedStyle(0, 1403, 900, 550, 2);
-const visionAiStyle = getTopLeftSizedStyle(DESIGN_WIDTH - 900, 2073, 900, 545, 2);
+const videoStyle = getTopCenterSizedStyle(850, 1067, 600, 2);
+const danceStyle = getTopLeftSizedStyle(0, 1898, 900, 550, 2);
+const visionAiStyle = getTopLeftSizedStyle(DESIGN_WIDTH - 900, 2598, 900, 545, 2);
 
-const danceButtonStyle = getTopLeftSizedStyle(DESIGN_WIDTH - 175 - 318, 1793, 304, 61, 3);
-const visionAiButtonStyle = getTopLeftSizedStyle(190, 2470, 304, 61, 3);
+const danceButtonStyle = getTopLeftSizedStyle(DESIGN_WIDTH - 175 - 318, 2370, 304, 61, 3);
+const visionAiButtonStyle = getTopLeftSizedStyle(170, 3070, 304, 61, 3);
 const topButtonStyle = getFooterChildStyle(1375, 72, 35, 35, 3);
 const ctaButtonFrameStyle: CSSProperties = {
   borderRadius: 0,
